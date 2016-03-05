@@ -1,0 +1,27 @@
+﻿@model IEnumerable<VaWorks.Web.DataAccess.Entities.BusinessUnit>
+
+@{
+    ViewBag.Title = "Companies";
+}
+
+<h2>Companies</h2>
+
+<p>
+    @Html.ActionLink("Add New Company", "Create", null, new { @class = "btn btn-default" })
+</p>
+
+
+    @helper ShowTree(IEnumerable<VaWorks.Web.DataAccess.Entities.BusinessUnit> items, int level) {
+
+    foreach (var item in items) {
+        <ul class="nav nav-pills nav-stacked">
+            <li>
+                @Html.ActionLink(item.Name, "Details", new { id = item.BusinessUnitId })
+            </li>
+            @ShowTree(item.Children, level++)
+        </ul>
+}
+
+}
+
+@ShowTree(Model, 0)

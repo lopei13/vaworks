@@ -1,0 +1,73 @@
+﻿@model VaWorks.Web.DataAccess.Entities.BusinessUnit
+
+@{
+    ViewBag.Title = "Company";
+}
+
+@helper ShowFullName(VaWorks.Web.DataAccess.Entities.BusinessUnit model) { 
+    if(model.ParentBusinessUnit != null) {
+        @ShowFullName(model.ParentBusinessUnit);
+    }
+    <li>@Html.ActionLink(model.Name, "Details", new { id = model.BusinessUnitId })</li>
+}
+
+<ul class="breadcrumb h2"><li>@Html.ActionLink("All", "Index")</li> @ShowFullName(Model)</ul>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.BusinessUnitId }, new { @class = "btn btn-default" })
+    @Html.ActionLink("Add Child", "Create", new { parentId = Model.BusinessUnitId }, new { @class = "btn btn-default" })
+    @Html.ActionLink("Invite User", "Invite", new { parentId = Model.BusinessUnitId }, new { @class = "btn btn-default" })
+    @Html.ActionLink("Copy", "Copy", new { parentId = Model.BusinessUnitId }, new { @class = "btn btn-default" })
+</p>
+
+<div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#users" data-toggle="tab" aria-expanded="true">Users</a></li>
+        <li class=""><a href="#kits" data-toggle="tab" aria-expanded="false">Kits</a></li>
+        <li class=""><a href="#valves" data-toggle="tab" aria-expanded="false">Valves</a></li>
+        <li class=""><a href="#actuators" data-toggle="tab" aria-expanded="false">Actuators</a></li>
+        <li class=""><a href="#quotes" data-toggle="tab" aria-expanded="false">Quotes</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active in" id="users">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="#">Fred</a></li>
+                <li><a href="#">Frank</a></li>
+                <li><a href="#">Freida</a></li>
+            </ul>
+        </div>
+        
+        <div class="tab-pane fade in" id="kits">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="#">VA-2252</a></li>
+                <li><a href="#">VA-6631</a></li>
+                <li><a href="#">VA-3665</a></li>
+            </ul>
+        </div>
+
+        <div class="tab-pane fade in" id="valves">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="#">ABZ 369 2</a></li>
+                <li><a href="#">ABZ 369 4</a></li>
+                <li><a href="#">ABZ 369 6</a></li>
+            </ul>
+        </div>
+
+        <div class="tab-pane fade in" id="actuators">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="#">Bettis G10 2</a></li>
+                <li><a href="#">Bettis G10 4</a></li>
+                <li><a href="#">Bettis G10 6</a></li>
+            </ul>
+        </div>
+
+        <div class="tab-pane fade in" id="quotes">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="#">55221</a></li>
+                <li><a href="#">55327</a></li>
+                <li><a href="#">56524</a></li>
+            </ul>
+        </div>
+
+    </div>
+</div>
