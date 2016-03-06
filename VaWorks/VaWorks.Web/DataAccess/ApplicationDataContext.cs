@@ -14,6 +14,22 @@ namespace VaWorks.Web.DataAccess
 
         public DbSet<BusinessUnit> BusinessUnits { get; set; }
 
+        public DbSet<Kit> Kits { get; set; }
+
+        public DbSet<Valve> Valves { get; set; }
+
+        public DbSet<Actuator> Actuators { get; set; }
+
+        public DbSet<BusinessUnitActuators> BusinessUnitActuators { get; set; }
+
+        public DbSet<BusinessUnitValves> BusinessUnitValves { get; set; }
+
+        public DbSet<BusinessUnitKits> BusinessUnitKits { get; set; }
+
+        public DbSet<ValveInterfaceCode> ValveInterfaceCodes { get; set; }
+
+        public DbSet<ActuatorInterfaceCode> ActuatorInterfaceCodes { get; set; }
+
         #endregion
 
 

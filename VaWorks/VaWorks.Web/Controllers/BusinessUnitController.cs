@@ -34,6 +34,7 @@ namespace VaWorks.Web.Controllers
             {
                 return HttpNotFound();
             }
+            PopulateDropDown(businessUnit.ParentBusinessUnitId);
             return View(businessUnit);
         }
 
@@ -88,6 +89,23 @@ namespace VaWorks.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                // check to see if we are trying to move the item down the tree
+                Stack<BusinessUnit> stack = new Stack<BusinessUnit>();
+                stack.Push(businessUnit);
+
+                while(stack.Any()) {
+                    var next = stack.Pop();
+
+                    if(next.ParentBusinessUnitId == businessUnit.BusinessUnitId) {
+                        ViewBag.Error = "You cannot move an organization to a decendant.";
+                        PopulateDropDown(businessUnit.ParentBusinessUnitId);
+                        return View(businessUnit);
+                    }
+                    foreach (var c in db.BusinessUnits.Where(b => b.ParentBusinessUnitId == next.BusinessUnitId)) {
+                        stack.Push(c);
+                    }
+                }
+
                 db.Entry(businessUnit).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

@@ -180,17 +180,22 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BusinessUnitController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KitsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DataAccess\ApplicationDataContext.cs" />
     <Compile Include="DataAccess\Entities\ApplicationUser.cs" />
     <Compile Include="DataAccess\Entities\BusinessUnit.cs" />
     <Compile Include="DataAccess\Entities\Kit.cs" />
     <Compile Include="DataAccess\Entities\KitConfiguratin.cs" />
+    <Compile Include="DataAccess\Entities\Actuators.cs" />
+    <Compile Include="DataAccess\Entities\Valve.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\MessageViewModel.cs" />
+    <Compile Include="Models\KitViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -255,6 +260,14 @@
     <Content Include="Views\BusinessUnit\Details.cshtml" />
     <Content Include="Views\BusinessUnit\Edit.cshtml" />
     <Content Include="Views\BusinessUnit\Index.cshtml" />
+    <Content Include="Views\Kits\Create.cshtml" />
+    <Content Include="Views\Kits\Delete.cshtml" />
+    <Content Include="Views\Kits\Details.cshtml" />
+    <Content Include="Views\Kits\Edit.cshtml" />
+    <Content Include="Views\Kits\Index.cshtml" />
+    <Content Include="Views\Kits\Import.cshtml" />
+    <Content Include="Views\Kits\ImportKits.cshtml" />
+    <Content Include="Views\Shared\_AdminMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

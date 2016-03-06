@@ -1,0 +1,42 @@
+﻿@model VaWorks.Web.DataAccess.Entities.Kit
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Kit</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ActuatorInterfaceCodeEntity.InterfaceCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ActuatorInterfaceCodeEntity.InterfaceCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ValuveIntefaceCodeEntity.InterfaceCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ValuveIntefaceCodeEntity.InterfaceCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BaseNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BaseNumber)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.KitId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

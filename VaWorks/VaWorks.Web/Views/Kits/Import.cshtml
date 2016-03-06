@@ -1,0 +1,92 @@
+﻿@model VaWorks.Web.DataAccess.Entities.BusinessUnit
+@{
+    ViewBag.Title = "Imported Kits";
+}
+
+<h2>Import Kits to @Model.Name</h2>
+
+<p>
+    @Html.ActionLink("Back", "Details", "BusinessUnit", new { id = Model.BusinessUnitId }, null)
+</p>
+
+<div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#import" data-toggle="tab" aria-expanded="true">Import From File</a></li>
+        <li class=""><a href="#copy" data-toggle="tab" aria-expanded="false">Copy Kits From Another Company</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active in" id="import">
+           @using (Html.BeginForm(actionName: "ImportKits", controllerName: "Kits", method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" })) {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(m => Model.BusinessUnitId)
+                <p>To import a large number of kits you can upload a tab separted text file formatted as follows.</p>
+                <p> </p>
+                <p>Column 1: <i>Full Kit Number</i></p>
+                <p>Column 2: <i>Valve Interface Code</i></p>
+                <p>Column 3: <i>Actuator Interface Code</i></p>
+                <p>Column 4: <i>Classification Code or Standard</i></p>
+                <p>Column 5: <i>Option Code - Specify "No Option" if there is no option for this kit</i></p>
+                <p>Column 6: <i>List Price</i></p>
+                <p>Example: <i>VA5682-COMCS-AA&nbsp;&nbsp;&nbsp;&nbsp;32&nbsp;&nbsp;&nbsp;448&nbsp;&nbsp;&nbsp;NA&nbsp;&nbsp;&nbsp;LD&nbsp;&nbsp;&nbsp;65.50</i></p>
+                <div class="form-group">
+                    @Html.Label("", "Import File", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input type="file" name="file" id="file1" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("", "Overwrite Existing?", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.CheckBox("overwrite")
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Import" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+           }
+        </div>
+
+        <div class="tab-pane fade in" id="copy">
+            
+            @using (Html.BeginForm(actionName: "CopyKits", controllerName: "Kits", method: FormMethod.Post)) {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true)
+                    @Html.HiddenFor(m => Model.BusinessUnitId)
+                    <p>You can copy kits from one business unit to another.</p>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BusinessUnitId, new { @class = "control-label col-md-2" })
+                        <div class="col-lg-10">
+                            @Html.DropDownList("FromBusinessUnitId", "Select Business Unit")
+                            @Html.ValidationMessageFor(model => model.ParentBusinessUnitId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("", "Overwrite Existing?", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.CheckBox("overwrite")
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Import" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+
+    </div>
+</div>
+
+
+  

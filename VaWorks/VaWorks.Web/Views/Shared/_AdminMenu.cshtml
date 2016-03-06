@@ -1,0 +1,32 @@
+﻿
+
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">System Administration <span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li>
+            @Html.ActionLink("Organizations", "Index", "BusinessUnit")
+        </li>
+        <li>
+            @Html.ActionLink("Users", "UserList", "Administration")
+        </li>
+        <li>@Html.ActionLink("Sales People", "SalesPersonList", "Administration")</li>
+        <li>@Html.ActionLink("Invite", "InvitationCreate", "Administration")</li>
+
+        <li>
+            <a href="@Url.Action("InvitationList", "Administration", routeValues: new { Arg = "Pending" })">
+                Pending Invitations
+                @*@{Html.RenderAction("PendingInviteCount", "Administration");}*@
+            </a>
+        <li>
+            <a href="@Url.Action("InvitationRequestList", "Administration", routeValues: new { Arg = "Pending" })">
+                Invitation Requests
+                @*@{Html.RenderAction("PendingInviteRequestCount", "Administration");}*@
+            </a>
+        </li>
+        <li>@Html.ActionLink("Quotes", "QuotesList", "Quoting")</li>
+        <li>@Html.ActionLink("Kits", "ListProducts", "Products")</li>
+        <li>@Html.ActionLink("Valves and Actuators", "ListValvesActuators", "Products")</li>
+        <li>@Html.ActionLink("Attributes", "AttributesList", "Administration")</li>
+        <li>@Html.ActionLink("Design Standards", "DesignStandards", "Administration")</li>
+    </ul>
+</li>

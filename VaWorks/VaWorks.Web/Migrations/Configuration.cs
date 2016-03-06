@@ -10,6 +10,7 @@ namespace VaWorks.Web.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(VaWorks.Web.DataAccess.ApplicationDbContext context)

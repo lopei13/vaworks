@@ -14,30 +14,101 @@
 <ul class="breadcrumb h2"><li>@Html.ActionLink("All", "Index")</li> @ShowFullName(Model)</ul>
 
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.BusinessUnitId }, new { @class = "btn btn-default" })
-    @Html.ActionLink("Add Child", "Create", new { parentId = Model.BusinessUnitId }, new { @class = "btn btn-default" })
-    @Html.ActionLink("Invite User", "Invite", new { parentId = Model.BusinessUnitId }, new { @class = "btn btn-default" })
-    @Html.ActionLink("Copy", "Copy", new { parentId = Model.BusinessUnitId }, new { @class = "btn btn-default" })
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            @*@Html.ActionLink("Edit", "Edit", new { id = Model.BusinessUnitId }, new { @class = "btn btn-default" })*@
+            @*@Html.ActionLink("Add Child", "Create", new { parentId = Model.BusinessUnitId }, new { @class = "btn btn-default" })*@
+            @*@Html.ActionLink("Invite User", "Invite", new { parentId = Model.BusinessUnitId }, new { @class = "btn btn-default" })*@
+            @*@Html.ActionLink("Copy", "Copy", new { parentId = Model.BusinessUnitId }, new { @class = "btn btn-default" })*@
+            @*@Html.ActionLink("Import Kits", "Import", "Kits", new { businessId = Model.BusinessUnitId }, new { @class = "btn btn-default" })*@
+            @*@Html.ActionLink("Import Valves", "Import", new { businessId = Model.BusinessUnitId }, new { @class = "btn btn-default" })*@
+            @*@Html.ActionLink("Import Actuators", "Import", new { businessId = Model.BusinessUnitId }, new { @class = "btn btn-default" })*@
+        </div>
+    </div>
 </p>
 
 <div>
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#users" data-toggle="tab" aria-expanded="true">Users</a></li>
+        <li class="active"><a href="#organizations" data-toggle="tab" aria-expanded="true">Organizations</a></li>
+        <li class=""><a href="#users" data-toggle="tab" aria-expanded="true">Users</a></li>
+        <li class=""><a href="#details" data-toggle="tab" aria-expanded="true">Details</a></li>
         <li class=""><a href="#kits" data-toggle="tab" aria-expanded="false">Kits</a></li>
         <li class=""><a href="#valves" data-toggle="tab" aria-expanded="false">Valves</a></li>
         <li class=""><a href="#actuators" data-toggle="tab" aria-expanded="false">Actuators</a></li>
         <li class=""><a href="#quotes" data-toggle="tab" aria-expanded="false">Quotes</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active in" id="users">
+        <div class="tab-pane fade active in" id="organizations">
+            <div class="btn-group">
+                @Html.ActionLink("Add Organization", "Create", new { parentId = Model.BusinessUnitId }, new { @class = "btn btn-link" })
+            </div>
+            <ul class="nav nav-pills nav-stacked">
+                @foreach(var c in Model.Children) {
+                    <li>@Html.ActionLink(c.Name, "Details", new { id = c.BusinessUnitId })</li>
+                }
+            </ul>
+        </div>
+
+        <div class="tab-pane fade in" id="users">
+            <div class="btn-group">
+                @Html.ActionLink("Invite User", "Invite", new { parentId = Model.BusinessUnitId }, new { @class = "btn btn-link" })
+            </div>
             <ul class="nav nav-pills nav-stacked">
                 <li><a href="#">Fred</a></li>
                 <li><a href="#">Frank</a></li>
                 <li><a href="#">Freida</a></li>
             </ul>
         </div>
+
+        <div class="tab-pane fade in" id="details">
+            
+            @using (Html.BeginForm("Edit", "BusinessUnit", FormMethod.Post)) {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.BusinessUnitId)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ParentBusinessUnitId, "Parent Organization", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("ParentBusinessUnitId", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ParentBusinessUnitId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+        </div>
         
         <div class="tab-pane fade in" id="kits">
+            <p>
+                @Html.ActionLink("Import Kits", "Import", "Kits", new { businessId = Model.BusinessUnitId }, new { @class = "btn btn-link" })
+            </p>
             <ul class="nav nav-pills nav-stacked">
                 <li><a href="#">VA-2252</a></li>
                 <li><a href="#">VA-6631</a></li>
@@ -46,6 +117,9 @@
         </div>
 
         <div class="tab-pane fade in" id="valves">
+            <div class="btn-group">
+                @Html.ActionLink("Import Valves", "Import", new { businessId = Model.BusinessUnitId }, new { @class = "btn btn-link" })
+            </div>
             <ul class="nav nav-pills nav-stacked">
                 <li><a href="#">ABZ 369 2</a></li>
                 <li><a href="#">ABZ 369 4</a></li>
@@ -54,6 +128,9 @@
         </div>
 
         <div class="tab-pane fade in" id="actuators">
+            <div class="btn-group">
+                @Html.ActionLink("Import Actuators", "Import", new { businessId = Model.BusinessUnitId }, new { @class = "btn btn-link" })
+            </div>
             <ul class="nav nav-pills nav-stacked">
                 <li><a href="#">Bettis G10 2</a></li>
                 <li><a href="#">Bettis G10 4</a></li>
