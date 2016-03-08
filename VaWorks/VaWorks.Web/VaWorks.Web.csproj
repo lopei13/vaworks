@@ -186,10 +186,12 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KitsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\Valves1Controller.cs" />
+    <Compile Include="Controllers\ActuatorsController.cs" />
     <Compile Include="Controllers\ValvesController.cs" />
     <Compile Include="DataAccess\ApplicationDataContext.cs" />
     <Compile Include="DataAccess\DataWriters\KitDataWriter.cs" />
+    <Compile Include="DataAccess\DataWriters\ActuatorDataWriter.cs" />
+    <Compile Include="DataAccess\DataWriters\ValveDataWriter.cs" />
     <Compile Include="DataAccess\Entities\ApplicationUser.cs" />
     <Compile Include="DataAccess\Entities\Organization.cs" />
     <Compile Include="DataAccess\Entities\Kit.cs" />
@@ -295,6 +297,14 @@
     <Content Include="Views\Kits\_List.cshtml" />
     <Content Include="Views\Shared\_GridPager.cshtml" />
     <Content Include="Views\Shared\_Grid.cshtml" />
+    <Content Include="Views\Valves\ImportValves.cshtml" />
+    <Content Include="Views\Actuators\Create.cshtml" />
+    <Content Include="Views\Actuators\Delete.cshtml" />
+    <Content Include="Views\Actuators\Details.cshtml" />
+    <Content Include="Views\Actuators\Edit.cshtml" />
+    <Content Include="Views\Actuators\Import.cshtml" />
+    <Content Include="Views\Actuators\ImportActuators.cshtml" />
+    <Content Include="Views\Actuators\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

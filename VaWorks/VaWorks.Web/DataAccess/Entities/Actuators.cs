@@ -32,13 +32,15 @@ namespace VaWorks.Web.DataAccess.Entities
 
         [ForeignKey("InterfaceCode")]
         public virtual ActuatorInterfaceCode InterfaceCodeEntity { get; set; }
+
+        public virtual ICollection<Organization> Organizations { get; set; }
     }
 
     [Table("ActuatorInterfaceCodes")]
     public class ActuatorInterfaceCode
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int InterfaceCode { get; set; }
     }
 }

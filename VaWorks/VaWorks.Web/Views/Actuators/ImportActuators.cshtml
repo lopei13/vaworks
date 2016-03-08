@@ -1,0 +1,25 @@
+﻿@model IEnumerable<VaWorks.Web.Models.MessageViewModel>
+
+@{
+    ViewBag.Title = "Imported Valves";
+}
+
+<h2>Import Status</h2>
+
+<p>
+    @Html.ActionLink("Back", "Details", "Organizations", new { id = ViewBag.Id }, null)
+</p>
+
+<ul>
+    @foreach (var item in Model) {
+        if (item.AlertType == "Success") {
+            <li class="alert alert-success">@item.Message</li>
+        }
+        if (item.AlertType == "Warning") {
+            <li class="alert alert-warning">@item.Message</li>
+        }
+        if (item.AlertType == "Danger") {
+            <li class="alert alert-danger">@item.Message</li>
+        }
+    }
+</ul>

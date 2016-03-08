@@ -201,7 +201,7 @@ namespace VaWorks.Web.DataAccess.DataReaders
 
         public int GetInt32(int i)
         {
-            return int.Parse(this[i].ToString());
+            return int.Parse(this[i].ToString().Trim());
         }
 
         public long GetInt64(int i)

@@ -73,19 +73,26 @@ namespace VaWorks.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CopyKits(int organizationId, int fromOrganizationId, bool overwrite = false)
+        public ActionResult CopyKits(int? organizationId, int? fromOrganizationId)
         {
-            List<MessageViewModel> messages = new List<MessageViewModel>();
+            Dictionary<string, MessageViewModel> messages = new Dictionary<string, MessageViewModel>();
 
-            var copyFrom = db.Organizations.Find(fromOrganizationId);
-            var copyTo = db.Organizations.Find(organizationId);
+            var fromOrganization = db.Organizations.Find(fromOrganizationId);
+            var toOrganization = db.Organizations.Find(organizationId);
 
-            messages.Add(new MessageViewModel() {
-                Message = $"Kits copied from {copyFrom.Name} to {copyTo.Name}",
+            foreach (var k in fromOrganization.Kits) {
+                toOrganization.Kits.Add(k);
+            }
+
+            int result = db.SaveChanges();
+
+            messages.Add("success", new MessageViewModel() {
+                Message = $"{result} records affected",
                 AlertType = "Success"
             });
+
             ViewBag.Id = organizationId;
-            return View("ImportKits", messages);
+            return View("ImportKits", messages.Values);
         }
 
         // GET: Kits/Details/5

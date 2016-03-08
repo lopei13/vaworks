@@ -20,12 +20,6 @@ namespace VaWorks.Web.DataAccess
 
         public DbSet<Actuator> Actuators { get; set; }
 
-        public DbSet<OrganizationActuators> OrganizationActuators { get; set; }
-
-        public DbSet<OrganizationValves> OrganizationValves { get; set; }
-
-        public DbSet<OrganizationKits> OrganizationKits { get; set; }
-
         public DbSet<ValveInterfaceCode> ValveInterfaceCodes { get; set; }
 
         public DbSet<ActuatorInterfaceCode> ActuatorInterfaceCodes { get; set; }
@@ -45,6 +39,38 @@ namespace VaWorks.Web.DataAccess
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Organization>()
+                .HasMany(x => x.Actuators)
+                .WithMany(x => x.Organizations)
+                .Map(x => {
+                    x.ToTable("OrganizationActuators");
+                    x.MapLeftKey("OrganizationId");
+                    x.MapRightKey("ActuatorId");
+                });
+
+            modelBuilder.Entity<Organization>()
+                .HasMany(x => x.Valves)
+                .WithMany(x => x.Organizations)
+                .Map(x => {
+                    x.ToTable("OrganizationValves");
+                    x.MapLeftKey("OrganizationId");
+                    x.MapRightKey("ValveId");
+                });
+
+            modelBuilder.Entity<Organization>()
+                .HasMany(x => x.Kits)
+                .WithMany(x => x.Organizations)
+                .Map(x => {
+                    x.ToTable("OrganizationKits");
+                    x.MapLeftKey("OrganizationId");
+                    x.MapRightKey("KitId");
+                });
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

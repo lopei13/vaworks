@@ -15,15 +15,15 @@ using VaWorks.Web.Models;
 
 namespace VaWorks.Web.Controllers
 {
-    public class ValvesController : Controller
+    public class ActuatorsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Valves
+        // GET: Actuators
         public ActionResult Index()
         {
-            var valves = db.Valves.Include(v => v.InterfaceCodeEntity);
-            return View(valves.ToList());
+            var actuators = db.Actuators.Include(v => v.InterfaceCodeEntity);
+            return View(actuators.ToList());
         }
 
         public ActionResult Import(int? organizationId)
@@ -35,7 +35,7 @@ namespace VaWorks.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ImportValves(int organizationId, HttpPostedFileBase file)
+        public ActionResult ImportActuators(int organizationId, HttpPostedFileBase file)
         {
             Dictionary<string, MessageViewModel> messages = new Dictionary<string, MessageViewModel>();
 
@@ -43,7 +43,7 @@ namespace VaWorks.Web.Controllers
                 try {
                     CSVReader reader = new CSVReader(file.InputStream, false, '\t');
 
-                    IDataWriter writer = new ValveDataWriter(db, organizationId);
+                    IDataWriter writer = new ActuatorDataWriter(db, organizationId);
                     writer.Write(reader);
                     int result = writer.SaveChanges();
 
@@ -70,15 +70,15 @@ namespace VaWorks.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CopyValves(int? organizationId, int? fromOrganizationId)
+        public ActionResult CopyActuators(int? organizationId, int? fromOrganizationId)
         {
             Dictionary<string, MessageViewModel> messages = new Dictionary<string, MessageViewModel>();
 
             var fromOrganization = db.Organizations.Find(fromOrganizationId);
             var toOrganization = db.Organizations.Find(organizationId);
 
-            foreach(var v in fromOrganization.Valves) {
-                toOrganization.Valves.Add(v);
+            foreach (var a in fromOrganization.Actuators) {
+                toOrganization.Actuators.Add(a);
             }
 
             int result = db.SaveChanges();
@@ -89,26 +89,26 @@ namespace VaWorks.Web.Controllers
             });
 
             ViewBag.Id = organizationId;
-            return View("ImportValves", messages.Values);
+            return View("ImportActuators", messages.Values);
         }
 
         public ActionResult List(int? organizationId)
         {
-            var valves = from v in db.Valves
+            var actuators = from v in db.Actuators
                          where v.Organizations.Any(o => o.OrganizationId == organizationId)
                          select v;
 
-            return View(valves);
+            return View(actuators);
         }
 
-        // GET: Valves/Details/5
+        // GET: Actuators/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Valve valve = db.Valves.Find(id);
+            Actuator valve = db.Actuators.Find(id);
             if (valve == null)
             {
                 return HttpNotFound();
@@ -116,53 +116,53 @@ namespace VaWorks.Web.Controllers
             return View(valve);
         }
 
-        // GET: Valves/Create
+        // GET: Actuators/Create
         public ActionResult Create()
         {
-            ViewBag.InterfaceCode = new SelectList(db.ValveInterfaceCodes, "InterfaceCode", "InterfaceCode");
+            ViewBag.InterfaceCode = new SelectList(db.ActuatorInterfaceCodes, "InterfaceCode", "InterfaceCode");
             return View();
         }
 
-        // POST: Valves/Create
+        // POST: Actuators/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ValveId,InterfaceCode,Manufacturer,Model,Size")] Valve valve)
+        public ActionResult Create([Bind(Include = "ActuatorId,InterfaceCode,Manufacturer,Model,Size")] Actuator valve)
         {
             if (ModelState.IsValid)
             {
-                db.Valves.Add(valve);
+                db.Actuators.Add(valve);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.InterfaceCode = new SelectList(db.ValveInterfaceCodes, "InterfaceCode", "InterfaceCode", valve.InterfaceCode);
+            ViewBag.InterfaceCode = new SelectList(db.ActuatorInterfaceCodes, "InterfaceCode", "InterfaceCode", valve.InterfaceCode);
             return View(valve);
         }
 
-        // GET: Valves/Edit/5
+        // GET: Actuators/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Valve valve = db.Valves.Find(id);
+            Actuator valve = db.Actuators.Find(id);
             if (valve == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.InterfaceCode = new SelectList(db.ValveInterfaceCodes, "InterfaceCode", "InterfaceCode", valve.InterfaceCode);
+            ViewBag.InterfaceCode = new SelectList(db.ActuatorInterfaceCodes, "InterfaceCode", "InterfaceCode", valve.InterfaceCode);
             return View(valve);
         }
 
-        // POST: Valves/Edit/5
+        // POST: Actuators/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ValveId,InterfaceCode,Manufacturer,Model,Size")] Valve valve)
+        public ActionResult Edit([Bind(Include = "ActuatorId,InterfaceCode,Manufacturer,Model,Size")] Actuator valve)
         {
             if (ModelState.IsValid)
             {
@@ -170,18 +170,18 @@ namespace VaWorks.Web.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.InterfaceCode = new SelectList(db.ValveInterfaceCodes, "InterfaceCode", "InterfaceCode", valve.InterfaceCode);
+            ViewBag.InterfaceCode = new SelectList(db.ActuatorInterfaceCodes, "InterfaceCode", "InterfaceCode", valve.InterfaceCode);
             return View(valve);
         }
 
-        // GET: Valves/Delete/5
+        // GET: Actuators/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Valve valve = db.Valves.Find(id);
+            Actuator valve = db.Actuators.Find(id);
             if (valve == null)
             {
                 return HttpNotFound();
@@ -189,13 +189,13 @@ namespace VaWorks.Web.Controllers
             return View(valve);
         }
 
-        // POST: Valves/Delete/5
+        // POST: Actuators/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Valve valve = db.Valves.Find(id);
-            db.Valves.Remove(valve);
+            Actuator valve = db.Actuators.Find(id);
+            db.Actuators.Remove(valve);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

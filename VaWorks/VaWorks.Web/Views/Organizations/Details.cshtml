@@ -32,9 +32,9 @@
         <li class="active"><a href="#organizations" data-toggle="tab" aria-expanded="true">Organizations</a></li>
         <li class=""><a href="#users" data-toggle="tab" aria-expanded="true">Users</a></li>
         <li class=""><a href="#details" data-toggle="tab" aria-expanded="true">Details</a></li>
-        <li class=""><a href="#kits" data-toggle="tab" aria-expanded="false">Kits</a></li>
-        <li class=""><a href="#valves" data-toggle="tab" aria-expanded="false">Valves</a></li>
-        <li class=""><a href="#actuators" data-toggle="tab" aria-expanded="false">Actuators</a></li>
+        <li class=""><a href="#kits" data-toggle="tab" aria-expanded="false">Kits <span class="badge">@Model.Kits.Count</span></a></li>
+        <li class=""><a href="#valves" data-toggle="tab" aria-expanded="false">Valves <span class="badge">@Model.Valves.Count</span></a></li>
+        <li class=""><a href="#actuators" data-toggle="tab" aria-expanded="false">Actuators <span class="badge">@Model.Actuators.Count</span></a></li>
         <li class=""><a href="#quotes" data-toggle="tab" aria-expanded="false">Quotes</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
@@ -109,8 +109,7 @@
             <p>
                 @Html.ActionLink("Import Kits", "Import", "Kits", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" })
             </p>
-            <ul class="nav nav-pills nav-stacked">
-                
+
                 @using GridMvc.Html
                 @Html.Grid(Model.Kits).Columns(columns => {
                     columns.Add(m => m.KitNumber).Titled("Kit Number").Sortable(true).Filterable(true).SetWidth(220);
@@ -120,29 +119,36 @@
                     columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @Html.ActionLink("Edit", "EditProduct", new { id = m.KitId }));
                     columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Delete", "DeleteProduct", new { id = m.KitId }));
                 }).WithPaging(10).WithMultipleFilters()
-            </ul>
         </div>
 
         <div class="tab-pane fade in" id="valves">
             <div class="btn-group">
                 @Html.ActionLink("Import Valves", "Import", "Valves", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" })
             </div>
-            <ul class="nav nav-pills nav-stacked">
-                <li><a href="#">ABZ 369 2</a></li>
-                <li><a href="#">ABZ 369 4</a></li>
-                <li><a href="#">ABZ 369 6</a></li>
-            </ul>
+            @using GridMvc.Html
+            @Html.Grid(Model.Valves).Columns(columns => {
+               columns.Add(m => m.Manufacturer).Sortable(true).Filterable(true).SetWidth(220);
+               columns.Add(m => m.Model).Filterable(true);
+               columns.Add(m => m.Size).Filterable(true);
+               columns.Add(m => m.InterfaceCode).Sortable(true).Filterable(true);
+               columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @Html.ActionLink("Edit", "EditProduct", new { id = m.ValveId }));
+               columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Delete", "DeleteProduct", new { id = m.ValveId }));
+           }).WithPaging(10).WithMultipleFilters()
         </div>
 
         <div class="tab-pane fade in" id="actuators">
             <div class="btn-group">
-                @Html.ActionLink("Import Actuators", "Import", new { businessId = Model.OrganizationId }, new { @class = "btn btn-link" })
+                @Html.ActionLink("Import Actuators", "Import", "Actuators", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" })
             </div>
-            <ul class="nav nav-pills nav-stacked">
-                <li><a href="#">Bettis G10 2</a></li>
-                <li><a href="#">Bettis G10 4</a></li>
-                <li><a href="#">Bettis G10 6</a></li>
-            </ul>
+            @using GridMvc.Html
+            @Html.Grid(Model.Actuators).Columns(columns => {
+                columns.Add(m => m.Manufacturer).Sortable(true).Filterable(true).SetWidth(220);
+                columns.Add(m => m.Model).Filterable(true);
+                columns.Add(m => m.Size).Filterable(true);
+                columns.Add(m => m.InterfaceCode).Sortable(true).Filterable(true);
+                columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @Html.ActionLink("Edit", "EditProduct", new { id = m.ActuatorId }));
+                columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Delete", "DeleteProduct", new { id = m.ActuatorId }));
+            }).WithPaging(10).WithMultipleFilters()
         </div>
 
         <div class="tab-pane fade in" id="quotes">
@@ -181,12 +187,20 @@
                 $(this).attr('href', this.href + "#kits");
             });
 
-        // change the paging url
         $('#kits').find(".grid-header").find(".grid-header-title").find("a").each(
             function () {
                 $(this).attr('href', this.href + "#kits");
             });
            
+        $('#valves').find(".grid-footer").find("ul").find("a").each(
+            function () {
+                $(this).attr('href', this.href + "#valves");
+            });
+
+        $('#valves').find(".grid-header").find(".grid-header-title").find("a").each(
+            function () {
+                $(this).attr('href', this.href + "#valves");
+            });
     </script>
 
 }
