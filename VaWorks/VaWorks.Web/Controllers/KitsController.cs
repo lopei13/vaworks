@@ -9,7 +9,9 @@ using System.Web;
 using System.Web.Mvc;
 using VaWorks.Web.DataAccess;
 using VaWorks.Web.DataAccess.Entities;
+using VaWorks.Web.DataAccess.DataReaders;
 using VaWorks.Web.Models;
+using VaWorks.Web.DataAccess.DataWriters;
 
 namespace VaWorks.Web.Controllers
 {
@@ -24,62 +26,65 @@ namespace VaWorks.Web.Controllers
             return View(kits.ToList());
         }
 
-        public ActionResult Import(int businessId)
+        public ActionResult Import(int organizationId)
         {
-            var businessUnit = db.BusinessUnits.Find(businessId);
-            PopulateDropDown(businessId);
-            return View(businessUnit);
+            var organization = db.Organizations.Find(organizationId);
+            PopulateDropDown(organizationId);
+            return View(organization);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ImportKits(int businessUnitId, HttpPostedFileBase file, bool overwrite = false)
+        public ActionResult ImportKits(int organizationId, HttpPostedFileBase file, bool overwrite = false)
         {
-            List<MessageViewModel> messages = new List<MessageViewModel>();
-            int count = 0;
+            Dictionary<string, MessageViewModel> messages = new Dictionary<string, MessageViewModel>();
+
             if (file.ContentLength > 0) {
                 try {
-                    TextReader reader = new StreamReader(file.InputStream);
-                    while (reader.Peek() > 0) {
-                        string[] line = reader.ReadLine().Split('\t');
 
-                        count++;
+                    var organization = db.Organizations.Find(organizationId);
+
+                    CSVReader reader = new CSVReader(file.InputStream, false, '\t');
+
+                    IDataWriter writer = new KitDataWriter(db, organizationId);
+                    writer.Write(reader);
+                    int result = writer.SaveChanges();
+
+                    messages.Add("success", new MessageViewModel() {
+                        Message = $"{result} records affected",
+                        AlertType = "Success"
+                    });
+
+                } catch(Exception ex) {
+
+                    if (!messages.ContainsKey(ex.Message)) {
+                        messages.Add(ex.Message, new MessageViewModel() {
+                            Message = ex.Message,
+                            AlertType = "Danger"
+                        });
                     }
-                } catch { }
+
+                }
             }
 
-            messages.Add(new MessageViewModel() {
-                Message = $"{count} kits inserted into the database",
-                AlertType = "Success"
-            });
-
-            messages.Add(new MessageViewModel() {
-                Message = "17 kits failed to import",
-                AlertType = "Danger"
-            });
-
-            messages.Add(new MessageViewModel() {
-                Message = "34 kits already existed",
-                AlertType = "Warning"
-            });
-            ViewBag.Id = businessUnitId;
-            return View(messages);
+            ViewBag.Id = organizationId;
+            return View(messages.Values);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CopyKits(int businessUnitId, int fromBusinessUnitId, bool overwrite = false)
+        public ActionResult CopyKits(int organizationId, int fromOrganizationId, bool overwrite = false)
         {
             List<MessageViewModel> messages = new List<MessageViewModel>();
 
-            var copyFrom = db.BusinessUnits.Find(fromBusinessUnitId);
-            var copyTo = db.BusinessUnits.Find(businessUnitId);
+            var copyFrom = db.Organizations.Find(fromOrganizationId);
+            var copyTo = db.Organizations.Find(organizationId);
 
             messages.Add(new MessageViewModel() {
                 Message = $"Kits copied from {copyFrom.Name} to {copyTo.Name}",
                 AlertType = "Success"
             });
-            ViewBag.Id = businessUnitId;
+            ViewBag.Id = organizationId;
             return View("ImportKits", messages);
         }
 
@@ -199,12 +204,12 @@ namespace VaWorks.Web.Controllers
 
         private void PopulateDropDown(int exclude, object selected = null)
         {
-            var units = from c in db.BusinessUnits
-                        where c.BusinessUnitId != exclude
+            var units = from c in db.Organizations
+                        where c.OrganizationId != exclude
                         orderby c.Name
                         select c;
 
-            ViewBag.FromBusinessUnitId = new SelectList(units, "BusinessUnitId", "Name", selected);
+            ViewBag.FromOrganizationId = new SelectList(units, "OrganizationId", "Name", selected);
         }
 
         #endregion

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<VaWorks.Web.DataAccess.Entities.BusinessUnit>
+﻿@model IEnumerable<VaWorks.Web.DataAccess.Entities.Organization>
 
 @{
     ViewBag.Title = "Organizations";
@@ -11,12 +11,12 @@
 </p>
 
 
-    @helper ShowTree(IEnumerable<VaWorks.Web.DataAccess.Entities.BusinessUnit> items, int level) {
+    @helper ShowTree(IEnumerable<VaWorks.Web.DataAccess.Entities.Organization> items, int level) {
 
     foreach (var item in items) {
         <ul class="nav nav-pills nav-stacked">
             <li>
-                @Html.ActionLink(item.Name, "Details", new { id = item.BusinessUnitId })
+                @Html.ActionLink(item.Name, "Details", new { id = item.OrganizationId })
             </li>
             @ShowTree(item.Children, level++)
         </ul>

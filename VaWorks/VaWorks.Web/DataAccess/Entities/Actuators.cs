@@ -38,6 +38,7 @@ namespace VaWorks.Web.DataAccess.Entities
     public class ActuatorInterfaceCode
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int InterfaceCode { get; set; }
     }
 }

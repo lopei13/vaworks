@@ -1,4 +1,4 @@
-﻿@model VaWorks.Web.DataAccess.Entities.BusinessUnit
+﻿@model VaWorks.Web.DataAccess.Entities.Valve
 
 @{
     ViewBag.Title = "Delete";
@@ -8,31 +8,39 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>BusinessUnit</h4>
+    <h4>Valve</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.ParentBusinessUnit.Name)
+            @Html.DisplayNameFor(model => model.InterfaceCodeEntity.InterfaceCode)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ParentBusinessUnit.Name)
+            @Html.DisplayFor(model => model.InterfaceCodeEntity.InterfaceCode)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Manufacturer)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Manufacturer)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Model)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Model)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Size)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Size)
         </dd>
 
     </dl>

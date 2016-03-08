@@ -1,12 +1,12 @@
-﻿@model VaWorks.Web.DataAccess.Entities.Organization
+﻿@model VaWorks.Web.DataAccess.Entities.BusinessUnit
 @{
-    ViewBag.Title = "Imported Kits";
+    ViewBag.Title = "Imported Valves";
 }
 
-<h2>Import Kits to @Model.Name</h2>
+<h2>Import Valves to @Model.Name</h2>
 
 <p>
-    @Html.ActionLink("Back", "Details", "Organization", new { id = Model.OrganizationId }, null)
+    @Html.ActionLink("Back", "Details", "BusinessUnit", new { id = Model.BusinessUnitId }, null)
 </p>
 
 <div>
@@ -16,20 +16,17 @@
     </ul>
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade active in" id="import">
-           @using (Html.BeginForm(actionName: "ImportKits", controllerName: "Kits", method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" })) {
+           @using (Html.BeginForm(actionName: "ImportValves", controllerName: "Valves", method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" })) {
             @Html.AntiForgeryToken()
             <div class="form-horizontal">
                 @Html.ValidationSummary(true)
-                @Html.HiddenFor(m => Model.OrganizationId)
+                @Html.HiddenFor(m => Model.BusinessUnitId)
                 <p>To import a large number of kits you can upload a tab separted text file formatted as follows.</p>
                 <p> </p>
-                <p>Column 1: <i>Full Kit Number</i></p>
-                <p>Column 2: <i>Valve Interface Code</i></p>
-                <p>Column 3: <i>Actuator Interface Code</i></p>
-                <p>Column 4: <i>Classification Code or Standard</i></p>
-                <p>Column 5: <i>Option Code - Specify "No Option" if there is no option for this kit</i></p>
-                <p>Column 6: <i>List Price</i></p>
-                <p>Example: <i>VA5682-COMCS-AA&nbsp;&nbsp;&nbsp;&nbsp;32&nbsp;&nbsp;&nbsp;448&nbsp;&nbsp;&nbsp;NA&nbsp;&nbsp;&nbsp;LD&nbsp;&nbsp;&nbsp;65.50</i></p>
+                <p>Column 1: <i>Manufacturer</i></p>
+                <p>Column 2: <i>Model</i></p>
+                <p>Column 3: <i>Size</i></p>
+                <p>Column 4: <i>Interface Code</i></p>
                 <div class="form-group">
                     @Html.Label("", "Import File", new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -37,7 +34,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.Label("", "Overwrite Existing?", new { @class = "control-label col-md-2" })
+                    @Html.Label("", "Overwrite existing valves based on interface code?", new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.CheckBox("overwrite")
                     </div>
@@ -53,23 +50,23 @@
 
         <div class="tab-pane fade in" id="copy">
             
-            @using (Html.BeginForm(actionName: "CopyKits", controllerName: "Kits", method: FormMethod.Post)) {
+            @using (Html.BeginForm(actionName: "CopyValves", controllerName: "Valves", method: FormMethod.Post)) {
                 @Html.AntiForgeryToken()
                 <div class="form-horizontal">
                     @Html.ValidationSummary(true)
-                    @Html.HiddenFor(m => Model.OrganizationId)
+                    @Html.HiddenFor(m => Model.BusinessUnitId)
                     <p>You can copy kits from one business unit to another.</p>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.OrganizationId, new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.BusinessUnitId, new { @class = "control-label col-md-2" })
                         <div class="col-lg-10">
                             @Html.DropDownList("FromOrganizationId", "Select Organization")
-                            @Html.ValidationMessageFor(model => model.ParentId)
+                            @Html.ValidationMessageFor(model => model.ParentBusinessUnitId)
                         </div>
                     </div>
 
                     <div class="form-group">
-                        @Html.Label("", "Overwrite Existing?", new { @class = "control-label col-md-2" })
+                        @Html.Label("", "Overwrite existing based on interface code?", new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
                             @Html.CheckBox("overwrite")
                         </div>

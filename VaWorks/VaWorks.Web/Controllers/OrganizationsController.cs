@@ -11,132 +11,132 @@ using VaWorks.Web.DataAccess.Entities;
 
 namespace VaWorks.Web.Controllers
 {
-    public class BusinessUnitController : Controller
+    public class OrganizationsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: BusinessUnit
+        // GET: Organization
         public ActionResult Index()
         {
-            var businessUnits = db.BusinessUnits.Where(b => b.ParentBusinessUnitId == null).Include(b => b.Children);
-            return View(businessUnits.ToList());
+            var Organizations = db.Organizations.Where(b => b.ParentId == null).Include(b => b.Children);
+            return View(Organizations.ToList());
         }
 
-        // GET: BusinessUnit/Details/5
+        // GET: Organization/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BusinessUnit businessUnit = db.BusinessUnits.Find(id);
-            if (businessUnit == null)
+            Organization Organization = db.Organizations.Find(id);
+            if (Organization == null)
             {
                 return HttpNotFound();
             }
-            PopulateDropDown(businessUnit.ParentBusinessUnitId);
-            return View(businessUnit);
+            PopulateDropDown(Organization.ParentId);
+            return View(Organization);
         }
 
-        // GET: BusinessUnit/Create
+        // GET: Organization/Create
         public ActionResult Create(int? parentId = null)
         {
             PopulateDropDown(parentId);
             return View();
         }
 
-        // POST: BusinessUnit/Create
+        // POST: Organization/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "BusinessUnitId,ParentBusinessUnitId,Name,Description")] BusinessUnit businessUnit)
+        public ActionResult Create([Bind(Include = "OrganizationId,ParentId,Name,Description")] Organization Organization)
         {
             if (ModelState.IsValid)
             {
-                db.BusinessUnits.Add(businessUnit);
+                db.Organizations.Add(Organization);
                 db.SaveChanges();
-                return RedirectToAction("Details", new { id = businessUnit.BusinessUnitId });
+                return RedirectToAction("Details", new { id = Organization.OrganizationId });
             }
 
-            PopulateDropDown(businessUnit.ParentBusinessUnitId);
-            return View(businessUnit);
+            PopulateDropDown(Organization.ParentId);
+            return View(Organization);
         }
 
-        // GET: BusinessUnit/Edit/5
+        // GET: Organization/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BusinessUnit businessUnit = db.BusinessUnits.Find(id);
-            if (businessUnit == null)
+            Organization Organization = db.Organizations.Find(id);
+            if (Organization == null)
             {
                 return HttpNotFound();
             }
 
-            PopulateDropDown(businessUnit.ParentBusinessUnitId);
-            return View(businessUnit);
+            PopulateDropDown(Organization.ParentId);
+            return View(Organization);
         }
 
-        // POST: BusinessUnit/Edit/5
+        // POST: Organization/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "BusinessUnitId,ParentBusinessUnitId,Name,Description")] BusinessUnit businessUnit)
+        public ActionResult Edit([Bind(Include = "OrganizationId,ParentId,Name,Description")] Organization Organization)
         {
             if (ModelState.IsValid)
             {
                 // check to see if we are trying to move the item down the tree
-                Stack<BusinessUnit> stack = new Stack<BusinessUnit>();
-                stack.Push(businessUnit);
+                Stack<Organization> stack = new Stack<Organization>();
+                stack.Push(Organization);
 
                 while(stack.Any()) {
                     var next = stack.Pop();
 
-                    if(next.ParentBusinessUnitId == businessUnit.BusinessUnitId) {
+                    if(next.ParentId == Organization.OrganizationId) {
                         ViewBag.Error = "You cannot move an organization to a decendant.";
-                        PopulateDropDown(businessUnit.ParentBusinessUnitId);
-                        return View(businessUnit);
+                        PopulateDropDown(Organization.ParentId);
+                        return View(Organization);
                     }
-                    foreach (var c in db.BusinessUnits.Where(b => b.ParentBusinessUnitId == next.BusinessUnitId)) {
+                    foreach (var c in db.Organizations.Where(b => b.ParentId == next.OrganizationId)) {
                         stack.Push(c);
                     }
                 }
 
-                db.Entry(businessUnit).State = EntityState.Modified;
+                db.Entry(Organization).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            PopulateDropDown(businessUnit.ParentBusinessUnitId);
-            return View(businessUnit);
+            PopulateDropDown(Organization.ParentId);
+            return View(Organization);
         }
 
-        // GET: BusinessUnit/Delete/5
+        // GET: Organization/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BusinessUnit businessUnit = db.BusinessUnits.Find(id);
-            if (businessUnit == null)
+            Organization Organization = db.Organizations.Find(id);
+            if (Organization == null)
             {
                 return HttpNotFound();
             }
-            return View(businessUnit);
+            return View(Organization);
         }
 
-        // POST: BusinessUnit/Delete/5
+        // POST: Organization/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            BusinessUnit businessUnit = db.BusinessUnits.Find(id);
-            db.BusinessUnits.Remove(businessUnit);
+            Organization Organization = db.Organizations.Find(id);
+            db.Organizations.Remove(Organization);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -154,11 +154,11 @@ namespace VaWorks.Web.Controllers
 
         private void PopulateDropDown(object selected = null)
         {
-            var units = from c in db.BusinessUnits
+            var units = from c in db.Organizations
                             orderby c.Name
                             select c;
 
-            ViewBag.ParentBusinessUnitId = new SelectList(units, "BusinessUnitId", "Name", selected);
+            ViewBag.ParentId = new SelectList(units, "OrganizationId", "Name", selected);
         }
 
         #endregion

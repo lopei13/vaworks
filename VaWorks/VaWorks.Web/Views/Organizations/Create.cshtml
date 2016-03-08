@@ -1,10 +1,10 @@
-﻿@model VaWorks.Web.DataAccess.Entities.BusinessUnit
+﻿@model VaWorks.Web.DataAccess.Entities.Organization
 
 @{
     ViewBag.Title = "Create";
 }
 
-<h2>Create New Business Unit</h2>
+<h2>Create New Organization</h2>
 
 
 @using (Html.BeginForm()) 
@@ -15,10 +15,10 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.ParentBusinessUnitId, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ParentId, new { @class = "control-label col-md-2" })
             <div class="col-lg-10">
-                @Html.DropDownList("ParentBusinessUnitId", "Select a Parent Business Unit")
-                @Html.ValidationMessageFor(model => model.ParentBusinessUnitId)
+                @Html.DropDownList("ParentId", "Select a Parent Organization")
+                @Html.ValidationMessageFor(model => model.ParentId)
             </div>
         </div>
 

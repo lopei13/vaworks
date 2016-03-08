@@ -12,7 +12,7 @@ namespace VaWorks.Web.DataAccess
     {
         #region DbSets
 
-        public DbSet<BusinessUnit> BusinessUnits { get; set; }
+        public DbSet<Organization> Organizations { get; set; }
 
         public DbSet<Kit> Kits { get; set; }
 
@@ -20,15 +20,19 @@ namespace VaWorks.Web.DataAccess
 
         public DbSet<Actuator> Actuators { get; set; }
 
-        public DbSet<BusinessUnitActuators> BusinessUnitActuators { get; set; }
+        public DbSet<OrganizationActuators> OrganizationActuators { get; set; }
 
-        public DbSet<BusinessUnitValves> BusinessUnitValves { get; set; }
+        public DbSet<OrganizationValves> OrganizationValves { get; set; }
 
-        public DbSet<BusinessUnitKits> BusinessUnitKits { get; set; }
+        public DbSet<OrganizationKits> OrganizationKits { get; set; }
 
         public DbSet<ValveInterfaceCode> ValveInterfaceCodes { get; set; }
 
         public DbSet<ActuatorInterfaceCode> ActuatorInterfaceCodes { get; set; }
+
+        public DbSet<KitMaterial> KitMaterials { get; set; }
+
+        public DbSet<KitOption> KitOptions { get; set; }
 
         #endregion
 

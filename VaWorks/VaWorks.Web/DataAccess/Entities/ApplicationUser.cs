@@ -13,7 +13,7 @@ namespace VaWorks.Web.DataAccess.Entities
     {
         public int BusinessUnitId { get; set; }
 
-        public virtual BusinessUnit BusinessUnit { get; set; }
+        public virtual Organization BusinessUnit { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
