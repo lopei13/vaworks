@@ -9,7 +9,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{01718467-0785-4F93-BF00-0B5AF14B58EA}</ProjectGuid>
+    <ProjectGuid>{4F0A8E18-805B-44B9-8082-AFDA2F8F9826}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -182,47 +182,44 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\OrganizationsController.cs" />
+    <Compile Include="Controllers\ActuatorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KitsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\ActuatorsController.cs" />
+    <Compile Include="Controllers\OrganizationsController.cs" />
     <Compile Include="Controllers\ValvesController.cs" />
-    <Compile Include="DataAccess\ApplicationDataContext.cs" />
-    <Compile Include="DataAccess\DataWriters\KitDataWriter.cs" />
-    <Compile Include="DataAccess\DataWriters\ActuatorDataWriter.cs" />
-    <Compile Include="DataAccess\DataWriters\ValveDataWriter.cs" />
-    <Compile Include="DataAccess\Entities\ApplicationUser.cs" />
-    <Compile Include="DataAccess\Entities\Organization.cs" />
-    <Compile Include="DataAccess\Entities\Kit.cs" />
-    <Compile Include="DataAccess\Entities\Actuators.cs" />
-    <Compile Include="DataAccess\Entities\Valve.cs" />
-    <Compile Include="DataAccess\DataReaders\CSVReader.cs" />
-    <Compile Include="DataAccess\IDataWriter.cs" />
+    <Compile Include="Data\ApplicationDataContext.cs" />
+    <Compile Include="Data\DataReaders\CSVReader.cs" />
+    <Compile Include="Data\DataWriters\ActuatorDataWriter.cs" />
+    <Compile Include="Data\DataWriters\KitDataWriter.cs" />
+    <Compile Include="Data\DataWriters\ValveDataWriter.cs" />
+    <Compile Include="Data\Entities\Actuators.cs" />
+    <Compile Include="Data\Entities\ApplicationUser.cs" />
+    <Compile Include="Data\Entities\Kit.cs" />
+    <Compile Include="Data\Entities\Organization.cs" />
+    <Compile Include="Data\Entities\Valve.cs" />
+    <Compile Include="Data\IDataWriter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\MessageViewModel.cs" />
-    <Compile Include="Models\KitViewModel.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="ViewModels\AccountViewModels.cs" />
+    <Compile Include="ViewModels\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\MessageViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datepicker.css" />
-    <Content Include="Content\bootstrap-datepicker3.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Gridmvc.css" />
     <Content Include="Content\gridmvc.datepicker.css" />
-    <Content Include="Content\gridmvc.datepicker.min.css" />
+    <Content Include="Content\tree.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Grid.mvc.readme" />
@@ -275,29 +272,14 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Organizations\Create.cshtml" />
     <Content Include="Views\Organizations\Delete.cshtml" />
     <Content Include="Views\Organizations\Details.cshtml" />
     <Content Include="Views\Organizations\Edit.cshtml" />
     <Content Include="Views\Organizations\Index.cshtml" />
-    <Content Include="Views\Kits\Create.cshtml" />
-    <Content Include="Views\Kits\Delete.cshtml" />
-    <Content Include="Views\Kits\Details.cshtml" />
-    <Content Include="Views\Kits\Edit.cshtml" />
-    <Content Include="Views\Kits\Index.cshtml" />
-    <Content Include="Views\Kits\Import.cshtml" />
-    <Content Include="Views\Kits\ImportKits.cshtml" />
-    <Content Include="Views\Shared\_AdminMenu.cshtml" />
-    <Content Include="Views\Valves\Create.cshtml" />
-    <Content Include="Views\Valves\Delete.cshtml" />
-    <Content Include="Views\Valves\Details.cshtml" />
-    <Content Include="Views\Valves\Edit.cshtml" />
-    <Content Include="Views\Valves\Index.cshtml" />
-    <Content Include="Views\Valves\Import.cshtml" />
-    <Content Include="Views\Kits\_List.cshtml" />
     <Content Include="Views\Shared\_GridPager.cshtml" />
     <Content Include="Views\Shared\_Grid.cshtml" />
-    <Content Include="Views\Valves\ImportValves.cshtml" />
     <Content Include="Views\Actuators\Create.cshtml" />
     <Content Include="Views\Actuators\Delete.cshtml" />
     <Content Include="Views\Actuators\Details.cshtml" />
@@ -305,6 +287,21 @@
     <Content Include="Views\Actuators\Import.cshtml" />
     <Content Include="Views\Actuators\ImportActuators.cshtml" />
     <Content Include="Views\Actuators\Index.cshtml" />
+    <Content Include="Views\Kits\Create.cshtml" />
+    <Content Include="Views\Kits\Delete.cshtml" />
+    <Content Include="Views\Kits\Details.cshtml" />
+    <Content Include="Views\Kits\Edit.cshtml" />
+    <Content Include="Views\Kits\Import.cshtml" />
+    <Content Include="Views\Kits\ImportKits.cshtml" />
+    <Content Include="Views\Kits\Index.cshtml" />
+    <Content Include="Views\Kits\_List.cshtml" />
+    <Content Include="Views\Valves\Create.cshtml" />
+    <Content Include="Views\Valves\Delete.cshtml" />
+    <Content Include="Views\Valves\Details.cshtml" />
+    <Content Include="Views\Valves\Edit.cshtml" />
+    <Content Include="Views\Valves\Import.cshtml" />
+    <Content Include="Views\Valves\ImportValves.cshtml" />
+    <Content Include="Views\Valves\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -333,9 +330,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52311</DevelopmentServerPort>
+          <DevelopmentServerPort>50630</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:52311/</IISUrl>
+          <IISUrl>http://localhost:50630/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -7,14 +7,15 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using VaWorks.Web.DataAccess;
-using VaWorks.Web.DataAccess.DataReaders;
-using VaWorks.Web.DataAccess.DataWriters;
-using VaWorks.Web.DataAccess.Entities;
-using VaWorks.Web.Models;
+using VaWorks.Web.Data;
+using VaWorks.Web.Data.DataReaders;
+using VaWorks.Web.Data.DataWriters;
+using VaWorks.Web.Data.Entities;
+using VaWorks.Web.ViewModels;
 
 namespace VaWorks.Web.Controllers
 {
+    [Authorize(Roles = "System Administrator")]
     public class ValvesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

@@ -8,8 +8,8 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using VaWorks.Web.Models;
-using VaWorks.Web.DataAccess.Entities;
+using VaWorks.Web.Data.Entities;
+using VaWorks.Web.ViewModels;
 
 namespace VaWorks.Web.Controllers
 {
@@ -28,6 +28,7 @@ namespace VaWorks.Web.Controllers
             UserManager = userManager;
             SignInManager = signInManager;
         }
+    
 
         public ApplicationSignInManager SignInManager
         {
@@ -53,6 +54,22 @@ namespace VaWorks.Web.Controllers
             }
         }
 
+        public ActionResult Index()
+        {
+            var user = UserManager.FindByName(User.Identity.GetUserName());
+
+            return View(user);
+        }
+
+        public ActionResult Menu()
+        {
+            if(User.IsInRole("System Administrator")) {
+                return View("_AdminMenu");
+            }
+
+            return View("_Menu");
+        }
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -76,7 +93,7 @@ namespace VaWorks.Web.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -152,7 +169,12 @@ namespace VaWorks.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    Name = $"{model.FirstName} {model.LastName}",
+                    PhoneNumber = model.PhoneNumber
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

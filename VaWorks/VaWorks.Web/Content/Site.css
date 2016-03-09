@@ -23,6 +23,26 @@ textarea {
     max-width: 280px;
 }
 
-.nav-pills > ul {
-  padding: 0px 25px;
+.login-form {
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    width: 50%; 
+    height: 80%;
+    min-width: 200px;
+    max-width: 400px;
+    padding: 40px;
+}
+
+.login-form .btn{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.login-form label{
+    margin-top: 10px;
+}
+
+.login-form h2 {
+    margin-bottom : 30px;
 }

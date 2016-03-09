@@ -1,4 +1,4 @@
-﻿@model VaWorks.Web.DataAccess.Entities.Organization
+﻿@model VaWorks.Web.Data.Entities.Organization
 
 @{
     ViewBag.Title = "Create";
@@ -17,7 +17,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ParentId, new { @class = "control-label col-md-2" })
             <div class="col-lg-10">
-                @Html.DropDownList("ParentId", "Select a Parent Organization")
+                @Html.DropDownList("ParentId", (IEnumerable<SelectListItem>)ViewBag.ParentId, "Select a Parent Organization", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ParentId)
             </div>
         </div>

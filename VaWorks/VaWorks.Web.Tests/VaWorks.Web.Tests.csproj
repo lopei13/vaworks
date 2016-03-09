@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{090551CA-A45F-41B7-B132-DED15D5AE431}</ProjectGuid>
+    <ProjectGuid>{7A40C0C8-8A76-446A-8D12-094012EDA6B1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VaWorks.Web.Tests</RootNamespace>
@@ -93,7 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VaWorks.Web\VaWorks.Web.csproj">
-      <Project>{01718467-0785-4F93-BF00-0B5AF14B58EA}</Project>
+      <Project>{4F0A8E18-805B-44B9-8082-AFDA2F8F9826}</Project>
       <Name>VaWorks.Web</Name>
     </ProjectReference>
   </ItemGroup>

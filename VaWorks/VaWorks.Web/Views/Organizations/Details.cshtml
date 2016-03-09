@@ -1,17 +1,17 @@
-﻿@model VaWorks.Web.DataAccess.Entities.Organization
+﻿@model VaWorks.Web.Data.Entities.Organization
 
 @{
     ViewBag.Title = "Company";
 }
 
-@helper ShowFullName(VaWorks.Web.DataAccess.Entities.Organization model) { 
+@helper ShowFullName(VaWorks.Web.Data.Entities.Organization model) { 
     if(model.ParentOrganization != null) {
         @ShowFullName(model.ParentOrganization);
     }
     <li>@Html.ActionLink(model.Name, "Details", new { id = model.OrganizationId })</li>
 }
 
-<ul class="breadcrumb h2"><li>@Html.ActionLink("All", "Index")</li> @ShowFullName(Model)</ul>
+<ol class="breadcrumb h2"><li>@Html.ActionLink("All", "Index")</li> @ShowFullName(Model)</ol>
 
 <p>
     <div class="btn-toolbar">
@@ -42,11 +42,20 @@
             <div class="btn-group">
                 @Html.ActionLink("Add Organization", "Create", new { parentId = Model.OrganizationId }, new { @class = "btn btn-link" })
             </div>
-            <ul class="nav nav-pills nav-stacked">
-                @foreach(var c in Model.Children) {
-                    <li>@Html.ActionLink(c.Name, "Details", new { id = c.OrganizationId })</li>
+           @helper ShowTree(IEnumerable<VaWorks.Web.Data.Entities.Organization> items, int level)
+           {
+                foreach (var item in items) {
+                        <ul>
+                            <li>
+                                @Html.ActionLink(item.Name, "Details", new { id = item.OrganizationId }, new { @class = "btn btn-link" })
+                            </li>
+                            @ShowTree(item.Children, level++)
+                        </ul>
                 }
-            </ul>
+                }
+            <div class="tree">
+                @ShowTree(Model.Children, 0)
+            </div>
         </div>
 
         <div class="tab-pane fade in" id="users">
@@ -107,7 +116,8 @@
         
         <div class="tab-pane fade in" id="kits">
             <p>
-                @Html.ActionLink("Import Kits", "Import", "Kits", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" })
+                @Html.ActionLink("Import Kits", "Import", "Kits", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" }) | 
+                @Html.ActionLink("Delete All", "Import", "Kits", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" })
             </p>
 
                 @using GridMvc.Html
@@ -164,7 +174,8 @@
 
 @section styles{
     <link href="~/Content/Gridmvc.css" rel="stylesheet">
-    <link href="~/Content/gridmvc.datepicker.min.css" rel="stylesheet" >
+    <link href="~/Content/gridmvc.datepicker.css" rel="stylesheet" >
+    <link href="~/Content/tree.css" rel="stylesheet" />
 }
 
 @section scripts {
@@ -200,6 +211,16 @@
         $('#valves').find(".grid-header").find(".grid-header-title").find("a").each(
             function () {
                 $(this).attr('href', this.href + "#valves");
+            });
+
+        $('#actuators').find(".grid-footer").find("ul").find("a").each(
+           function () {
+               $(this).attr('href', this.href + "#actuators");
+           });
+
+        $('#actuators').find(".grid-header").find(".grid-header-title").find("a").each(
+            function () {
+                $(this).attr('href', this.href + "#actuators");
             });
     </script>
 

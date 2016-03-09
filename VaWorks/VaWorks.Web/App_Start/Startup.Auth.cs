@@ -5,8 +5,8 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using VaWorks.Web.DataAccess;
-using VaWorks.Web.DataAccess.Entities;
+using VaWorks.Web.Data;
+using VaWorks.Web.Data.Entities;
 
 namespace VaWorks.Web
 {

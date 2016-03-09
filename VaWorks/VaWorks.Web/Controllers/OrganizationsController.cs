@@ -6,11 +6,12 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using VaWorks.Web.DataAccess;
-using VaWorks.Web.DataAccess.Entities;
+using VaWorks.Web.Data;
+using VaWorks.Web.Data.Entities;
 
 namespace VaWorks.Web.Controllers
 {
+    [Authorize(Roles = "System Administrator")]
     public class OrganizationsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
