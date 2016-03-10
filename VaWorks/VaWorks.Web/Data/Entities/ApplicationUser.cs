@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace VaWorks.Web.Data.Entities
         [MaxLength(100)]
         public string Name { get; set; }
 
+        public string ImageString { get; set; }
+
         public virtual Organization BusinessUnit { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
@@ -27,4 +30,5 @@ namespace VaWorks.Web.Data.Entities
             return userIdentity;
         }
     }
+
 }

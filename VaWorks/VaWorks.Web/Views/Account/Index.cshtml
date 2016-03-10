@@ -8,13 +8,13 @@
 
 <div>
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#quotes" data-toggle="tab" aria-expanded="true">Quotes</a></li>
-        <li class=""><a href="#contacts" data-toggle="tab" aria-expanded="true">Contacts</a></li>
-        <li class=""><a href="#profile" data-toggle="tab" aria-expanded="true">Profile</a></li>
+        <li class="active"><a href="#profile" data-toggle="tab" aria-expanded="true">Profile</a></li>
+        <li class=""><a href="#quotes" data-toggle="tab" aria-expanded="true">Quotes</a></li>
+        <li class=""><a href="#contacts" data-toggle="tab" aria-expanded="true">Contacts</a></li>    
         <li class=""><a href="#messages" data-toggle="tab" aria-expanded="false">Messages <span class="badge">36</span></a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active in" id="quotes">
+        <div class="tab-pane fade in" id="quotes">
          
         </div>
 
@@ -22,43 +22,62 @@
           
         </div>
 
-        <div class="tab-pane fade in" id="profile">
+        <div class="tab-pane fade active in" id="profile">
             <h3>Edit Profile</h3>
             <div class="row">
-                @using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+                @using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" })) {
                     @Html.AntiForgeryToken()
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
-                        <div class="col-md-3">
-                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "User name", type = "text" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
-                        <div class="col-md-3">
-                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "First name", type = "text" })
-                        </div>
-                    </div>
+                    @Html.HiddenFor(m => m.Id)
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            @if (string.IsNullOrEmpty(Model.ImageString)) {
+                                <img src="~/images/profiledefault.png" class="avatar img-circle" alt="avatar">
+                            } else {
+                                <img src="@Model.ImageString" class="avatar img-circle" alt="avatar">
+                            }
+                            <h6>Upload a different photo...</h6>
 
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                        <div class="col-md-3">
-                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email" })
-                        </div>      
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
-                        <div class="col-md-3">
-                            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", placeholder = "Phone", type = "email" })
+                            <input type="file" name="file" class="form-control">
                         </div>
                     </div>
+                    <div class="col-md-9 personal-info">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "User name", type = "text" })
+                                @Html.ValidationMessageFor(m => m.UserName)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "First name", type = "text" })
+                                @Html.ValidationMessageFor(m => m.Name)
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <div class="col-md-2 col-md-offset-3" style="margin-top: 15px;">
-                            <input type="submit" class="btn btn-primary form-control" value="Save" />
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email" })
+                                @Html.ValidationMessageFor(m => m.Email)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", placeholder = "Phone", type = "phone" })
+                                @Html.ValidationMessageFor(m => m.PhoneNumber)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-2 col-md-offset-3" style="margin-top: 15px;">
+                                <input type="submit" class="btn btn-primary form-control" value="Save" />
+                            </div>
                         </div>
                     </div>
-                }
+                }     
             </div>
         </div>
 

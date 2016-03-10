@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using VaWorks.Web.Data.Entities;
 using VaWorks.Web.ViewModels;
+using VaWorks.Web.Data;
 
 namespace VaWorks.Web.Controllers
 {
@@ -18,12 +19,13 @@ namespace VaWorks.Web.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext _db;
 
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -54,9 +56,17 @@ namespace VaWorks.Web.Controllers
             }
         }
 
+        public ApplicationDbContext DataContext
+        {
+            get
+            {
+                return _db ?? HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+            }
+        }
+
         public ActionResult Index()
         {
-            var user = UserManager.FindByName(User.Identity.GetUserName());
+            var user = UserManager.FindById(User.Identity.GetUserId());
 
             return View(user);
         }
@@ -68,6 +78,35 @@ namespace VaWorks.Web.Controllers
             }
 
             return View("_Menu");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ApplicationUser user, HttpPostedFileBase file)
+        {
+            if (ModelState.IsValid) {
+
+                var u = UserManager.FindById(user.Id);
+
+                if (file != null) {
+                    if (file.ContentLength > 0) {
+                        byte[] data = new byte[file.ContentLength];
+                        file.InputStream.Read(data, 0, file.ContentLength);
+
+                        u.ImageString = $"data:{file.ContentType};base64,{Convert.ToBase64String(data)}";
+                    }
+                }
+
+                u.PhoneNumber = user.PhoneNumber;
+                u.Email = user.Email;
+                u.Name = user.Name;
+                u.UserName = user.UserName;
+
+                UserManager.Update(u);
+
+                return RedirectToAction("Index");
+            }
+            return View("Index", user);           
         }
 
         //
