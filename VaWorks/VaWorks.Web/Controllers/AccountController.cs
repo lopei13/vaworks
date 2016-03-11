@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using VaWorks.Web.Data.Entities;
 using VaWorks.Web.ViewModels;
 using VaWorks.Web.Data;
+using System.Collections.Generic;
 
 namespace VaWorks.Web.Controllers
 {
@@ -239,6 +240,12 @@ namespace VaWorks.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var invite = DataContext.Invitations.Where(i => i.InvitationCode == model.InvitationCode).FirstOrDefault();
+
+                if (invite == null || invite.IsClaimed) {
+                    return View("Confirmation", new List<MessageViewModel>() { new MessageViewModel() { AlertType = "Warning", Message = "Invitation code is not valid." } });
+                }
+
                 var user = new ApplicationUser {
                     UserName = model.UserName,
                     Email = model.Email,
@@ -249,12 +256,17 @@ namespace VaWorks.Web.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    invite.IsClaimed = true;
+                    invite.ClaimedDate = DateTimeOffset.Now;
+                    invite.ClaimedEmail = model.Email;
+                    DataContext.SaveChanges();
 
                     return RedirectToAction("Index", "Home");
                 }

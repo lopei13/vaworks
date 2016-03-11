@@ -89,13 +89,16 @@
           
         </div>
 
+        @if (User.IsInRole("System Administrator")) {
         <div class="tab-pane fade in" id="requests">
             @{ Html.RenderAction("InvitationRequestsList", "Invitations"); }
         </div>
-
+                }
+        @if (User.IsInRole("System Administrator")) {
         <div class="tab-pane fade in" id="invitations">
             @{ Html.RenderAction("InvitationsList", "Invitations"); }
         </div>
+                }
 
     </div>
 </div>

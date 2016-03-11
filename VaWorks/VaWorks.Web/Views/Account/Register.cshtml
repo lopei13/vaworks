@@ -8,10 +8,11 @@
 
         <h2>Register</h2>
         @Html.AntiForgeryToken()
+        @Html.ValidationSummary();
         <div class="form-group">
             @Html.LabelFor(m => m.InvitationCode, new { @class = "col-md-2 control-label" })
             <div class="col-md-2">
-                @Html.TextBoxFor(m => m.InvitationCode, new { @class = "form-control", placeholder = "Invitation Code", type = "email" })
+                @Html.TextBoxFor(m => m.InvitationCode, new { @class = "form-control", placeholder = "Invitation Code", type = "text" })
             </div>
         </div>
             <hr />
@@ -26,12 +27,14 @@
                 @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
             <div class="col-md-2">
                 @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", type = "password" })
+                @Html.ValidationMessageFor(m => m.Password)
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
             <div class="col-md-2">
                 @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm Password", type = "password" })
+                @Html.ValidationMessageFor(m => m.ConfirmPassword)
             </div>
         </div>
         <hr />
@@ -39,10 +42,12 @@
             @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
             <div class="col-md-2">
                 @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "First name", type = "text" })
+                @Html.ValidationMessageFor(m => m.FirstName)
             </div>
             @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
             <div class="col-md-2">
                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Last name", type = "text" })
+                @Html.ValidationMessageFor(m => m.LastName)
             </div>
         </div>
 
@@ -50,10 +55,12 @@
             @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
             <div class="col-md-2">
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email" })
+                @Html.ValidationMessageFor(m => m.Email)
             </div>
             @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
             <div class="col-md-2">
                 @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", placeholder = "Phone", type = "phone" })
+                @Html.ValidationMessageFor(m => m.PhoneNumber)
             </div>
         </div>
 
