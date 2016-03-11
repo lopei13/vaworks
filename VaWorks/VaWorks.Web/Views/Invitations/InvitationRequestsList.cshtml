@@ -1,0 +1,13 @@
+﻿@model IEnumerable<VaWorks.Web.Data.Entities.InvitationRequest>
+
+
+@using GridMvc.Html
+@Html.Grid(Model).Columns(columns => {
+    columns.Add(m => m.Name).Titled("Name").Sortable(true);
+    columns.Add(m => m.Email).Titled("Email").Sortable(true);
+    columns.Add(m => m.Company).Titled("Company").Sortable(true);
+    columns.Add(m => m.RequestDate).Titled("Request Date").Sortable(true).RenderValueAs(m => m.RequestDate.Date.ToShortDateString());
+    columns.Add(m => m.Status).Titled("Request Status").Sortable(true);
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Grant", "AcceptRequest", new { id = m.InvitationRequestId }));
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Reject", "RejectRequest", new { id = m.InvitationRequestId }));
+}).WithPaging(50)

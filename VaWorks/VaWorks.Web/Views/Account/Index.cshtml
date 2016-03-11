@@ -1,7 +1,7 @@
 ﻿@model VaWorks.Web.Data.Entities.ApplicationUser
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "VaWorks";
 }
 
 <h2>@Model.Name</h2>
@@ -12,6 +12,10 @@
         <li class=""><a href="#quotes" data-toggle="tab" aria-expanded="true">Quotes</a></li>
         <li class=""><a href="#contacts" data-toggle="tab" aria-expanded="true">Contacts</a></li>    
         <li class=""><a href="#messages" data-toggle="tab" aria-expanded="false">Messages <span class="badge">36</span></a></li>
+        @if (User.IsInRole("System Administrator")) {
+            <li class=""><a href="#requests" data-toggle="tab" aria-expanded="false">Requests @{Html.RenderAction("PendingRequestsCount", "Invitations");}</a></li>
+            <li class=""><a href="#invitations" data-toggle="tab" aria-expanded="false">Invitations @{Html.RenderAction("PendingInvitationsCount", "Invitations");}</a></li>
+        }
     </ul>
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade in" id="quotes">
@@ -85,9 +89,51 @@
           
         </div>
 
+        <div class="tab-pane fade in" id="requests">
+            @{ Html.RenderAction("InvitationRequestsList", "Invitations"); }
+        </div>
+
+        <div class="tab-pane fade in" id="invitations">
+            @{ Html.RenderAction("InvitationsList", "Invitations"); }
+        </div>
+
     </div>
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        var url = document.location.toString();
+        if (url.match('#')) {
+            $('.nav-tabs a[href=#' + url.split('#')[1] + ']').tab('show');
+        }
+
+        // Change hash for page-reload
+        $('.nav-tabs a').on('shown.bs.tab', function (e) {
+            window.location.hash = e.target.hash;
+        })
+
+        // change the paging url
+        $('#invitations').find(".grid-footer").find("ul").find("a").each(
+            function () {
+                $(this).attr('href', this.href + "#invitations");
+            });
+
+        $('#invitations').find(".grid-header").find(".grid-header-title").find("a").each(
+            function () {
+                $(this).attr('href', this.href + "#invitations");
+            });
+
+        $('#requests').find(".grid-footer").find("ul").find("a").each(
+            function () {
+                $(this).attr('href', this.href + "#requests");
+            });
+
+        $('#requests').find(".grid-header").find(".grid-header-title").find("a").each(
+            function () {
+                $(this).attr('href', this.href + "#requests");
+            });
+
+    </script>
 }

@@ -148,6 +148,37 @@ namespace VaWorks.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
+        public ActionResult RequestAccess()
+        {
+            return View(new RequestInviteViewModel());
+        }
+
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult RequestAccess(RequestInviteViewModel model)
+        {
+            if (ModelState.IsValid) {
+
+                DataContext.InvitationRequests.Add(new InvitationRequest() {
+                    RequestDate = DateTimeOffset.Now,
+                    Company = model.Company,
+                    Email = model.Email,
+                    Name = model.Name,
+                    Status = RequestStatus.New
+                });
+
+                DataContext.SaveChanges();
+
+                // TODO: Send admin an email
+
+                return View("RequestAccessConfirmation");
+            }
+
+            return View(model);
+        }
+
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]

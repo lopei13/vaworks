@@ -28,6 +28,10 @@ namespace VaWorks.Web.Data
 
         public DbSet<KitOption> KitOptions { get; set; }
 
+        public DbSet<Invitation> Invitations { get; set; }
+
+        public DbSet<InvitationRequest> InvitationRequests { get; set; }
+
         #endregion
 
 

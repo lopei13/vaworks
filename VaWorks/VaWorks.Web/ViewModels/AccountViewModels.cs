@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using VaWorks.Web.Data.Entities;
 
 namespace VaWorks.Web.ViewModels
 {
@@ -99,6 +100,46 @@ namespace VaWorks.Web.ViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+    }
+
+    public class RequestInviteViewModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
+        [Required]
+        public string Company { get; set; }
+
+        [StringLength(500)]
+        public string Comments { get; set; }
+
+    }
+
+    public class InvitationViewModel
+    {
+        [Required]
+        [Display(Name = "Invitation Code")]
+        [StringLength(25)]
+        public string InvitationCode { get; set; }
+
+        [Required]
+        [Display(Name = "Organization")]
+        public int OrganizationId { get; set; }
+
+        [Required]
+        [DataType(DataType.MultilineText)]
+        public string Emails { get; set; }
+
+        [Required]
+        public InvitationType Type { get; set; }
+
+        public int RequestId { get; set; }
     }
 
     public class ResetPasswordViewModel

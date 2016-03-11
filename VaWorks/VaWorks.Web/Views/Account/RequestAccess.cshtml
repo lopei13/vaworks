@@ -1,0 +1,44 @@
+﻿@model VaWorks.Web.ViewModels.RequestInviteViewModel
+@{
+    ViewBag.Title = "Request Access";
+}
+
+<div class="row">
+    @using (Html.BeginForm("RequestAccess", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+
+        <h2>Request Access</h2>
+        @Html.AntiForgeryToken()
+        <hr />
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+            <div class="col-md-2">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+            <div class="col-md-2">
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Name", type = "text" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Company, new { @class = "col-md-2 control-label" })
+            <div class="col-md-2">
+                @Html.TextBoxFor(m => m.Company, new { @class = "form-control", placeholder = "Company", type = "text" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 col-md-offset-2" style="margin-top: 15px;">
+                <input type="submit" class="btn btn-primary form-control" value="Request Access" />
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

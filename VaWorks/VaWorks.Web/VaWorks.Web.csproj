@@ -184,6 +184,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActuatorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InvitationsController.cs" />
     <Compile Include="Controllers\KitsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrganizationsController.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Data\DataWriters\ValveDataWriter.cs" />
     <Compile Include="Data\Entities\Actuators.cs" />
     <Compile Include="Data\Entities\ApplicationUser.cs" />
+    <Compile Include="Data\Entities\Invitation.cs" />
     <Compile Include="Data\Entities\Kit.cs" />
     <Compile Include="Data\Entities\Organization.cs" />
     <Compile Include="Data\Entities\Valve.cs" />
@@ -303,6 +305,17 @@
     <Content Include="Views\Valves\Import.cshtml" />
     <Content Include="Views\Valves\ImportValves.cshtml" />
     <Content Include="Views\Valves\Index.cshtml" />
+    <Content Include="Views\Account\RequestAccess.cshtml" />
+    <Content Include="Views\Account\RequestAccessConfirmation.cshtml" />
+    <Content Include="Views\Invitations\Create.cshtml" />
+    <Content Include="Views\Invitations\Delete.cshtml" />
+    <Content Include="Views\Invitations\Details.cshtml" />
+    <Content Include="Views\Invitations\Edit.cshtml" />
+    <Content Include="Views\Invitations\Index.cshtml" />
+    <Content Include="Views\Shared\BadgeCount.cshtml" />
+    <Content Include="Views\Invitations\InvitationsList.cshtml" />
+    <Content Include="Views\Invitations\InvitationRequestsList.cshtml" />
+    <Content Include="Views\Shared\Confirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

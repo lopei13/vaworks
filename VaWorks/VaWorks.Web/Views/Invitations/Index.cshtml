@@ -1,0 +1,81 @@
+﻿@model IEnumerable<VaWorks.Web.Data.Entities.Invitation>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OrganizationId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InvitationCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SentDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsClaimed)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClaimedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClaimedEmail)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrganizationId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InvitationCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SentDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsClaimed)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClaimedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClaimedEmail)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.InvitationId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.InvitationId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.InvitationId })
+        </td>
+    </tr>
+}
+
+</table>

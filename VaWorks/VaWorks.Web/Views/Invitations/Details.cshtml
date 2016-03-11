@@ -1,0 +1,90 @@
+﻿@model VaWorks.Web.Data.Entities.Invitation
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Invitation</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrganizationId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrganizationId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InvitationCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InvitationCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SentDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SentDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsClaimed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsClaimed)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaimedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaimedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaimedEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaimedEmail)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.InvitationId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
