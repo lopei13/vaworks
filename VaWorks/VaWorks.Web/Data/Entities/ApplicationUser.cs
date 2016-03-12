@@ -13,14 +13,16 @@ namespace VaWorks.Web.Data.Entities
 {
     public class ApplicationUser : IdentityUser
     {
-        public int BusinessUnitId { get; set; }
+        public int OrgainzationId { get; set; }
 
         [MaxLength(100)]
         public string Name { get; set; }
 
         public string ImageString { get; set; }
 
-        public virtual Organization BusinessUnit { get; set; }
+        public virtual Organization Organization { get; set; }
+
+        public virtual ICollection<ShoppingCartItems> ShoppingCart { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

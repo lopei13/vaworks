@@ -186,8 +186,10 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationsController.cs" />
     <Compile Include="Controllers\KitsController.cs" />
+    <Compile Include="Controllers\KitSelectionController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrganizationsController.cs" />
+    <Compile Include="Controllers\ShoppingCartItemsController.cs" />
     <Compile Include="Controllers\ValvesController.cs" />
     <Compile Include="Data\ApplicationDataContext.cs" />
     <Compile Include="Data\DataReaders\CSVReader.cs" />
@@ -199,6 +201,7 @@
     <Compile Include="Data\Entities\Invitation.cs" />
     <Compile Include="Data\Entities\Kit.cs" />
     <Compile Include="Data\Entities\Organization.cs" />
+    <Compile Include="Data\Entities\ShoppingCart.cs" />
     <Compile Include="Data\Entities\Valve.cs" />
     <Compile Include="Data\IDataWriter.cs" />
     <Compile Include="Global.asax.cs">
@@ -212,21 +215,35 @@
     <Compile Include="ViewModels\MessageViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\angular-busy.css" />
+    <Content Include="Content\angular-busy.min.css" />
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Gridmvc.css" />
     <Content Include="Content\gridmvc.datepicker.css" />
     <Content Include="Content\tree.css" />
+    <Content Include="Content\wizard-nav.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="images\profiledefault.png" />
+    <Content Include="Scripts\angular-busy.js" />
+    <Content Include="Scripts\angular-busy.min.js" />
+    <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angular-resource.js" />
+    <Content Include="Scripts\angular-resource.min.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\client\app.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Grid.mvc.readme" />
+    <Content Include="Scripts\angular.min.js.map" />
+    <Content Include="Scripts\angular-resource.min.js.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\client\controllers\mainController.js" />
     <Content Include="Scripts\gridmvc.js" />
     <Content Include="Scripts\gridmvc.lang.ru.js" />
     <Content Include="Scripts\gridmvc.min.js" />
@@ -240,6 +257,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\spin.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -316,6 +334,9 @@
     <Content Include="Views\Invitations\InvitationsList.cshtml" />
     <Content Include="Views\Invitations\InvitationRequestsList.cshtml" />
     <Content Include="Views\Shared\Confirmation.cshtml" />
+    <Content Include="Views\ShoppingCartItems\Details.cshtml" />
+    <Content Include="Views\ShoppingCartItems\Index.cshtml" />
+    <Content Include="Views\KitSelection\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

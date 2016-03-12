@@ -1,0 +1,50 @@
+﻿@model VaWorks.Web.Data.Entities.ShoppingCartItems
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ShoppingCartItems</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Actuator.Manufacturer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Actuator.Manufacturer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Kit.KitNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Kit.KitNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Valve.Manufacturer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Valve.Manufacturer)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ShoppingCartItemId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

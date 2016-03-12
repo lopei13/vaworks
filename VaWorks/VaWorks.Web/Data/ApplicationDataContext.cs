@@ -32,6 +32,8 @@ namespace VaWorks.Web.Data
 
         public DbSet<InvitationRequest> InvitationRequests { get; set; }
 
+        public DbSet<ShoppingCartItems> ShoppingCartItems { get; set; }
+
         #endregion
 
 
@@ -73,6 +75,11 @@ namespace VaWorks.Web.Data
                     x.MapLeftKey("OrganizationId");
                     x.MapRightKey("KitId");
                 });
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOptional(u => u.ShoppingCart)
+                .WithOptionalDependent()
+                .WillCascadeOnDelete(true);
 
             base.OnModelCreating(modelBuilder);
         }
