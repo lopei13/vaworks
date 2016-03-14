@@ -28,11 +28,12 @@ namespace VaWorks.Web.Controllers
         // GET: ShoppingCartItems
         public ActionResult Index()
         {
+            var userId = User.Identity.GetUserId();
             var shoppingCartItems = db.ShoppingCartItems
                 .Include(s => s.Actuator)
                 .Include(s => s.Kit)
                 .Include(s => s.User)
-                .Include(s => s.Valve);
+                .Include(s => s.Valve).Where(u => u.UserId == userId);
             return View(shoppingCartItems.ToList());
         }
 

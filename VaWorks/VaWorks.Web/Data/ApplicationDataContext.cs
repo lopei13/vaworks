@@ -38,6 +38,10 @@ namespace VaWorks.Web.Data
 
         public DbSet<QuoteItems> QuoteItems { get; set; }
 
+        public DbSet<Discount> Discounts { get; set; }
+
+        public DbSet<SystemMessage> SystemMessages { get; set; }
+
         #endregion
 
 

@@ -67,7 +67,9 @@ namespace VaWorks.Web.Controllers
 
         public ActionResult Index()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
+            var userId = User.Identity.GetUserId();
+            var user = DataContext.Users.Find(userId);
+
             
             return View(user);
         }
@@ -87,7 +89,7 @@ namespace VaWorks.Web.Controllers
         {
             if (ModelState.IsValid) {
 
-                var u = UserManager.FindById(user.Id);
+                var u = DataContext.Users.Find(user.Id);
 
                 if (file != null) {
                     if (file.ContentLength > 0) {
@@ -101,15 +103,15 @@ namespace VaWorks.Web.Controllers
                 u.PhoneNumber = user.PhoneNumber;
                 u.Email = user.Email;
                 u.Name = user.Name;
-                u.UserName = user.UserName;
+                //u.UserName = user.UserName;
                 u.Facebook = user.Facebook;
                 u.Twitter = user.Twitter;
                 u.LinkedIn = user.LinkedIn;
                 u.Skype = user.Skype;
                 u.Title = user.Title;
 
-                UserManager.Update(u);
-
+                //UserManager.Update(u);
+                DataContext.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View("Index", user);           
@@ -513,6 +515,14 @@ namespace VaWorks.Web.Controllers
             return View();
         }
 
+        public ActionResult GetNewMessageCount()
+        {
+            var userId = User.Identity.GetUserId();
+            var messages = DataContext.SystemMessages.Where(m => m.UserId == userId).Where(m => !m.IsRead);
+
+            return PartialView("BadgeCount", messages.Count() > 0 ? messages.Count().ToString() : "");
+        }
+
         public JsonResult GetOrganizationDetails(int organizationId)
         {
             var org = from o in DataContext.Organizations
@@ -520,6 +530,39 @@ namespace VaWorks.Web.Controllers
                       select new { o.Name, };
 
             return Json(org, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult MarkMessageAsRead(int messageId)
+        {
+            var userId = User.Identity.GetUserId();
+            var message = DataContext.SystemMessages
+                .Where(m => m.UserMessageId == messageId)
+                .Where(m => m.UserId == userId).FirstOrDefault();
+
+            if(message != null) {
+                message.IsRead = true;
+                message.DateRead = DateTimeOffset.Now;
+                DataContext.SaveChanges();
+                return Redirect(Url.RouteUrl(new { controller = "Account", action = "Index" }) + "#messages");
+            }
+            return HttpNotFound();
+        }
+
+        [HttpPost]
+        public ActionResult DeleteMessage(int messageId)
+        {
+            var userId = User.Identity.GetUserId();
+            var message = DataContext.SystemMessages
+                .Where(m => m.UserMessageId == messageId)
+                .Where(m => m.UserId == userId).FirstOrDefault();
+
+            if (message != null) {
+                DataContext.SystemMessages.Remove(message);
+                DataContext.SaveChanges();
+                return Redirect(Url.RouteUrl(new { controller = "Account", action = "Index" }) + "#messages");
+            }
+            return HttpNotFound();
         }
 
         protected override void Dispose(bool disposing)

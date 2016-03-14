@@ -11,7 +11,7 @@
         <li class="active"><a href="#profile" data-toggle="tab" aria-expanded="true">Profile</a></li>
         <li class=""><a href="#quotes" data-toggle="tab" aria-expanded="true">Quotes</a></li>
         <li class=""><a href="#contacts" data-toggle="tab" aria-expanded="true">Contacts</a></li>    
-        <li class=""><a href="#messages" data-toggle="tab" aria-expanded="false">Messages <span class="badge">36</span></a></li>
+        <li class=""><a href="#messages" data-toggle="tab" aria-expanded="false">Messages @{Html.RenderAction("GetNewMessageCount", "Account");}</a></li>
         @if (User.IsInRole("System Administrator")) {
             <li class=""><a href="#requests" data-toggle="tab" aria-expanded="false">Requests @{Html.RenderAction("PendingRequestsCount", "Invitations");}</a></li>
             <li class=""><a href="#invitations" data-toggle="tab" aria-expanded="false">Invitations @{Html.RenderAction("PendingInvitationsCount", "Invitations");}</a></li>
@@ -19,7 +19,16 @@
     </ul>
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade in" id="quotes">
-         
+            <div class="btn-group">
+                @Html.ActionLink("Select Kit", "Index", "KitSelection", null, new { @class = "btn btn-link" })
+            </div>
+            @using GridMvc.Html;
+            @if (Model.Organization != null) {
+                @Html.Grid(Model.Organization.GetAllQuotes()).Columns(columns => {
+                    columns.Add(m => m.QuoteNumber).Sortable(true).Filterable(true).SetWidth(220);
+                    columns.Add(m => m.CreatedDate).Sortable(true).Filterable(true);
+                }).WithPaging(10).WithMultipleFilters()
+            }
         </div>
 
         <div class="tab-pane fade in" id="contacts">
@@ -77,7 +86,7 @@
                         </div>   
                     </div>
                   </div>
-                    }
+                  }
             </div>
             <div class="row">
                 <h4>Add Contacts</h4>
@@ -116,7 +125,7 @@
                         <div class="form-group">
                             @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
                             <div class="col-md-3">
-                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "User name", type = "text" })
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "User name", type = "text", disabled = true })
                                 @Html.ValidationMessageFor(m => m.UserName)
                             </div>
                         </div>
@@ -188,7 +197,14 @@
         </div>
 
         <div class="tab-pane fade in" id="messages">
-          
+            @using GridMvc.Html;
+            @Html.Grid(Model.Messages).Columns(columns => {
+               columns.Add(m => m.Message).Sortable(false).Filterable(false).SetWidth(400);
+               columns.Add(m => m.DateSent).Titled("Date").Sortable(true).Filterable(true).RenderValueAs(m => m.DateSent.Date.ToShortDateString());
+               columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<form action="Account/MarkMessageAsRead" method="post">@if (!m.IsRead) {<input type="hidden" value="@m.UserMessageId" name="messageId" /> <input type="submit" value="Mark as Read" class="btn btn-link" />}</form>);
+               columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<form action="Account/DeleteMessage" method="post"><input type="hidden" value="@m.UserMessageId" name="messageId" /> <input type="submit" value="Delete" class="btn btn-link" /></form>);
+
+               }).WithPaging(10).WithMultipleFilters()
         </div>
 
         @if (User.IsInRole("System Administrator")) {
@@ -238,6 +254,27 @@
         $('#requests').find(".grid-header").find(".grid-header-title").find("a").each(
             function () {
                 $(this).attr('href', this.href + "#requests");
+            });
+
+        $('#quotes').find(".grid-footer").find("ul").find("a").each(
+            function () {
+                $(this).attr('href', this.href + "#quotes");
+            });
+
+        $('#quotes').find(".grid-header").find(".grid-header-title").find("a").each(
+            function () {
+                $(this).attr('href', this.href + "#quotes");
+            });
+
+
+        $('#messages').find(".grid-footer").find("ul").find("a").each(
+            function () {
+                $(this).attr('href', this.href + "#messages");
+            });
+
+        $('#messages').find(".grid-header").find(".grid-header-title").find("a").each(
+            function () {
+                $(this).attr('href', this.href + "#messages");
             });
 
 

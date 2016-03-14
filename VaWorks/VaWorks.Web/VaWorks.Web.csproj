@@ -204,6 +204,7 @@
     <Compile Include="Data\Entities\Organization.cs" />
     <Compile Include="Data\Entities\Quote.cs" />
     <Compile Include="Data\Entities\ShoppingCart.cs" />
+    <Compile Include="Data\Entities\SystemMessage.cs" />
     <Compile Include="Data\Entities\Valve.cs" />
     <Compile Include="Data\IDataWriter.cs" />
     <Compile Include="Global.asax.cs">

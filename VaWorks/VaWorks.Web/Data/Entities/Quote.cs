@@ -20,6 +20,9 @@ namespace VaWorks.Web.Data.Entities
         public int OrganizationId { get; set; }
 
         [Required]
+        public int QuoteNumber { get; set; }
+
+        [Required]
         public string CustomerName { get; set; }
 
         [Required]
@@ -70,5 +73,23 @@ namespace VaWorks.Web.Data.Entities
         public double Discount { get; set; }
 
         public double TotalPrice { get; set; }
+    }
+
+    [Table("Discounts")]
+    public class Discount
+    {
+        [Key]
+        public int DiscountId { get; set; }
+
+        public int OrganizationId { get; set; }
+
+        public int Quantity { get; set; }
+
+        [Range(0, 100)]
+        [Display(Name = "Discount")]
+        public double DiscountPercentage { get; set; }
+
+        [ForeignKey("OrganizationId")]
+        public virtual Organization Organization { get; set; }
     }
 }

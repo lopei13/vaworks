@@ -62,11 +62,62 @@
             <div class="btn-group">
                 @Html.ActionLink("Invite User", "Invite", new { parentId = Model.OrganizationId }, new { @class = "btn btn-link" })
             </div>
-            <ul class="nav nav-pills nav-stacked">
-                <li><a href="#">Fred</a></li>
-                <li><a href="#">Frank</a></li>
-                <li><a href="#">Freida</a></li>
-            </ul>
+            <div class="row">
+                @foreach (var c in Model.Users) {
+                    <div class="col-sm-6">
+                        <div class="panel card">
+                            <div class="panel-body p-t-10">
+                                <div class="media-main">
+                                    <div class="pull-left">
+                                        <img class="avatar img-circle" src="@c.ImageString" alt="">
+                                    </div>
+                                    <div class="pull-right btn-group-sm">
+                                        @using (Html.BeginForm("RemoveConnection", "Connections", FormMethod.Post)) {
+                                            <input type="hidden" name="userId" value="@c.Id" />
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        }
+                                    </div>
+                                    <div class="info">
+                                        <h4>@c.Name</h4>
+                                        <p class="text-muted organization" data-org-id="@c.OrganizationId"></p>
+                                        <p class="text-muted">@c.Title</p>
+                                        <p class="text-muted">@c.Email</p>
+                                        <p class="text-muted">@c.PhoneNumber</p>
+                                        <div class="clearfix"></div>
+                                        <ul class="social-links list-inline p-b-10">
+                                            @if (!string.IsNullOrEmpty(c.Facebook)) {
+                                                <li>
+                                                    <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.Facebook" data-original-title="Facebook"><i class="fa fa-facebook"></i></a>
+                                                </li>
+                                            }
+                                            @if (!string.IsNullOrEmpty(c.Twitter)) {
+                                                <li>
+                                                    <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.Twitter" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                                                </li>
+                                            }
+                                            @if (!string.IsNullOrEmpty(c.LinkedIn)) {
+                                                <li>
+                                                    <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.LinkedIn" data-original-title="LinkedIn"><i class="fa fa-linkedin"></i></a>
+                                                </li>
+                                            }
+                                            @if (!string.IsNullOrEmpty(c.Skype)) {
+                                                <li>
+                                                    <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.Skype" data-original-title="Skype"><i class="fa fa-skype"></i></a>
+                                                </li>
+                                            }
+                                            <li>
+                                                <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="mailto:@c.Email" data-original-title="Message"><i class="fa fa-envelope-o"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
 
         <div class="tab-pane fade in" id="details">
@@ -162,11 +213,14 @@
         </div>
 
         <div class="tab-pane fade in" id="quotes">
-            <ul class="nav nav-pills nav-stacked">
-                <li><a href="#">55221</a></li>
-                <li><a href="#">55327</a></li>
-                <li><a href="#">56524</a></li>
-            </ul>
+            <div class="btn-group">
+                @Html.ActionLink("Select Kit", "Index", "KitSelection", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" })
+            </div>
+            @using GridMvc.Html
+                    @Html.Grid(Model.GetAllQuotes()).Columns(columns => {
+                   columns.Add(m => m.QuoteNumber).Sortable(true).Filterable(true).SetWidth(220);
+                   columns.Add(m => m.CreatedDate).Sortable(true).Filterable(true);
+               }).WithPaging(10).WithMultipleFilters()
         </div>
 
     </div>
@@ -222,6 +276,27 @@
             function () {
                 $(this).attr('href', this.href + "#actuators");
             });
+
+
+        $('.organization').each(function () {
+            var p = $(this);
+            $.ajax({
+                url: '/Account/GetOrganizationDetails/',
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: { organizationId: p.data('org-id') },
+                success: function (data) {
+                    if (data.length > 0) {
+                        p.html(data[0]['Name']);
+                    }
+
+                    stop();
+                },
+                error: function () {
+
+                }
+            });
+        });
     </script>
 
 }

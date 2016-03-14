@@ -33,5 +33,30 @@ namespace VaWorks.Web.Data.Entities
         public virtual ICollection<Actuator> Actuators { get; set; }
 
         public virtual ICollection<ApplicationUser> Users { get; set; }
+
+        public virtual ICollection<Discount> Discounts { get; set; }
+
+        public virtual ICollection<Quote> Quotes { get; set; }
+
+        public IEnumerable<Quote> GetAllQuotes()
+        {
+            List<Quote> quotes = new List<Quote>();
+
+            Stack<Organization> stack = new Stack<Organization>();
+            stack.Push(this);
+
+            while (stack.Any()) {
+                var org = stack.Pop();
+                foreach (var q in org.Quotes) {
+                    quotes.Add(q);
+                }
+
+                foreach (var o in org.Children) {
+                    stack.Push(o);
+                }
+            }
+
+            return quotes.OrderBy(q => q.QuoteNumber);
+        }
     }
 }
