@@ -50,3 +50,38 @@ textarea {
 .img-circle{
     width: 150px;
 }
+
+.p-t-10 {
+    padding-top: 10px !important;
+}
+
+.p-b-10 {
+    padding-bottom: 10px !important;
+}
+
+.media-main .pull-left {
+    width: 200px;
+    height: 170px;
+}
+.media-main .info h4 {
+    padding-top: 10px;
+    margin-bottom: 5px;
+}
+.social-links li a {
+    background: #EFF0F4;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    display: inline-block;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    color: #7A7676;
+}
+
+.card{
+    margin-top: 15px;
+    border-style: solid;
+    border-width: medium;
+    border-color: #EFF0F4;
+}

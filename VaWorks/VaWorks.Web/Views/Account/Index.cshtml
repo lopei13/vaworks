@@ -5,7 +5,7 @@
 }
 
 <h2>@Model.Name</h2>
-
+<h4 class="text-muted organization" data-org-id="@Model.OrganizationId"></h4>
 <div>
     <ul class="nav nav-tabs">
         <li class="active"><a href="#profile" data-toggle="tab" aria-expanded="true">Profile</a></li>
@@ -23,7 +23,75 @@
         </div>
 
         <div class="tab-pane fade in" id="contacts">
-          
+            <div class="row">
+            @foreach (var c in Model.Contacts) {
+                <div class="col-sm-6">
+                    <div class="panel card">
+                        <div class="panel-body p-t-10">
+                            <div class="media-main">
+                                <div class="pull-left">
+                                    <img class="avatar img-circle" src="@c.ImageString" alt="">
+                                </div>
+                                <div class="pull-right btn-group-sm">
+                                    @using (Html.BeginForm("RemoveConnection", "Connections", FormMethod.Post)) {
+                                        <input type="hidden" name="userId" value="@c.Id" />
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    }
+                                </div>
+                                <div class="info">
+                                    <h4>@c.Name</h4>
+                                    <p class="text-muted organization" data-org-id="@c.OrganizationId"></p>
+                                    <p class="text-muted">@c.Title</p>
+                                    <p class="text-muted">@c.Email</p>
+                                    <p class="text-muted">@c.PhoneNumber</p>
+                                    <div class="clearfix"></div>
+                                    <ul class="social-links list-inline p-b-10">
+                                        @if (!string.IsNullOrEmpty(c.Facebook)) {
+                                            <li>
+                                                <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.Facebook" data-original-title="Facebook"><i class="fa fa-facebook"></i></a>
+                                            </li>
+                                        }
+                                        @if (!string.IsNullOrEmpty(c.Twitter)) {
+                                            <li>
+                                                <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.Twitter" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                                            </li>
+                                        }
+                                        @if (!string.IsNullOrEmpty(c.LinkedIn)) {
+                                            <li>
+                                                <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.LinkedIn" data-original-title="LinkedIn"><i class="fa fa-linkedin"></i></a>
+                                            </li>
+                                        }
+                                        @if (!string.IsNullOrEmpty(c.Skype)) {
+                                            <li>
+                                                <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.Skype" data-original-title="Skype"><i class="fa fa-skype"></i></a>
+                                            </li>
+                                        }
+                                        <li>
+                                            <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="mailto:@c.Email" data-original-title="Message"><i class="fa fa-envelope-o"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>   
+                    </div>
+                  </div>
+                    }
+            </div>
+            <div class="row">
+                <h4>Add Contacts</h4>
+                @using (Html.BeginForm("Search", "Connections", FormMethod.Post)) {
+                    <div class="col-md-8">
+                        <div class="col-md-6">
+                            <input class="form-control" name="email" placeholder="Search by email address" />
+                        </div>
+                        <div class="col-md-2">
+                            <input class="btn btn-primary" type="submit" value="Search" />
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
 
         <div class="tab-pane fade active in" id="profile">
@@ -59,7 +127,13 @@
                                 @Html.ValidationMessageFor(m => m.Name)
                             </div>
                         </div>
-
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Title, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = "Job title", type = "text" })
+                                @Html.ValidationMessageFor(m => m.Name)
+                            </div>
+                        </div>
                         <div class="form-group">
                             @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
                             <div class="col-md-3">
@@ -72,6 +146,34 @@
                             <div class="col-md-3">
                                 @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", placeholder = "Phone", type = "phone" })
                                 @Html.ValidationMessageFor(m => m.PhoneNumber)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.LinkedIn, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(m => m.LinkedIn, new { @class = "form-control", placeholder = "LinkedIn", type = "text" })
+                                @Html.ValidationMessageFor(m => m.Name)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Facebook, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(m => m.Facebook, new { @class = "form-control", placeholder = "Facebook", type = "text" })
+                                @Html.ValidationMessageFor(m => m.Name)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Twitter, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(m => m.Twitter, new { @class = "form-control", placeholder = "Twitter", type = "text" })
+                                @Html.ValidationMessageFor(m => m.Name)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Skype, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(m => m.Skype, new { @class = "form-control", placeholder = "Skype", type = "text" })
+                                @Html.ValidationMessageFor(m => m.Name)
                             </div>
                         </div>
 
@@ -137,6 +239,29 @@
             function () {
                 $(this).attr('href', this.href + "#requests");
             });
+
+
+        $('.organization').each(function () {
+            var p = $(this);
+            $.ajax({
+                url: '/Account/GetOrganizationDetails/',
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {organizationId: p.data('org-id')},
+                success: function (data) {
+                    if (data.length > 0) {
+                        p.html(data[0]['Name']);
+                    }
+
+                    stop();
+                },
+                error: function () {
+
+                }
+            });
+        });
+
+        
 
     </script>
 }

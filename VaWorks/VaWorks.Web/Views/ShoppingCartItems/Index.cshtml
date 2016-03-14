@@ -66,6 +66,9 @@
 
 </table>
 
-<p>
-    @Html.ActionLink("Continue Shopping", "Index", "KitSelection", null, new { @class = "btn btn-primary" })
-</p>
+<div class="pull-right">
+    <p>
+        @Html.ActionLink("Submit Quote", "Submit", "Quotes", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Continue Shopping", "Index", "KitSelection", null, new { @class = "btn btn-primary" })
+    </p>
+</div>

@@ -183,6 +183,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActuatorsController.cs" />
+    <Compile Include="Controllers\ConnectionsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationsController.cs" />
     <Compile Include="Controllers\KitsController.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="Data\Entities\Invitation.cs" />
     <Compile Include="Data\Entities\Kit.cs" />
     <Compile Include="Data\Entities\Organization.cs" />
+    <Compile Include="Data\Entities\Quote.cs" />
     <Compile Include="Data\Entities\ShoppingCart.cs" />
     <Compile Include="Data\Entities\Valve.cs" />
     <Compile Include="Data\IDataWriter.cs" />
@@ -220,11 +222,14 @@
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\Gridmvc.css" />
     <Content Include="Content\gridmvc.datepicker.css" />
     <Content Include="Content\tree.css" />
     <Content Include="Content\wizard-nav.css" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -242,6 +247,11 @@
     <Content Include="Grid.mvc.readme" />
     <Content Include="Scripts\angular.min.js.map" />
     <Content Include="Scripts\angular-resource.min.js.map" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\client\controllers\mainController.js" />
     <Content Include="Scripts\gridmvc.js" />
@@ -337,6 +347,13 @@
     <Content Include="Views\ShoppingCartItems\Details.cshtml" />
     <Content Include="Views\ShoppingCartItems\Index.cshtml" />
     <Content Include="Views\KitSelection\Index.cshtml" />
+    <Content Include="Views\Connections\Create.cshtml" />
+    <Content Include="Views\Connections\Delete.cshtml" />
+    <Content Include="Views\Connections\Details.cshtml" />
+    <Content Include="Views\Connections\Edit.cshtml" />
+    <Content Include="Views\Connections\Index.cshtml" />
+    <Content Include="Views\Connections\Search.cshtml" />
+    <Content Include="Views\Shared\Message.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

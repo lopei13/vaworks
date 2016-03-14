@@ -1,0 +1,438 @@
+﻿@model VaWorks.Web.Data.Entities.ApplicationUser
+
+<h2>Select Kit</h2>
+
+<div ng-app="MainApp">
+    <div ng-controller="mainController">
+        <div class="alert alert-info" ng-show="loading">We're loading</div>
+        <ul class="nav nav-pills nav-wizard">
+            <li ng-class="{'active': currentStep > 0}"><a ng-click="page(1)">Select Valve and Actuator</a><div class="nav-arrow"></div></li>
+            <li ng-class="{'active': currentStep > 1}"><div class="nav-wedge"></div><a ng-click="page(2)">Select Material</a><div class="nav-arrow"></div></ling-class="{active:>
+            <li ng-class="{'active': currentStep > 2}"><div class="nav-wedge"></div><a ng-click="page(3)">Select Options</a><div class="nav-arrow"></div></li>
+            <li ng-class="{'active': currentStep > 3}"><div class="nav-wedge"></div><a ng-click="page(4)">Preview Details</a></li>
+        </ul>
+
+
+        <div class="tab-content" >
+            <div id="start" class="tab-pane fade in" ng-class="{'active': currentStep == 1}">
+                <div class="col-lg-4">
+                    <div class="form-horizontal">
+                        <h4>Valve Information</h4>
+                        <div class="form-group">
+                            <label>Manufacturer</label>
+                            <select id="valves" class="form-control" ng-model="selectedValve"
+                                    ng-change="getValveModels()"
+                                    ng-options="v as v for v in valves">
+                                <option value="">Select Manufacturer</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Model</label>
+                            <select id="valvemodels" ng-disabled="!hasValveModels" ng-model="selectedValveModel"
+                                    ng-change="getValveSizes()"
+                                    ng-options="v as v for v in valvemodels" class="form-control">
+                                <option value="">Select Model</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Size</label>
+                            <select id="valvesizes" ng-disabled="!hasValveSizes" ng-model="selectedValveSize"
+                                    ng-change="getActuators()"
+                                    ng-options="v as v.Size for v in valvesizes track by v.InterfaceCode" class="form-control">
+                                <option value="">Select Size</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-horizontal">
+                        <h4>Actuator Information</h4>
+                        <div class="form-group">
+                            <label>Manufacturer</label>
+                            <select id="actuators" ng-disabled="!hasActuators" ng-model="selectedActuator"
+                                    ng-change="getActuatorModels()"
+                                    ng-options="a as a for a in actuators" class="form-control">
+                                <option value="">Select Manufacturer</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Model</label>
+                            <select id="actuatormodels" ng-disabled="!hasActuatorModels" ng-model="selectedActuatorModel"
+                                    ng-change="getActuatorSizes()"
+                                    ng-options="a as a for a in actuatormodels" class="form-control">
+                                <option value="">Select Model</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Size</label>
+                            <select id="actuatorsizes" ng-disabled="!hasActuatorSizes" ng-model="selectedActuatorSize"
+                                    ng-change="getMaterials()"
+                                    ng-options="a as a.Size for a in actuatorsizes track by a.InterfaceCode" class="form-control">
+                                <option value="">Select Size</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="material" class="tab-pane fade in" ng-class="{active: currentStep == 2}">
+                <div class="col-lg-4">
+                    <div class="form-horizontal">
+                        <h4>Select Material</h4>
+                        <div class="form-group">
+                            <label>Material</label>
+                            <select id="valves" class="form-control" ng-model="selectedMaterial"
+                                    ng-disabled="!hasMaterials"
+                                    ng-change="getOptions()"
+                                    ng-options="m as m.Name for m in materials track by m.KitMaterialId">
+                                <option value="">Select Material</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="options" class="tab-pane fade in" ng-class="{active: currentStep == 3}">
+                <div class="col-lg-4">
+                    <div class="form-horizontal">
+                        <h4>Select Option</h4>
+                        <div class="form-group">
+                            <label>Options</label>
+                            <select id="valves" class="form-control" ng-model="selectedOption"
+                                    ng-disabled="!hasOptions"
+                                    ng-change="getKit()"
+                                    ng-options="o as o.Name for o in options track by o.KitOptionId">
+                                <option value="">Select Option</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="finish" class="tab-pane fade in" ng-class="{active: currentStep == 4}">
+                <div class="col-lg-4">
+
+                </div>
+                <div class="col-lg-10">
+                    <h4></h4>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">{{kit.KitNumber}}</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <dl class="dl-horizontal">
+                                        <dt>
+                                            Kit Number
+                                        </dt>
+                                        <dd>
+                                            {{kit.KitNumber}}
+                                        </dd>
+                                        <dt>
+                                            Valve
+                                        </dt>
+
+                                        <dd>
+                                            {{selectedValve}} {{selectedValveModel}} {{selectedValveSize.Name}}
+                                        </dd>
+                                        <dt>Actuator</dt>
+                                        <dd>
+                                           {{selectedActuator}} {{selectedActuatorModel}} {{selectedActuatorSize.Name}}
+                                        </dd>
+
+                                    </dl>
+
+
+                                </div>
+                                <div class="col-lg-6">
+                                    <!-- show drawing-->
+                                    <p>Drawing</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @using (Html.BeginForm("AddToCart", "KitSelection")) {
+                                      
+                                        <input hidden name="actuatorId" value="{{selectedActuatorSize.ActuatorId}}" />
+                                        <input hidden name="valveId" value="{{selectedValveSize.ValveId}}" />
+                                        <input hidden name="kitId" value="{{kit.KitId}}" />
+                                        <div class="form-group top-buffer">
+                                            <label class="control-label">Quantity</label>
+                                            <input ng-model="quantity" name="quantity" type="number" class="form-control" />
+                                            <div class="top-buffer">
+                                                <input type="submit" value="Add to Cart" class="btn btn-default" />
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="col-md-6"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/spin.js" type="text/javascript"></script>
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/angular-resource.js"></script>
+    <script src="~/Scripts/angular-busy.js"></script>
+    <script src="~/Scripts/client/app.js"></script>
+    <script src="~/Scripts/client/controllers/mainController.js"></script>
+    <script type="text/javascript">
+        //var url = document.location.toString();
+        //if (url.match('#')) {
+        //    $('.nav-pills a[href=#' + url.split('#')[1] + ']').tab('show');
+        //}
+
+        //// Change hash for page-reload
+        //$('.nav-pills a').on('shown.bs.tab', function (e) {
+        //    window.location.hash = e.target.hash;
+        //})
+
+        //var spinner = new Spinner();
+
+        //var disable = function () {
+        //    $('#valves').attr({
+        //        'disabled': 'disabled'
+        //    });
+        //    $('#valvemodels').attr({
+        //        'disabled': 'disabled'
+        //    });
+        //    $('#valvesizes').attr({
+        //        'disabled': 'disabled'
+        //    });
+        //    $('#actuators').attr({
+        //        'disabled': 'disabled'
+        //    });
+        //    $('#actuatormodels').attr({
+        //        'disabled': 'disabled'
+        //    });
+        //    $('#actuatorsizes').attr({
+        //        'disabled': 'disabled'
+        //    });
+        //}
+
+        //var spin = function () {
+        //    spinner.spin(document.getElementById('start'));
+        //    disable();
+        //};
+
+        //var stop = function () {
+        //    spinner.stop();
+        //}
+
+        //spin();
+
+        //$.ajax({
+        //    url: '/KitSelection/GetValveManufacturers/',
+        //    type: 'GET',
+        //    contentType: 'application/json; charset=utf-8',
+        //    success: function (data) {
+
+        //        if (data.length > 0) {
+        //            var options = '<option>Select Manufacturer</option>';
+        //            for (var x = 0; x < data.length; x++) {
+        //                options += '<option value="' + data[x] + '">' + data[x] + '</option>';
+        //            }
+        //            $('#valves').html(options);
+        //            $('#valves').removeAttr('disabled');
+        //        }
+                
+        //        stop();
+        //    },
+        //    error: function () {
+        //        alert("Could not find any valves");
+        //        stop();
+        //    }
+        //});
+
+        //$('#valves').change(function () {
+        //    spin();
+        //    $.ajax({
+        //        url: '/KitSelection/GetValveModels/',
+        //        type: 'GET',
+        //        data: {mfg: $("#valves").val()},
+        //        contentType: 'application/json; charset=utf-8',
+        //        success: function (data) {
+
+        //            if (data.length > 0) {
+        //                var options = '<option>Select Model</option>';
+        //                for (var x = 0; x < data.length; x++) {
+        //                    options += '<option value="' + data[x] + '">' + data[x] + '</option>';
+        //                }
+        //                $('#valvemodels').html(options);
+        //                $('#valves').removeAttr('disabled');
+        //                $('#valvemodels').removeAttr('disabled');
+        //            }
+        //            stop();
+        //        },
+        //        error: function () {
+        //            alert("could not get any models");
+        //            stop();
+        //        }
+        //    });
+        //});
+
+        //$('#valvemodels').change(function () {
+        //    spin();
+        //    $.ajax({
+        //        url: '/KitSelection/GetValveSizes/',
+        //        type: 'GET',
+        //        data: { mfg: $("#valves").val(), model: $('#valvemodels').val() },
+        //        contentType: 'application/json; charset=utf-8',
+        //        success: function (data) {
+
+        //            if (data.length > 0) {
+        //                var options = '<option>Select Size</option>';
+        //                for (var x = 0; x < data.length; x++) {
+        //                    options += '<option value="' + data[x]['InterfaceCode'] + '">' + data[x]['Size'] + '</option>';
+        //                }
+        //                $('#valvesizes').html(options);
+
+        //                $('#valves').removeAttr('disabled');
+        //                $('#valvemodels').removeAttr('disabled');
+        //                $('#valvesizes').removeAttr('disabled');
+        //            }
+        //            stop();
+        //        },
+        //        error: function () {
+        //            alert("Could not get any sizes");
+        //            stop();
+        //        }
+        //    });
+        //});
+
+        //$('#valvesizes').change(function () {
+        //    spin();
+        //    $.ajax({
+        //        url: '/KitSelection/GetActuators/',
+        //        type: 'GET',
+        //        data: { valveInterface: $("#valvesizes").val() },
+        //        contentType: 'application/json; charset=utf-8',
+        //        success: function (data) {
+        //            if (data.length > 0) {
+        //                var options = '<option>Select Size</option>';
+        //                for (var x = 0; x < data.length; x++) {
+        //                    options += '<option value="' + data[x] + '">' + data[x] + '</option>';
+        //                }
+        //                $('#actuators').html(options);
+        //                $('#valves').removeAttr('disabled');
+        //                $('#valvemodels').removeAttr('disabled');
+        //                $('#valvesizes').removeAttr('disabled');
+        //                $('#actuators').removeAttr('disabled');
+        //            }
+        //            stop();
+        //        },
+        //        error: function () {
+        //            alert("Could not get any actuators");
+        //            stop();
+        //        }
+        //    });
+        //});
+
+        //$('#actuators').change(function () {
+        //    spin();
+        //    $.ajax({
+        //        url: '/KitSelection/GetActuatorModels/',
+        //        type: 'GET',
+        //        data: { valveInterface: $("#valvesizes").val(), mfg: $('#actuators').val() },
+        //        contentType: 'application/json; charset=utf-8',
+        //        success: function (data) {
+        //            if (data.length > 0) {
+        //                var options = '<option>Select Size</option>';
+        //                for (var x = 0; x < data.length; x++) {
+        //                    options += '<option value="' + data[x] + '">' + data[x] + '</option>';
+        //                }
+        //                $('#actuatormodels').html(options);
+        //                $('#valves').removeAttr('disabled');
+        //                $('#valvemodels').removeAttr('disabled');
+        //                $('#valvesizes').removeAttr('disabled');
+        //                $('#actuators').removeAttr('disabled');
+        //                $('#actuatormodels').removeAttr('disabled');
+        //            }
+        //            stop();
+        //        },
+        //        error: function () {
+        //            alert("Could not get any actuators");
+        //            stop();
+        //        }
+        //    });
+        //});
+
+        //$('#actuatormodels').change(function () {
+        //    spin();
+        //    $.ajax({
+        //        url: '/KitSelection/GetActuatorSizes/',
+        //        type: 'GET',
+        //        data: { valveInterface: $("#valvesizes").val(), mfg: $('#actuators').val(), model: $('#actuatormodels').val() },
+        //        contentType: 'application/json; charset=utf-8',
+        //        success: function (data) {
+                    
+        //            if (data.length > 0) {
+        //                var options = '<option>Select Size</option>';
+        //                for (var x = 0; x < data.length; x++) {
+        //                    options += '<option value="' + data[x]['InterfaceCode'] + '">' + data[x]['Size'] + '</option>';
+        //                }
+
+        //                $('#valves').removeAttr('disabled');
+        //                $('#valvemodels').removeAttr('disabled');
+        //                $('#valvesizes').removeAttr('disabled');
+        //                $('#actuators').removeAttr('disabled');
+        //                $('#actuatormodels').removeAttr('disabled');
+        //                $('#actuatorsizes').removeAttr('disabled');
+        //                $('#actuatorsizes').html(options);
+        //            }
+        //            stop();
+                    
+        //        },
+        //        error: function () {
+        //            alert("Could not get any actuators");
+        //            stop();
+        //        }
+        //    });
+        //});
+
+        //$('#actuatorsizes').change(function () {
+        //    spin();
+        //    $.ajax({
+        //        url: '/KitSelection/GetKitMaterials/',
+        //        type: 'GET',
+        //        data: { valveInterface: $("#valvesizes").val(), actuatorInterface: $('#actuatorsizes').val() },
+        //        contentType: 'application/json; charset=utf-8',
+        //        success: function (data) {
+
+        //            if (data.length > 0) {
+        //                var options = '<option>Select Size</option>';
+        //                for (var x = 0; x < data.length; x++) {
+        //                    options += '<option value="' + data[x]['KitMaterialId'] + '">' + data[x]['Name'] + '</option>';
+        //                }
+        //                $('#materials').html(options);
+        //                $('#valves').removeAttr('disabled');
+        //                $('#valvemodels').removeAttr('disabled');
+        //                $('#valvesizes').removeAttr('disabled');
+        //                $('#actuators').removeAttr('disabled');
+        //                $('#actuatormodels').removeAttr('disabled');
+        //                $('#actuatorsizes').removeAttr('disabled');
+        //            }
+        //            stop();
+
+        //        },
+        //        error: function () {
+        //            alert("Could not get any materials");
+        //            stop();
+        //        }
+        //    });
+        //});
+
+    </script>
+    }
+
+@section styles{
+    <link href="~/Content/wizard-nav.css" rel="stylesheet"/>
+    }

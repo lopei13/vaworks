@@ -27,7 +27,7 @@ namespace VaWorks.Web.Controllers
         public JsonResult GetValveManufacturers()
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrgainzationId);
+            var organization = db.Organizations.Find(user.OrganizationId);
 
             var valves = from v in organization.Valves
                          join k in organization.Kits on v.InterfaceCode equals k.ValveInterfaceCode
@@ -44,7 +44,7 @@ namespace VaWorks.Web.Controllers
         public JsonResult GetValveModels(string mfg)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrgainzationId);
+            var organization = db.Organizations.Find(user.OrganizationId);
 
             var valves = from v in organization.Valves
                          join k in organization.Kits on v.InterfaceCode equals k.ValveInterfaceCode
@@ -63,7 +63,7 @@ namespace VaWorks.Web.Controllers
         public JsonResult GetValveSizes(string mfg, string model)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrgainzationId);
+            var organization = db.Organizations.Find(user.OrganizationId);
 
             var valves = from v in organization.Valves
                          join k in organization.Kits on v.InterfaceCode equals k.ValveInterfaceCode
@@ -82,7 +82,7 @@ namespace VaWorks.Web.Controllers
         public JsonResult GetActuators(int valveInterface)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrgainzationId);
+            var organization = db.Organizations.Find(user.OrganizationId);
 
             var actuators = from a in organization.Actuators
                             join k in organization.Kits on a.InterfaceCode equals k.ActuatorInterfaceCode
@@ -100,7 +100,7 @@ namespace VaWorks.Web.Controllers
         public JsonResult GetActuatorModels(int valveInterface, string mfg)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrgainzationId);
+            var organization = db.Organizations.Find(user.OrganizationId);
 
             var actuators = from a in organization.Actuators
                             join k in organization.Kits on a.InterfaceCode equals k.ActuatorInterfaceCode
@@ -121,7 +121,7 @@ namespace VaWorks.Web.Controllers
         public JsonResult GetActuatorSizes(int valveInterface, string mfg, string model)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrgainzationId);
+            var organization = db.Organizations.Find(user.OrganizationId);
 
             var actuators = from a in organization.Actuators
                             join k in organization.Kits on a.InterfaceCode equals k.ActuatorInterfaceCode
@@ -142,7 +142,7 @@ namespace VaWorks.Web.Controllers
         public JsonResult GetKitMaterials(int valveInterface, int actuatorInterface)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrgainzationId);
+            var organization = db.Organizations.Find(user.OrganizationId);
 
             var materials = from k in organization.Kits
                             where k.ValveInterfaceCode == valveInterface
@@ -161,7 +161,7 @@ namespace VaWorks.Web.Controllers
         public JsonResult GetKitOptions(int valveInterface, int actuatorInterface, int materialId)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrgainzationId);
+            var organization = db.Organizations.Find(user.OrganizationId);
 
             var options = from k in organization.Kits
                           where k.ValveInterfaceCode == valveInterface
@@ -181,7 +181,7 @@ namespace VaWorks.Web.Controllers
         public JsonResult GetKit(int valveInterface, int actuatorInterface, int materialId, int optionId)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrgainzationId);
+            var organization = db.Organizations.Find(user.OrganizationId);
 
             var kit = from k in organization.Kits
                       where k.ValveInterfaceCode == valveInterface
@@ -204,7 +204,7 @@ namespace VaWorks.Web.Controllers
         public ActionResult AddToCart(int valveId, int actuatorId, int kitId, int quantity)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrgainzationId);
+            var organization = db.Organizations.Find(user.OrganizationId);
 
             db.ShoppingCartItems.Add(new Data.Entities.ShoppingCartItems() {
                 ActuatorId = actuatorId,

@@ -68,7 +68,7 @@ namespace VaWorks.Web.Controllers
         public ActionResult Index()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
-
+            
             return View(user);
         }
 
@@ -102,6 +102,11 @@ namespace VaWorks.Web.Controllers
                 u.Email = user.Email;
                 u.Name = user.Name;
                 u.UserName = user.UserName;
+                u.Facebook = user.Facebook;
+                u.Twitter = user.Twitter;
+                u.LinkedIn = user.LinkedIn;
+                u.Skype = user.Skype;
+                u.Title = user.Title;
 
                 UserManager.Update(u);
 
@@ -506,6 +511,15 @@ namespace VaWorks.Web.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
+        }
+
+        public JsonResult GetOrganizationDetails(int organizationId)
+        {
+            var org = from o in DataContext.Organizations
+                      where o.OrganizationId == organizationId
+                      select new { o.Name, };
+
+            return Json(org, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

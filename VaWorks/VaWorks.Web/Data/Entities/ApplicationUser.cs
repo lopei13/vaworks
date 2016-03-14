@@ -13,10 +13,20 @@ namespace VaWorks.Web.Data.Entities
 {
     public class ApplicationUser : IdentityUser
     {
-        public int OrgainzationId { get; set; }
+        public int? OrganizationId { get; set; }
 
         [MaxLength(100)]
         public string Name { get; set; }
+
+        public string Title { get; set; }
+        
+        public string LinkedIn { get; set; }
+
+        public string Facebook { get; set; }
+
+        public string Twitter { get; set; }
+
+        public string Skype { get; set; }
 
         public string ImageString { get; set; }
 
@@ -24,12 +34,40 @@ namespace VaWorks.Web.Data.Entities
 
         public virtual ICollection<ShoppingCartItems> ShoppingCart { get; set; }
 
+        public virtual ICollection<ApplicationUser> Contacts { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             return userIdentity;
+        }
+
+        public bool Friend(ApplicationUser contact)
+        {
+            if(this.Contacts.Where(c => c.Id == contact.Id).FirstOrDefault() == null) {
+                this.Contacts.Add(contact);
+                if (contact.Contacts.Where(c => c.Id == this.Id).FirstOrDefault() == null) {
+                    contact.Contacts.Add(this);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool Unfriend(ApplicationUser contact)
+        {
+            if (this.Contacts.Where(c => c.Id == contact.Id).FirstOrDefault() != null) {
+                this.Contacts.Remove(contact);
+                if (contact.Contacts.Where(c => c.Id == this.Id).FirstOrDefault() != null) {
+                    contact.Contacts.Remove(this);
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 

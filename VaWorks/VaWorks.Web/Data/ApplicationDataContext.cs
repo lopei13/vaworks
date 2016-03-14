@@ -34,6 +34,10 @@ namespace VaWorks.Web.Data
 
         public DbSet<ShoppingCartItems> ShoppingCartItems { get; set; }
 
+        public DbSet<Quote> Quotes { get; set; }
+
+        public DbSet<QuoteItems> QuoteItems { get; set; }
+
         #endregion
 
 
@@ -80,6 +84,15 @@ namespace VaWorks.Web.Data
                 .HasOptional(u => u.ShoppingCart)
                 .WithOptionalDependent()
                 .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(u => u.Contacts)
+                .WithMany()
+                .Map(m => {
+                    m.ToTable("Contacts");
+                    m.MapLeftKey("UserId");
+                    m.MapRightKey("ContactId");
+                });
 
             base.OnModelCreating(modelBuilder);
         }
