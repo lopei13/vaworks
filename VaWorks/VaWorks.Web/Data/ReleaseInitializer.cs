@@ -10,7 +10,7 @@ namespace VaWorks.Web.Data
 {
     public class ReleaseInitializer : System.Data.Entity.CreateDatabaseIfNotExists<ApplicationDbContext>
     {
-        public override void InitializeDatabase(ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
@@ -36,7 +36,10 @@ namespace VaWorks.Web.Data
                     Name = "VanAire"
                 });
             }
+        }
 
+        public override void InitializeDatabase(ApplicationDbContext context)
+        {
             base.InitializeDatabase(context);
         }
     }
