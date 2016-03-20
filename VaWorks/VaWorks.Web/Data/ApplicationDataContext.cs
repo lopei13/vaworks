@@ -52,7 +52,7 @@ namespace VaWorks.Web.Data
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-            Database.SetInitializer<ApplicationDbContext>(new System.Data.Entity.CreateDatabaseIfNotExists<ApplicationDbContext>());
+            Database.SetInitializer<ApplicationDbContext>(new ReleaseInitializer());
             var o = this.Organizations.FirstOrDefault();
         }
 

@@ -213,6 +213,7 @@
     <Compile Include="Data\Entities\SystemMessage.cs" />
     <Compile Include="Data\Entities\Valve.cs" />
     <Compile Include="Data\IDataWriter.cs" />
+    <Compile Include="Data\ReleaseInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
