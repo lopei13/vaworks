@@ -184,12 +184,17 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActuatorsController.cs" />
     <Compile Include="Controllers\ConnectionsController.cs" />
+    <Compile Include="Controllers\DiscountsController.cs" />
+    <Compile Include="Controllers\DocumentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationsController.cs" />
+    <Compile Include="Controllers\KitMaterialsController.cs" />
+    <Compile Include="Controllers\KitOptionsController.cs" />
     <Compile Include="Controllers\KitsController.cs" />
     <Compile Include="Controllers\KitSelectionController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrganizationsController.cs" />
+    <Compile Include="Controllers\QuotesController.cs" />
     <Compile Include="Controllers\ShoppingCartItemsController.cs" />
     <Compile Include="Controllers\ValvesController.cs" />
     <Compile Include="Data\ApplicationDataContext.cs" />
@@ -199,6 +204,7 @@
     <Compile Include="Data\DataWriters\ValveDataWriter.cs" />
     <Compile Include="Data\Entities\Actuators.cs" />
     <Compile Include="Data\Entities\ApplicationUser.cs" />
+    <Compile Include="Data\Entities\Document.cs" />
     <Compile Include="Data\Entities\Invitation.cs" />
     <Compile Include="Data\Entities\Kit.cs" />
     <Compile Include="Data\Entities\Organization.cs" />
@@ -227,6 +233,7 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\Gridmvc.css" />
     <Content Include="Content\gridmvc.datepicker.css" />
+    <Content Include="Content\Images\evah_design.png" />
     <Content Include="Content\tree.css" />
     <Content Include="Content\wizard-nav.css" />
     <Content Include="favicon.ico" />
@@ -242,6 +249,7 @@
     <Content Include="Scripts\angular-resource.min.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\client\app.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -355,6 +363,35 @@
     <Content Include="Views\Connections\Index.cshtml" />
     <Content Include="Views\Connections\Search.cshtml" />
     <Content Include="Views\Shared\Message.cshtml" />
+    <Content Include="Views\Documents\Create.cshtml" />
+    <Content Include="Views\Documents\Delete.cshtml" />
+    <Content Include="Views\Documents\Details.cshtml" />
+    <Content Include="Views\Documents\Edit.cshtml" />
+    <Content Include="Views\Documents\Index.cshtml" />
+    <Content Include="Views\Documents\Link.cshtml" />
+    <Content Include="Views\KitMaterials\Create.cshtml" />
+    <Content Include="Views\KitMaterials\Delete.cshtml" />
+    <Content Include="Views\KitMaterials\Details.cshtml" />
+    <Content Include="Views\KitMaterials\Edit.cshtml" />
+    <Content Include="Views\KitMaterials\Index.cshtml" />
+    <Content Include="Views\KitOptions\Create.cshtml" />
+    <Content Include="Views\KitOptions\Delete.cshtml" />
+    <Content Include="Views\KitOptions\Details.cshtml" />
+    <Content Include="Views\KitOptions\Edit.cshtml" />
+    <Content Include="Views\KitOptions\Index.cshtml" />
+    <Content Include="Views\Discounts\Create.cshtml" />
+    <Content Include="Views\Discounts\Delete.cshtml" />
+    <Content Include="Views\Discounts\Details.cshtml" />
+    <Content Include="Views\Discounts\Edit.cshtml" />
+    <Content Include="Views\Discounts\Index.cshtml" />
+    <Content Include="Views\Quotes\Create.cshtml" />
+    <Content Include="Views\Quotes\Delete.cshtml" />
+    <Content Include="Views\Quotes\Details.cshtml" />
+    <Content Include="Views\Quotes\Edit.cshtml" />
+    <Content Include="Views\Quotes\Index.cshtml" />
+    <Content Include="Views\Quotes\ViewQuote.cshtml" />
+    <Content Include="Views\Quotes\QuoteItemEdit.cshtml" />
+    <Content Include="Views\Quotes\QuoteItemList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<VaWorks.Web.Data.Entities.QuoteItem>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.KitNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Valve)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Actuator)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PriceEach)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Discount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalPrice)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.KitNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Valve)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Actuator)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PriceEach)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Discount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalPrice)
+        </td>
+        <td>
+
+        </td>
+    </tr>
+}
+
+</table>

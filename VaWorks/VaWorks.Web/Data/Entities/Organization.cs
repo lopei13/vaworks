@@ -21,6 +21,18 @@ namespace VaWorks.Web.Data.Entities
 
         public string Description { get; set; }
 
+        public string Address1 { get; set; }
+
+        public string Address2 { get; set; }
+
+        public string City { get; set; }
+
+        public string State { get; set; }
+
+        public string Country { get; set; }
+
+        public string PostalCode { get; set; }
+
         [ForeignKey("ParentId")]
         public virtual Organization ParentOrganization { get; set; }
 
@@ -38,9 +50,11 @@ namespace VaWorks.Web.Data.Entities
 
         public virtual ICollection<Quote> Quotes { get; set; }
 
+        public virtual ICollection<Document> Documents { get; set; }
+
         public IEnumerable<Quote> GetAllQuotes()
         {
-            List<Quote> quotes = new List<Quote>();
+            HashSet<Quote> quotes = new HashSet<Quote>();
 
             Stack<Organization> stack = new Stack<Organization>();
             stack.Push(this);
@@ -56,7 +70,21 @@ namespace VaWorks.Web.Data.Entities
                 }
             }
 
-            return quotes.OrderBy(q => q.QuoteNumber);
+            return quotes.OrderByDescending(q => q.QuoteNumber);
+        }
+
+        public string GetCompanyName()
+        {
+            string name = "";
+
+            Organization o = this;
+
+            while (o != null) {
+                name += name + o.Name + " ";
+                o = o.ParentOrganization;
+            }
+
+            return name;
         }
     }
 }

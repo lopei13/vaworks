@@ -36,150 +36,205 @@
         <li class=""><a href="#valves" data-toggle="tab" aria-expanded="false">Valves <span class="badge">@Model.Valves.Count</span></a></li>
         <li class=""><a href="#actuators" data-toggle="tab" aria-expanded="false">Actuators <span class="badge">@Model.Actuators.Count</span></a></li>
         <li class=""><a href="#quotes" data-toggle="tab" aria-expanded="false">Quotes</a></li>
+        <li class=""><a href="#discounts" data-toggle="tab" aria-expanded="false">Discounts</a></li>
+        <li class=""><a href="#designstandards" data-toggle="tab" aria-expanded="false">Design Standards</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade active in" id="organizations">
             <div class="btn-group">
                 @Html.ActionLink("Add Organization", "Create", new { parentId = Model.OrganizationId }, new { @class = "btn btn-link" })
             </div>
-           @helper ShowTree(IEnumerable<VaWorks.Web.Data.Entities.Organization> items, int level)
-           {
+            @helper ShowTree(IEnumerable<VaWorks.Web.Data.Entities.Organization>
+                items, int level)
+                {
                 foreach (var item in items) {
-                        <ul>
-                            <li>
-                                @Html.ActionLink(item.Name, "Details", new { id = item.OrganizationId }, new { @class = "btn btn-link" })
-                            </li>
-                            @ShowTree(item.Children, level++)
-                        </ul>
+                <div class="list-group-item">
+                    @Html.ActionLink(item.Name, "Details", new { id = item.OrganizationId }, new { @class = "btn btn-link" })
+                </div>
+                <div class="list-group">
+                    @ShowTree(item.Children, level++)
+                </div>
+
                 }
                 }
-            <div class="tree">
-                @ShowTree(Model.Children, 0)
-            </div>
+
+                <div class="tree">
+                    <div class="list-group list-group-root">
+                        @ShowTree(Model.Children, 0)
+                    </div>
+                </div>
         </div>
 
         <div class="tab-pane fade in" id="users">
             <div class="btn-group">
-                @Html.ActionLink("Invite User", "Invite", new { parentId = Model.OrganizationId }, new { @class = "btn btn-link" })
+                @Html.ActionLink("Invite User", "Create", "Invitations", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" })
             </div>
             <div class="row">
                 @foreach (var c in Model.Users) {
-                    <div class="col-sm-6">
-                        <div class="panel card">
-                            <div class="panel-body p-t-10">
-                                <div class="media-main">
-                                    <div class="pull-left">
-                                        <img class="avatar img-circle" src="@c.ImageString" alt="">
-                                    </div>
-                                    <div class="pull-right btn-group-sm">
-                                        @using (Html.BeginForm("RemoveConnection", "Connections", FormMethod.Post)) {
-                                            <input type="hidden" name="userId" value="@c.Id" />
-                                            <button type="submit" class="btn btn-danger">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
+                <div class="col-sm-6">
+                    <div class="panel card">
+                        <div class="panel-body p-t-10">
+                            <div class="media-main">
+                                <div class="pull-left">
+                                    <img class="avatar img-circle" src="@c.ImageString" alt="">
+                                </div>
+                                <div class="pull-right btn-group-sm">
+                                    @using (Html.BeginForm("RemoveConnection", "Connections", FormMethod.Post)) {
+                                    <input type="hidden" name="userId" value="@c.Id" />
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                    }
+                                </div>
+                                <div class="info">
+                                    <h4>@c.Name</h4>
+                                    <p class="text-muted organization" data-org-id="@c.OrganizationId"></p>
+                                    <p class="text-muted">@c.Title</p>
+                                    <p class="text-muted">@c.Email</p>
+                                    <p class="text-muted">@c.PhoneNumber</p>
+                                    <div class="clearfix"></div>
+                                    <ul class="social-links list-inline p-b-10">
+                                        @if (!string.IsNullOrEmpty(c.Facebook)) {
+                                        <li>
+                                            <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.Facebook" data-original-title="Facebook"><i class="fa fa-facebook"></i></a>
+                                        </li>
                                         }
-                                    </div>
-                                    <div class="info">
-                                        <h4>@c.Name</h4>
-                                        <p class="text-muted organization" data-org-id="@c.OrganizationId"></p>
-                                        <p class="text-muted">@c.Title</p>
-                                        <p class="text-muted">@c.Email</p>
-                                        <p class="text-muted">@c.PhoneNumber</p>
-                                        <div class="clearfix"></div>
-                                        <ul class="social-links list-inline p-b-10">
-                                            @if (!string.IsNullOrEmpty(c.Facebook)) {
-                                                <li>
-                                                    <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.Facebook" data-original-title="Facebook"><i class="fa fa-facebook"></i></a>
-                                                </li>
-                                            }
-                                            @if (!string.IsNullOrEmpty(c.Twitter)) {
-                                                <li>
-                                                    <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.Twitter" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
-                                                </li>
-                                            }
-                                            @if (!string.IsNullOrEmpty(c.LinkedIn)) {
-                                                <li>
-                                                    <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.LinkedIn" data-original-title="LinkedIn"><i class="fa fa-linkedin"></i></a>
-                                                </li>
-                                            }
-                                            @if (!string.IsNullOrEmpty(c.Skype)) {
-                                                <li>
-                                                    <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.Skype" data-original-title="Skype"><i class="fa fa-skype"></i></a>
-                                                </li>
-                                            }
-                                            <li>
-                                                <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="mailto:@c.Email" data-original-title="Message"><i class="fa fa-envelope-o"></i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                        @if (!string.IsNullOrEmpty(c.Twitter)) {
+                                        <li>
+                                            <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.Twitter" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                                        </li>
+                                        }
+                                        @if (!string.IsNullOrEmpty(c.LinkedIn)) {
+                                        <li>
+                                            <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.LinkedIn" data-original-title="LinkedIn"><i class="fa fa-linkedin"></i></a>
+                                        </li>
+                                        }
+                                        @if (!string.IsNullOrEmpty(c.Skype)) {
+                                        <li>
+                                            <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" target="_blank" href="@c.Skype" data-original-title="Skype"><i class="fa fa-skype"></i></a>
+                                        </li>
+                                        }
+                                        <li>
+                                            <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="mailto:@c.Email" data-original-title="Message"><i class="fa fa-envelope-o"></i></a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 }
             </div>
         </div>
 
         <div class="tab-pane fade in" id="details">
-            
+
             @using (Html.BeginForm("Edit", "Organizations", FormMethod.Post)) {
-                @Html.AntiForgeryToken()
+            @Html.AntiForgeryToken()
 
-                <div class="form-horizontal">
-                    <hr />
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.HiddenFor(model => model.OrganizationId)
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.OrganizationId)
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.ParentId, "Parent Organization", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.DropDownList("ParentId", null, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.ParentId, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Save" class="btn btn-default" />
-                        </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ParentId, "Parent Organization", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("ParentId", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ParentId, "", new { @class = "text-danger" })
                     </div>
                 </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Address1, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Address2, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Address2, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
             }
 
 
         </div>
-        
+
         <div class="tab-pane fade in" id="kits">
             <p>
-                @Html.ActionLink("Import Kits", "Import", "Kits", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" }) | 
+                @Html.ActionLink("Import Kits", "Import", "Kits", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" }) |
                 @Html.ActionLink("Delete All", "Import", "Kits", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" })
             </p>
 
-                @using GridMvc.Html
-                @Html.Grid(Model.Kits).Columns(columns => {
-                    columns.Add(m => m.KitNumber).Titled("Kit Number").Sortable(true).Filterable(true).SetWidth(220);
-                    columns.Add(m => m.Material.Name).Titled("Material").Filterable(true);
-                    columns.Add(m => m.Option.Name).Titled("Option").Filterable(true);
-                    columns.Add(m => m.Price).Titled("Price").Sortable(true).Filterable(true);
-                    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @Html.ActionLink("Edit", "EditProduct", new { id = m.KitId }));
-                    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Delete", "DeleteProduct", new { id = m.KitId }));
-                }).WithPaging(10).WithMultipleFilters()
+            @using GridMvc.Html
+            @Html.Grid(Model.Kits).Columns(columns => {
+            columns.Add(m => m.KitNumber).Titled("Kit Number").Sortable(true).Filterable(true).SetWidth(220);
+            columns.Add(m => m.Material.Name).Titled("Material").Filterable(true);
+            columns.Add(m => m.Option.Name).Titled("Option").Filterable(true);
+            columns.Add(m => m.Price).Titled("Price").Sortable(true).Filterable(true);
+            columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @Html.ActionLink("Edit", "EditProduct", new { id = m.KitId }));
+            columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Delete", "DeleteProduct", new { id = m.KitId }));
+            }).WithPaging(10).WithMultipleFilters()
         </div>
 
         <div class="tab-pane fade in" id="valves">
@@ -188,13 +243,13 @@
             </div>
             @using GridMvc.Html
             @Html.Grid(Model.Valves).Columns(columns => {
-               columns.Add(m => m.Manufacturer).Sortable(true).Filterable(true).SetWidth(220);
-               columns.Add(m => m.Model).Filterable(true);
-               columns.Add(m => m.Size).Filterable(true);
-               columns.Add(m => m.InterfaceCode).Sortable(true).Filterable(true);
-               columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @Html.ActionLink("Edit", "EditProduct", new { id = m.ValveId }));
-               columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Delete", "DeleteProduct", new { id = m.ValveId }));
-           }).WithPaging(10).WithMultipleFilters()
+            columns.Add(m => m.Manufacturer).Sortable(true).Filterable(true).SetWidth(220);
+            columns.Add(m => m.Model).Filterable(true);
+            columns.Add(m => m.Size).Filterable(true);
+            columns.Add(m => m.InterfaceCode).Sortable(true).Filterable(true);
+            columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @Html.ActionLink("Edit", "EditProduct", new { id = m.ValveId }));
+            columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Delete", "DeleteProduct", new { id = m.ValveId }));
+            }).WithPaging(10).WithMultipleFilters()
         </div>
 
         <div class="tab-pane fade in" id="actuators">
@@ -203,12 +258,12 @@
             </div>
             @using GridMvc.Html
             @Html.Grid(Model.Actuators).Columns(columns => {
-                columns.Add(m => m.Manufacturer).Sortable(true).Filterable(true).SetWidth(220);
-                columns.Add(m => m.Model).Filterable(true);
-                columns.Add(m => m.Size).Filterable(true);
-                columns.Add(m => m.InterfaceCode).Sortable(true).Filterable(true);
-                columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @Html.ActionLink("Edit", "EditProduct", new { id = m.ActuatorId }));
-                columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Delete", "DeleteProduct", new { id = m.ActuatorId }));
+            columns.Add(m => m.Manufacturer).Sortable(true).Filterable(true).SetWidth(220);
+            columns.Add(m => m.Model).Filterable(true);
+            columns.Add(m => m.Size).Filterable(true);
+            columns.Add(m => m.InterfaceCode).Sortable(true).Filterable(true);
+            columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Edit", "EditProduct", new { id = m.ActuatorId }));
+            columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Delete", "DeleteProduct", new { id = m.ActuatorId }));
             }).WithPaging(10).WithMultipleFilters()
         </div>
 
@@ -217,10 +272,38 @@
                 @Html.ActionLink("Select Kit", "Index", "KitSelection", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" })
             </div>
             @using GridMvc.Html
-                    @Html.Grid(Model.GetAllQuotes()).Columns(columns => {
-                   columns.Add(m => m.QuoteNumber).Sortable(true).Filterable(true).SetWidth(220);
-                   columns.Add(m => m.CreatedDate).Sortable(true).Filterable(true);
-               }).WithPaging(10).WithMultipleFilters()
+            @Html.Grid(Model.GetAllQuotes()).Columns(columns => {
+            columns.Add(m => m.QuoteNumber).Sortable(true).Filterable(true).SetWidth(220);
+            columns.Add(m => m.CreatedDate).Sortable(true).Filterable(true);
+            }).WithPaging(10).WithMultipleFilters()
+        </div>
+
+        <div class="tab-pane fade in" id="discounts">
+            <div class="btn-group">
+                @Html.ActionLink("Add Discount", "Create", "Discounts", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" })
+            </div>
+        @using GridMvc.Html;
+        @Html.Grid(Model.Discounts).Columns(columns => {
+        columns.Add(m => m.Quantity);
+        columns.Add(m => m.DiscountPercentage);
+        columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Edit", "Edit", "Discounts", new { id = m.DiscountId }, new { @class = "btn btn-link" }));
+        columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Delete", "Delete", "Discounts", new { id = m.DiscountId }, new { @class = "btn btn-link" }));
+        })
+    </div>
+
+        <div class="tab-pane fade in" id="designstandards">
+            <div class="btn-group">
+                @Html.ActionLink("Add New", "Create", "Documents", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" }) 
+                @Html.ActionLink("Link Existing", "Link", "Documents", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" })
+            </div>
+            @using GridMvc.Html;
+            @Html.Grid(Model.Documents).Columns(columns => {
+       columns.Add(m => m.Name);
+       columns.Add(m => m.Description);
+       columns.Add(m => m.FileName);
+       columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Edit", "Edit", "Documents", new { id = m.DocumentId }, new { @class = "btn btn-link" }));
+       columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<form method="post" action="/Organizations/RemoveDocument"><input type="hidden" value="@m.DocumentId" name="documentId" /><input type="hidden" value="@Model.OrganizationId" name="organizationId"/> <input type="submit" class="btn btn-link" value="Remove" /></form>);
+       })
         </div>
 
     </div>

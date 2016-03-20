@@ -34,5 +34,14 @@ namespace VaWorks.Web.Data.Entities
 
         [ForeignKey("UserId")]
         public virtual ApplicationUser User { get; set; }
+
+        public override string ToString()
+        {
+            if (Actuator != null && Valve != null) {
+                return $"KIT FOR {Actuator.ToString()} TO {Valve.ToString()}";
+            } else {
+                return "Invalid item";
+            }
+        }
     }
 }

@@ -17,7 +17,10 @@ namespace VaWorks.Web.Controllers
         // GET: KitSelection
         public ActionResult Index()
         {
-            return View();
+            var userId = User.Identity.GetUserId();
+            var user = db.Users.Find(userId);
+
+            return View(user);
         }
 
         /// <summary>

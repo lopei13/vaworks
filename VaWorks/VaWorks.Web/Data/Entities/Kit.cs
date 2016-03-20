@@ -71,7 +71,8 @@ namespace VaWorks.Web.Data.Entities
         [Key]
         public int KitMaterialId { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(50)]
+        [Display(Name = "Display Name")]
         public string Name { get; set; }
 
         [Required]
@@ -80,12 +81,6 @@ namespace VaWorks.Web.Data.Entities
 
         [Display(Name = "Sort Order")]
         public int SortOrder { get; set; }
-
-        public string Description { get; set; }
-
-        public byte[] FileData { get; set; }
-
-        public string ContentType { get; set; }
     }
 
     [Table("KitOptions")]
@@ -96,6 +91,7 @@ namespace VaWorks.Web.Data.Entities
 
         [Required]
         [MaxLength(100)]
+        [Display(Name = "Display Name")]
         public string Name { get; set; }
 
         [Required]

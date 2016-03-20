@@ -30,6 +30,8 @@ namespace VaWorks.Web.Data.Entities
 
         public string ImageString { get; set; }
 
+        public bool IsSales { get; set; }
+
         public virtual Organization Organization { get; set; }
 
         public virtual ICollection<ShoppingCartItems> ShoppingCart { get; set; }

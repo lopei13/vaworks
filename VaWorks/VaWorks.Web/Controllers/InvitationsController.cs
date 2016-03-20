@@ -115,9 +115,9 @@ namespace VaWorks.Web.Controllers
         }
 
         // GET: Invitations/Create
-        public ActionResult Create()
+        public ActionResult Create(int? organizationId)
         {
-            PopulateDropDown();
+            PopulateDropDown(organizationId);
             return View();
         }
 
@@ -138,7 +138,8 @@ namespace VaWorks.Web.Controllers
                         Email = email.Trim(),
                         InvitationCode = invitation.InvitationCode,
                         Company = org.Name,
-                        OrganizationId = invitation.OrganizationId
+                        OrganizationId = invitation.OrganizationId,
+                        Type = invitation.Type
                     };
 
                     invites.Add(invite);

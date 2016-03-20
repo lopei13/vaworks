@@ -10,11 +10,16 @@ namespace VaWorks.Web.Data.Entities
     [Table("Quotes")]
     public class Quote
     {
+        public Quote()
+        {
+            Items = new List<QuoteItem>();
+        }
+
         [Key]   
         public int QuoteId { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         [Required]
         public int OrganizationId { get; set; }
@@ -22,11 +27,26 @@ namespace VaWorks.Web.Data.Entities
         [Required]
         public int QuoteNumber { get; set; }
 
+        [StringLength(5)]
+        public string Revision { get; set; }
+
         [Required]
         public string CustomerName { get; set; }
 
         [Required]
         public string CompanyName { get; set; }
+
+        public string Address1 { get; set; }
+
+        public string Address2 { get; set; }
+
+        public string City { get; set; }
+
+        public string State { get; set; }
+
+        public string Country { get; set; }
+
+        public string PostalCode { get; set; }
 
         [Required]
         public string SalesPerson { get; set; }
@@ -43,13 +63,23 @@ namespace VaWorks.Web.Data.Entities
         [MaxLength(100)]
         public string Title { get; set; }
 
+        public double Total { get; set; }
+
         public bool IsSent { get; set; }
 
         public bool IsOrder { get; set; }
+
+        [ForeignKey("UserId")]
+        public virtual ApplicationUser User { get; set; }
+
+        [ForeignKey("OrganizationId")]
+        public virtual Organization Organization { get; set; }
+
+        public virtual IList<QuoteItem> Items { get; set; }
     }
 
     [Table("QuoteItems")]
-    public class QuoteItems
+    public class QuoteItem
     {
         [Key]
         public int QuoteItemId { get; set; }
@@ -91,5 +121,14 @@ namespace VaWorks.Web.Data.Entities
 
         [ForeignKey("OrganizationId")]
         public virtual Organization Organization { get; set; }
+    }
+
+    [Table("QuoteNumber")]
+    public class QuoteNumber
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public int Number { get; set; }
     }
 }

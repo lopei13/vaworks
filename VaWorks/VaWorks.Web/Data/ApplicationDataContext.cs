@@ -36,11 +36,15 @@ namespace VaWorks.Web.Data
 
         public DbSet<Quote> Quotes { get; set; }
 
-        public DbSet<QuoteItems> QuoteItems { get; set; }
+        public DbSet<QuoteItem> QuoteItems { get; set; }
 
         public DbSet<Discount> Discounts { get; set; }
 
         public DbSet<SystemMessage> SystemMessages { get; set; }
+
+        public DbSet<Document> Documents { get; set; }
+
+        public DbSet<QuoteNumber> QuoteNumber { get; set; }
 
         #endregion
 
@@ -98,7 +102,22 @@ namespace VaWorks.Web.Data
                     m.MapRightKey("ContactId");
                 });
 
+            modelBuilder.Entity<Organization>()
+                .HasMany(o => o.Documents)
+                .WithMany(d => d.Organizations)
+                .Map(x => {
+                    x.ToTable("OrganizationDocuments");
+                    x.MapLeftKey("OrganizationId");
+                    x.MapRightKey("DocumentId");
+                });
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(u => u.Messages)
+                .WithRequired(m => m.User)
+                .WillCascadeOnDelete(true);
+
             base.OnModelCreating(modelBuilder);
         }
+
     }
 }

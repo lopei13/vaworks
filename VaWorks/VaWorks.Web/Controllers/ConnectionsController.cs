@@ -41,6 +41,13 @@ namespace VaWorks.Web.Controllers
                     db.SaveChanges();
                     ViewBag.Heading = "Connection made!";
                     ViewBag.Message = $"You are now connected to {contact.Name}";
+
+                    db.SystemMessages.Add(new SystemMessage() {
+                        UserId = contact.Id,
+                        DateSent = DateTimeOffset.Now,
+                        Message = $"You are now connected to {user.Name} from {user.Organization.Name}."
+                    });
+
                     return View("Message");
                 } else {
                     ViewBag.Error = "A connection already exists.";

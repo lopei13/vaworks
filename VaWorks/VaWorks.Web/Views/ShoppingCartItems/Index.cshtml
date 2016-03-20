@@ -1,74 +1,88 @@
 ﻿@model IEnumerable<VaWorks.Web.Data.Entities.ShoppingCartItems>
 
-@{
+    @{
     ViewBag.Title = "Cart";
-}
+    }
 
-<h2>Current quote</h2>
+    <h2>Current quote</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Kit.KitNumber)
-        </th>
-        <th>
-            Valve
-        </th>
-        <th>
-            Actuator
-        </th>
-        <th>@Html.DisplayNameFor(model => model.Quantity)</th>
-        <th></th>
-    </tr>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Kit.KitNumber)
+            </th>
+            <th>
+                Valve
+            </th>
+            <th>
+                Actuator
+            </th>
+            <th>@Html.DisplayNameFor(model => model.Quantity)</th>
+            <th></th>
+        </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @if (item.Kit != null) {
-            @Html.DisplayFor(modelItem => item.Kit.KitNumber)
-            } else {
+        @foreach (var item in Model) {
+        <tr>
+            <td>
+                @if (item.Kit != null) {
+                @Html.DisplayFor(modelItem => item.Kit.KitNumber)
+                } else {
                 <div class="text-danger">The kit is not longer available.</div>
-            }
-        </td>
-        <td>
-            @if (item.Valve != null) {
-            @item.Valve.Manufacturer @item.Valve.Model @item.Valve.Size
-            } else {
+                }
+            </td>
+            <td>
+                @if (item.Valve != null) {
+                @item.Valve.Manufacturer @item.Valve.Model @item.Valve.Size
+                } else {
                 <div class="text-danger">The valve is not longer available.</div>
-            }
-        </td>
-        <td>
-            @if (item.Actuator != null) {
-            @item.Actuator.Manufacturer @item.Actuator.Model @item.Actuator.Size
-            } else {
+                }
+            </td>
+            <td>
+                @if (item.Actuator != null) {
+                @item.Actuator.Manufacturer @item.Actuator.Model @item.Actuator.Size
+                } else {
                 <div class="text-danger">The actuator is not longer available.</div>
-            }
-        </td>
-        <td>
-            <div class="form-inline">
-            @using (Html.BeginForm("UpdateQuantity", "ShoppingCartItems", FormMethod.Post)) {
-                <input type="hidden" value="@item.ShoppingCartItemId" name="shoppingCartItemId" />
-                <div class="form-group">
-                    <input type="number" value="@item.Quantity" class="form-control" name="quantity" style="width: 100px;" />
-                    <input value="Update" type="submit" class="btn btn-link" />
+                }
+            </td>
+            <td>
+                <div class="form-inline">
+                    @using (Html.BeginForm("UpdateQuantity", "ShoppingCartItems", FormMethod.Post)) {
+                    <input type="hidden" value="@item.ShoppingCartItemId" name="shoppingCartItemId" />
+                    <div class="form-group">
+                        <input type="number" value="@item.Quantity" class="form-control" name="quantity" style="width: 100px;" />
+                        <input value="Update" type="submit" class="btn btn-link" />
+                    </div>
+                    }
                 </div>
-            }</div>
-        </td>
-        <td>
-            <div class="form-inline">
-            @using(Html.BeginForm("RemoveItem", "ShoppingCartItems", FormMethod.Post)) {
-                <input type="hidden" value="@item.ShoppingCartItemId" name="shoppingCartItemId"/>
-                <input type="submit" value="Remove" class="btn btn-link" />
-            }</div>
-        </td>
-    </tr>
-}
+            </td>
+            <td>
+                <div class="form-inline">
+                    @using(Html.BeginForm("RemoveItem", "ShoppingCartItems", FormMethod.Post)) {
+                    <input type="hidden" value="@item.ShoppingCartItemId" name="shoppingCartItemId" />
+                    <input type="submit" value="Remove" class="btn btn-link" />
+                    }
+                </div>
+            </td>
+        </tr>
+        }
 
-</table>
+    </table>
 
-<div class="pull-right">
+<div class="pull-left">
     <p>
-        @Html.ActionLink("Submit Quote", "Submit", "Quotes", null, new { @class = "btn btn-default" })
         @Html.ActionLink("Continue Shopping", "Index", "KitSelection", null, new { @class = "btn btn-primary" })
     </p>
 </div>
+    <div class="pull-right">
+
+        <p>
+            <div class="form-inline">
+                @using(Html.BeginForm("SubmitQuote", "ShoppingCartItems")){
+                <input class="form-control" type="text" name="title" placeholder="Title" />
+                <input class="btn btn-default" type="submit" value="Submit Quote"/>
+                }
+
+            </div>
+
+        </p>
+    </div>

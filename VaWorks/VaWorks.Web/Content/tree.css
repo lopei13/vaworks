@@ -1,8 +1,8 @@
-﻿.tree li {
+﻿/*.tree li {
     margin: 0px 0;	
 	list-style-type: none;
     position: relative;
-	padding: 20px 5px 0px 5px;
+	padding: 10px 5px 0px 5px;
 }
 
 .tree li::before{
@@ -29,6 +29,46 @@
 	padding: 5px 10px;
 }
 
+.tree ul {
+    border-left-style: dashed;
+    border-bottom-style: dashed;
+    border-left-width: thin;
+    border-bottom-width: thin;
+    border-left-color: #446e9b;
+    border-bottom-color: #446e9b;
+}*/
 
+.tree > .just-padding {
+    padding: 15px;
+}
+
+.tree > .list-group.list-group-root {
+    padding: 0;
+    overflow: hidden;
+}
+
+.tree > .list-group.list-group-root .list-group {
+    margin-bottom: 0;
+}
+
+.tree > .list-group.list-group-root .list-group-item {
+    border-width: 0px;
+}
+
+.tree > .list-group.list-group-root > .list-group-item:first-child {
+    border-top-width: 0px;
+}
+
+.tree > .list-group.list-group-root > .list-group > .list-group-item {
+    padding-left: 30px;
+}
+
+.tree > .list-group.list-group-root > .list-group > .list-group > .list-group-item {
+    padding-left: 45px;
+}
+
+.tree > .list-group-item .glyphicon {
+    margin-right: 5px;
+}
 
 

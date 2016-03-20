@@ -173,6 +173,20 @@ namespace VaWorks.Web.Controllers
             return View(kit);
         }
 
+        [HttpPost]
+        public ActionResult SavePrice(int kitId, double price)
+        {
+            var kit = db.Kits.Find(kitId);
+            if(kit != null) {
+                kit.Price = price;
+                db.SaveChanges();
+
+                return Json(kit, JsonRequestBehavior.AllowGet);
+            }
+
+            return HttpNotFound();
+        }
+
         // GET: Kits/Delete/5
         public ActionResult Delete(int? id)
         {

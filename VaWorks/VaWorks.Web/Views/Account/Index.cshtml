@@ -9,7 +9,8 @@
 <div>
     <ul class="nav nav-tabs">
         <li class="active"><a href="#profile" data-toggle="tab" aria-expanded="true">Profile</a></li>
-        <li class=""><a href="#quotes" data-toggle="tab" aria-expanded="true">Quotes</a></li>
+        <li class=""><a href="#quotes" data-toggle="tab" aria-expanded="true">My Quotes</a></li>
+        <li class=""><a href="#companyquotes" data-toggle="tab" aria-expanded="true">Company Quotes</a></li>
         <li class=""><a href="#contacts" data-toggle="tab" aria-expanded="true">Contacts</a></li>    
         <li class=""><a href="#messages" data-toggle="tab" aria-expanded="false">Messages @{Html.RenderAction("GetNewMessageCount", "Account");}</a></li>
         @if (User.IsInRole("System Administrator")) {
@@ -24,10 +25,31 @@
             </div>
             @using GridMvc.Html;
             @if (Model.Organization != null) {
-                @Html.Grid(Model.Organization.GetAllQuotes()).Columns(columns => {
+                @Html.Grid(Model.Quotes.OrderByDescending(q => q.QuoteNumber)).Columns(columns => {
                     columns.Add(m => m.QuoteNumber).Sortable(true).Filterable(true).SetWidth(220);
-                    columns.Add(m => m.CreatedDate).Sortable(true).Filterable(true);
-                }).WithPaging(10).WithMultipleFilters()
+                    columns.Add(m => m.Revision).Sortable(true).Filterable(true).SetWidth(220);
+                    columns.Add(m => m.Title).Sortable(true).Filterable(true).SetWidth(220);
+                    columns.Add(m => m.CustomerName).Titled("Created By").Sortable(true).Filterable(true).SetWidth(220);
+                    columns.Add(m => m.CreatedDate.Date).Titled("Date").Sortable(true).Filterable(true).Format("{0:MM/dd/yyyy}");
+                    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("View", "ViewQuote", "Quotes", new { quoteId = m.QuoteId }, null));
+                }).WithPaging(50).WithMultipleFilters().Selectable(false)
+            }
+        </div>
+
+        <div class="tab-pane fade in" id="companyquotes">
+            <div class="btn-group">
+                @Html.ActionLink("Select Kit", "Index", "KitSelection", null, new { @class = "btn btn-link" })
+            </div>
+            @using GridMvc.Html;
+            @if (Model.Organization != null) {
+            @Html.Grid(Model.Organization.GetAllQuotes()).Columns(columns => {
+            columns.Add(m => m.QuoteNumber).Sortable(true).Filterable(true).SetWidth(220);
+            columns.Add(m => m.Revision).Sortable(true).Filterable(true).SetWidth(220);
+            columns.Add(m => m.Title).Sortable(true).Filterable(true).SetWidth(220);
+            columns.Add(m => m.CustomerName).Titled("Created By").Sortable(true).Filterable(true).SetWidth(220);
+            columns.Add(m => m.CreatedDate.Date).Titled("Date").Sortable(true).Filterable(true).Format("{0:MM/dd/yyyy}");
+            columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("View", "ViewQuote", "Quotes", new { quoteId = m.QuoteId }, null));
+            }).WithPaging(50).WithMultipleFilters().Selectable(false)
             }
         </div>
 
@@ -42,11 +64,13 @@
                                     <img class="avatar img-circle" src="@c.ImageString" alt="">
                                 </div>
                                 <div class="pull-right btn-group-sm">
-                                    @using (Html.BeginForm("RemoveConnection", "Connections", FormMethod.Post)) {
-                                        <input type="hidden" name="userId" value="@c.Id" />
-                                        <button type="submit" class="btn btn-danger">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
+                                    @if(User.IsInRole("Sales") || User.IsInRole("System Administrator")){
+                                        using (Html.BeginForm("RemoveConnection", "Connections", FormMethod.Post)) {
+                                            <input type="hidden" name="userId" value="@c.Id" />
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        }
                                     }
                                 </div>
                                 <div class="info">
@@ -89,8 +113,9 @@
                   }
             </div>
             <div class="row">
+                @if(User.IsInRole("Sales") || User.IsInRole("System Administrator")){
                 <h4>Add Contacts</h4>
-                @using (Html.BeginForm("Search", "Connections", FormMethod.Post)) {
+                using (Html.BeginForm("Search", "Connections", FormMethod.Post)) {
                     <div class="col-md-8">
                         <div class="col-md-6">
                             <input class="form-control" name="email" placeholder="Search by email address" />
@@ -99,6 +124,7 @@
                             <input class="btn btn-primary" type="submit" value="Search" />
                         </div>
                     </div>
+                }
                 }
             </div>
         </div>
@@ -198,13 +224,13 @@
 
         <div class="tab-pane fade in" id="messages">
             @using GridMvc.Html;
-            @Html.Grid(Model.Messages).Columns(columns => {
+            @Html.Grid(Model.Messages.OrderByDescending(m => m.DateSent)).Columns(columns => {
                columns.Add(m => m.Message).Sortable(false).Filterable(false).SetWidth(400);
                columns.Add(m => m.DateSent).Titled("Date").Sortable(true).Filterable(true).RenderValueAs(m => m.DateSent.Date.ToShortDateString());
                columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<form action="Account/MarkMessageAsRead" method="post">@if (!m.IsRead) {<input type="hidden" value="@m.UserMessageId" name="messageId" /> <input type="submit" value="Mark as Read" class="btn btn-link" />}</form>);
                columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<form action="Account/DeleteMessage" method="post"><input type="hidden" value="@m.UserMessageId" name="messageId" /> <input type="submit" value="Delete" class="btn btn-link" /></form>);
 
-               }).WithPaging(10).WithMultipleFilters()
+               }).WithPaging(10).WithMultipleFilters().Selectable(false)
         </div>
 
         @if (User.IsInRole("System Administrator")) {
@@ -224,6 +250,8 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
+    <script src="~/Scripts/gridmvc.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js" type="text/javascript"></script>
     <script type="text/javascript">
         var url = document.location.toString();
         if (url.match('#')) {
@@ -301,4 +329,10 @@
         
 
     </script>
+}
+
+@section styles{
+    <link href="~/Content/Gridmvc.css" rel="stylesheet">
+    <link href="~/Content/gridmvc.datepicker.css" rel="stylesheet">
+    <link href="~/Content/tree.css" rel="stylesheet" />
 }

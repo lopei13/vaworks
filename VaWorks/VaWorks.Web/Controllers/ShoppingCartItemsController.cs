@@ -76,6 +76,101 @@ namespace VaWorks.Web.Controllers
             return View(shoppingCartItems);
         }
 
+        public ActionResult SubmitQuote(string title = null)
+        {
+            var userId = User.Identity.GetUserId();
+            var user = db.Users.Find(userId);
+            var org = db.Organizations.Where(o => o.OrganizationId == user.OrganizationId).Include(o => o.Discounts).FirstOrDefault();
+            var items = db.ShoppingCartItems.Where(c => c.UserId == userId)
+                .Include(i => i.Actuator)
+                .Include(i => i.Valve)
+                .Include(i => i.Kit);
+            var sales = user.Contacts.Where(c => c.IsSales).FirstOrDefault();
+
+            // get the next quote number
+            var quoteNumber = db.QuoteNumber.OrderByDescending(n => n.Number).FirstOrDefault();
+            if (quoteNumber == null) {
+                quoteNumber = new QuoteNumber() {
+                    Number = 20000
+                };
+                db.QuoteNumber.Add(quoteNumber);
+            }
+            quoteNumber.Number += 1;
+
+            db.SaveChanges();
+
+            // take the shopping cart and turn it into a quote
+            Quote quote = new Quote() {
+                UserId = userId,
+                CreatedDate = DateTimeOffset.Now,
+                IsSent = true,
+                QuoteNumber = quoteNumber.Number,
+                CustomerName = user.Name,
+                OrganizationId = (int)user.OrganizationId,
+                CompanyName = user.Organization.Name,
+                Address1 = user.Organization.Address1,
+                Address2 = user.Organization.Address2,
+                City = user.Organization.City,
+                Country = user.Organization.Country,
+                State = user.Organization.State,
+                PostalCode = user.Organization.PostalCode,
+                SalesPerson = sales != null ? sales.Name : "",
+                Title = title,
+                IsOrder = false
+            };
+
+            db.Quotes.Add(quote);
+
+            foreach (var i in items) {
+                if (i.Actuator != null && i.Valve != null && i.Kit != null) {
+                    // get the discount
+                    var dis = org.Discounts.Where(d => d.Quantity < i.Quantity).OrderBy(d => d.Quantity).FirstOrDefault();
+                    double discount = 1;
+                    if (dis != null) {
+                        discount = dis.DiscountPercentage / 100;
+                    }
+
+                    quote.Items.Add(new QuoteItem() {
+                        Actuator = i.Actuator.ToString(),
+                        Valve = i.Valve.ToString(),
+                        KitNumber = i.Kit.KitNumber,
+                        Description = i.ToString(),
+                        Discount = discount,
+                        Quantity = i.Quantity,
+                        PriceEach = i.Kit.Price * discount,
+                        TotalPrice = i.Kit.Price * discount * i.Quantity
+                    });
+                }
+            }
+
+            // clear cart
+            db.ShoppingCartItems.RemoveRange(db.ShoppingCartItems.Where(c => c.UserId == userId));
+
+            // send a message
+            string message = $"Thank you for submitting quote number {quoteNumber.Number}.  You should receive an email with the quote and drawings attached.  ";
+            if(quote.Items.Any(i => i.PriceEach == 0)) {
+                message += "It looks like some of the items you requested have not been priced yet.  A salesperson will review the items and get back to you.";
+            }
+
+            db.SystemMessages.Add(new SystemMessage() {
+                UserId = userId,
+                DateSent = DateTimeOffset.Now,
+                Message = message
+            });
+
+            if (sales != null) {
+                db.SystemMessages.Add(new SystemMessage() {
+                    UserId = sales.Id,
+                    DateSent = DateTimeOffset.Now,
+                    Message = $"{user.Name} from {user.Organization.Name} submitted quote number {quoteNumber.Number}.  Please review and get in touch with the customer.  Email: {user.Email}, Phone: {user.PhoneNumber}. "
+                });
+            }
+
+            db.SaveChanges();
+
+            return RedirectToAction("ViewQuote", "Quotes", new { quoteId = quote.QuoteId });
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -1,0 +1,22 @@
+﻿@model VaWorks.Web.Data.Entities.QuoteItem
+
+@using(Html.BeginCollectionItem("QuoteItems")){
+@Html.HiddenFor(m => m.QuoteItemId)
+@Html.HiddenFor(m => m.QuoteId)
+<tr>
+    <td>
+        @Html.DisplayFor(m => m.KitNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(m => m.Valve)
+    </td>
+    <td>
+        @Html.DisplayFor(m => m.Actuator)
+    </td>
+    <td>
+        @Html.EditorFor(m => m.Quantity, new {@class = "form-control"})
+    </td>
+    <td></td>
+</tr>
+
+}

@@ -12,6 +12,8 @@ using VaWorks.Web.Data.Entities;
 using VaWorks.Web.ViewModels;
 using VaWorks.Web.Data;
 using System.Collections.Generic;
+using System.Web.Security;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace VaWorks.Web.Controllers
 {
@@ -57,7 +59,7 @@ namespace VaWorks.Web.Controllers
             }
         }
 
-        public ApplicationDbContext DataContext
+        public ApplicationDbContext Database
         {
             get
             {
@@ -68,9 +70,11 @@ namespace VaWorks.Web.Controllers
         public ActionResult Index()
         {
             var userId = User.Identity.GetUserId();
-            var user = DataContext.Users.Find(userId);
+            var user = Database.Users.Find(userId);
 
-            
+            if(user == null) {
+                return LogOff();
+            }
             return View(user);
         }
 
@@ -89,7 +93,7 @@ namespace VaWorks.Web.Controllers
         {
             if (ModelState.IsValid) {
 
-                var u = DataContext.Users.Find(user.Id);
+                var u = Database.Users.Find(user.Id);
 
                 if (file != null) {
                     if (file.ContentLength > 0) {
@@ -111,7 +115,7 @@ namespace VaWorks.Web.Controllers
                 u.Title = user.Title;
 
                 //UserManager.Update(u);
-                DataContext.SaveChanges();
+                Database.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View("Index", user);           
@@ -169,7 +173,7 @@ namespace VaWorks.Web.Controllers
         {
             if (ModelState.IsValid) {
 
-                DataContext.InvitationRequests.Add(new InvitationRequest() {
+                Database.InvitationRequests.Add(new InvitationRequest() {
                     RequestDate = DateTimeOffset.Now,
                     Company = model.Company,
                     Email = model.Email,
@@ -177,7 +181,7 @@ namespace VaWorks.Web.Controllers
                     Status = RequestStatus.New
                 });
 
-                DataContext.SaveChanges();
+                Database.SaveChanges();
 
                 // TODO: Send admin an email
 
@@ -247,7 +251,7 @@ namespace VaWorks.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var invite = DataContext.Invitations.Where(i => i.InvitationCode == model.InvitationCode).FirstOrDefault();
+                var invite = Database.Invitations.Where(i => i.InvitationCode == model.InvitationCode).FirstOrDefault();
 
                 if (invite == null || invite.IsClaimed) {
                     return View("Confirmation", new List<MessageViewModel>() { new MessageViewModel() { AlertType = "Warning", Message = "Invitation code is not valid." } });
@@ -257,11 +261,23 @@ namespace VaWorks.Web.Controllers
                     UserName = model.UserName,
                     Email = model.Email,
                     Name = $"{model.FirstName} {model.LastName}",
-                    PhoneNumber = model.PhoneNumber
+                    PhoneNumber = model.PhoneNumber,
+                    IsSales = invite.Type == InvitationType.SalesRepresentive,
+                    OrganizationId = invite.OrganizationId
                 };
+                
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(Database));
+                    
+                    if (invite.Type == InvitationType.SalesRepresentive) {
+                        if (!roleManager.RoleExists("Sales")) {
+                            roleManager.Create(new IdentityRole("Sales"));
+                        }
+
+                        var result2 = UserManager.AddToRole(user.Id, "Sales");
+                    }
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
@@ -273,9 +289,31 @@ namespace VaWorks.Web.Controllers
                     invite.IsClaimed = true;
                     invite.ClaimedDate = DateTimeOffset.Now;
                     invite.ClaimedEmail = model.Email;
-                    DataContext.SaveChanges();
 
-                    return RedirectToAction("Index", "Home");
+                    Database.SystemMessages.Add(new SystemMessage() {
+                        UserId = user.Id,
+                        DateSent = DateTimeOffset.Now,
+                        Message = "Welcome to VAWORKS - The largest database of mounting hardware in the world.  If you have any questions, please do not hesitate to contact VanAire directly."
+                    });
+
+                    var org = Database.Organizations.Find(invite.OrganizationId);
+                    
+                    var admins = from role in roleManager.Roles
+                                 where role.Name == "System Administrator"
+                                 from u in role.Users
+                                 select u.UserId;
+
+                    foreach (var admin in admins) {
+                        Database.SystemMessages.Add(new SystemMessage() {
+                            UserId = admin,
+                            DateSent = DateTimeOffset.Now,
+                            Message = $"{user.Name} from {org.Name} has registered."
+                        });
+                    }
+
+                    Database.SaveChanges();
+
+                    return RedirectToAction("Index", "Account");
                 }
                 AddErrors(result);
             }
@@ -518,14 +556,14 @@ namespace VaWorks.Web.Controllers
         public ActionResult GetNewMessageCount()
         {
             var userId = User.Identity.GetUserId();
-            var messages = DataContext.SystemMessages.Where(m => m.UserId == userId).Where(m => !m.IsRead);
+            var messages = Database.SystemMessages.Where(m => m.UserId == userId).Where(m => !m.IsRead);
 
             return PartialView("BadgeCount", messages.Count() > 0 ? messages.Count().ToString() : "");
         }
 
         public JsonResult GetOrganizationDetails(int organizationId)
         {
-            var org = from o in DataContext.Organizations
+            var org = from o in Database.Organizations
                       where o.OrganizationId == organizationId
                       select new { o.Name, };
 
@@ -536,14 +574,14 @@ namespace VaWorks.Web.Controllers
         public ActionResult MarkMessageAsRead(int messageId)
         {
             var userId = User.Identity.GetUserId();
-            var message = DataContext.SystemMessages
+            var message = Database.SystemMessages
                 .Where(m => m.UserMessageId == messageId)
                 .Where(m => m.UserId == userId).FirstOrDefault();
 
             if(message != null) {
                 message.IsRead = true;
                 message.DateRead = DateTimeOffset.Now;
-                DataContext.SaveChanges();
+                Database.SaveChanges();
                 return Redirect(Url.RouteUrl(new { controller = "Account", action = "Index" }) + "#messages");
             }
             return HttpNotFound();
@@ -553,13 +591,13 @@ namespace VaWorks.Web.Controllers
         public ActionResult DeleteMessage(int messageId)
         {
             var userId = User.Identity.GetUserId();
-            var message = DataContext.SystemMessages
+            var message = Database.SystemMessages
                 .Where(m => m.UserMessageId == messageId)
                 .Where(m => m.UserId == userId).FirstOrDefault();
 
             if (message != null) {
-                DataContext.SystemMessages.Remove(message);
-                DataContext.SaveChanges();
+                Database.SystemMessages.Remove(message);
+                Database.SaveChanges();
                 return Redirect(Url.RouteUrl(new { controller = "Account", action = "Index" }) + "#messages");
             }
             return HttpNotFound();

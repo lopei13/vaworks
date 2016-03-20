@@ -51,7 +51,7 @@ namespace VaWorks.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "OrganizationId,ParentId,Name,Description")] Organization Organization)
+        public ActionResult Create(Organization Organization)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace VaWorks.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OrganizationId,ParentId,Name,Description")] Organization Organization)
+        public ActionResult Edit(Organization Organization)
         {
             if (ModelState.IsValid)
             {
@@ -140,6 +140,18 @@ namespace VaWorks.Web.Controllers
             db.Organizations.Remove(Organization);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult RemoveDocument(int organizationId, int documentId)
+        {
+            var org = db.Organizations.Find(organizationId);
+            var doc = db.Documents.Find(documentId);
+
+            org.Documents.Remove(doc);
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = organizationId });
         }
 
         protected override void Dispose(bool disposing)

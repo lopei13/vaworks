@@ -34,6 +34,11 @@ namespace VaWorks.Web.Data.Entities
         public virtual ValveInterfaceCode InterfaceCodeEntity { get; set; }
 
         public virtual ICollection<Organization> Organizations { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Manufacturer} {Model} {Size}";
+        }
     }
 
     [Table("ValveInterfaceCodes")]

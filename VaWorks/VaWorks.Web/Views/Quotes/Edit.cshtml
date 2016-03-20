@@ -1,0 +1,70 @@
+﻿@model VaWorks.Web.Data.Entities.Quote
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Quote</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Quote @Model.QuoteNumber @Model.Revision</h4>
+    <h5>@Model.Title</h5>
+    <p>@Model.CompanyName</p>
+    <p>@Model.CustomerName</p>
+
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.QuoteId)
+    @Html.HiddenFor(model => model.SalesPerson)
+    @Html.HiddenFor(model => model.UserId)
+    @Html.HiddenFor(model => model.CompanyName)
+    @Html.HiddenFor(model => model.CustomerName)
+    @Html.HiddenFor(model => model.OrganizationId)
+
+    <div class="form-group">
+        <table class="table">
+            <tr>
+                <th>
+                    Kit Number
+                </th>
+                <th>
+                    Valve
+                </th>
+                <th>
+                    Actuator
+                </th>
+                <th>Quantity</th>
+                <th></th>
+            </tr>
+
+            @for(int i = 0; i < Model.Items.Count(); i++) {
+            @Html.Hidden("Items[" + i + "]", Model.Items[i].QuoteItemId)
+            <tr>
+                <td>
+                    @Model.Items[i].KitNumber
+                </td>
+                <td>
+                    @Model.Items[i].Valve
+                </td>
+                <td>
+                    @Model.Items[i].Actuator
+                </td>
+                <td>
+                    <input name="Items[@i].Quantity" value="@Model.Items[i].Quantity" type="number" class = "form-control" />
+                </td>
+                <td></td>
+            </tr>
+            }
+
+        </table>
+    </div>
+    <div class="form-group">
+       <input type="submit" value="Save" class="btn btn-default" />
+    </div>
+</div>
+}
+
