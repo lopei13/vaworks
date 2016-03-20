@@ -30,5 +30,20 @@ namespace VaWorks.Web.Controllers
 
             return View();
         }
+
+        public ActionResult Error()
+        {
+            return View();
+        }
+
+        public ActionResult InternalError()
+        {
+            return View();
+        }
+
+        public ActionResult NotFound()
+        {
+            return View();
+        }
     }
 }

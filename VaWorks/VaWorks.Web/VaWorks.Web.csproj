@@ -392,6 +392,9 @@
     <Content Include="Views\Quotes\ViewQuote.cshtml" />
     <Content Include="Views\Quotes\QuoteItemEdit.cshtml" />
     <Content Include="Views\Quotes\QuoteItemList.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\Home\InternalError.cshtml" />
+    <Content Include="Views\Home\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

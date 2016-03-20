@@ -52,6 +52,8 @@ namespace VaWorks.Web.Data
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+            Database.SetInitializer<ApplicationDbContext>(new System.Data.Entity.CreateDatabaseIfNotExists<ApplicationDbContext>());
+            var o = this.Organizations.FirstOrDefault();
         }
 
         public static ApplicationDbContext Create()
