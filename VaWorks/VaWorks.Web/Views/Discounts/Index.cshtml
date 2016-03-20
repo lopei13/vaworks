@@ -1,0 +1,44 @@
+﻿@model IEnumerable<VaWorks.Web.Data.Entities.Discount>
+
+@{
+    ViewBag.Title = "Discounts";
+}
+
+<h2>Discounts</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Organization.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DiscountPercentage)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.ActionLink(item.Organization.Name, "Details", "Organizations", new {id = item.OrganizationId}, null)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DiscountPercentage)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.DiscountId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.DiscountId })
+        </td>
+    </tr>
+}
+
+</table>
