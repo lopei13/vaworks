@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -8,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using VaWorks.Web.Data;
 using VaWorks.Web.Data.Entities;
+using VaWorks.Web.Extensions;
 
 namespace VaWorks.Web.Controllers
 {
@@ -18,8 +20,25 @@ namespace VaWorks.Web.Controllers
         // GET: Quotes
         public ActionResult Index()
         {
-            var quotes = db.Quotes.Include(q => q.User);
+            var quotes = db.Quotes.Include(q => q.CreatedBy);
             return View(quotes.ToList());
+        }
+
+        public ActionResult QuotesGrid()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = db.Users.Include(u => u.Organization).Include(u => u.Quotes).Where(u => u.Id == userId).FirstOrDefault();
+
+            var users = user.Organization.GetAllUsers().Select(o => o.Id);
+            var contacts = user.Contacts.Select(c => c.Id);
+
+            var quotes = db.Quotes.Where(q => q.CreatedById == userId || 
+            (users.Contains(q.CustomerId) && q.IsSent) || 
+            users.Contains(q.CreatedById) ||
+            contacts.Contains(q.CreatedById) ||
+            (q.CustomerId == userId && q.IsSent)).OrderByDescending(q => q.QuoteNumber);
+
+            return PartialView("_QuotesGrid", quotes);
         }
 
         public ActionResult ViewQuote(int quoteId)
@@ -30,6 +49,15 @@ namespace VaWorks.Web.Controllers
             } else {
                 ViewBag.ReturnUrl = base.Request.UrlReferrer;
             }
+
+            if(quote == null) {
+                return HttpNotFound();
+            }
+
+            if(!quote.IsSent && quote.CreatedById != User.Identity.GetUserId()) {
+                return HttpNotFound();
+            }
+
             return View(quote);
         }
 
@@ -51,8 +79,16 @@ namespace VaWorks.Web.Controllers
         // GET: Quotes/Create
         public ActionResult Create()
         {
-            // populate the organizations
-            // set the user
+            var userId = User.Identity.GetUserId();
+            var user = db.Users.Find(userId);
+
+           
+            Quote quote = new Quote() {
+                SalesPerson = user.Name
+            };
+
+            PopulateDropDown();
+
             return View();
         }
 
@@ -61,18 +97,57 @@ namespace VaWorks.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "QuoteId,UserId,OrganizationId,QuoteNumber,Revision,CustomerName,CompanyName,SalesPerson,CreatedDate,ModifiedDate,OrderDate,Title,IsSent,IsOrder")] Quote quote)
+        public ActionResult Create(string customerId = null, string title = null)
         {
-            if (ModelState.IsValid)
-            {
-                db.Quotes.Add(quote);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+            if(string.IsNullOrEmpty(customerId) || string.IsNullOrEmpty(title)) {
+                ModelState.AddModelError("", new Exception("Select a user and enter a title."));
+                PopulateDropDown(customerId);
+                return View();
             }
 
-            // populate the organizations
-            // set the user
-            return View(quote);
+            var customer = db.Users.Find(customerId);
+            var org = customer.Organization;
+
+            var salesId = User.Identity.GetUserId();
+            var sales = db.Users.Find(salesId);
+
+
+            // get the next quote number
+            var quoteNumber = db.QuoteNumber.OrderByDescending(n => n.Number).FirstOrDefault();
+            if (quoteNumber == null) {
+                quoteNumber = new QuoteNumber() {
+                    Number = 20000
+                };
+                db.QuoteNumber.Add(quoteNumber);
+            }
+            quoteNumber.Number += 1;
+
+            db.SaveChanges();
+
+            Quote quote = new Quote() {
+                CreatedById = salesId,
+                CreatedDate = DateTimeOffset.Now,
+                CreatedByName = sales.Name,
+                IsSent = false,
+                QuoteNumber = quoteNumber.Number,
+                CustomerName = customer.Name,
+                CustomerId = customer.Id,
+                CompanyName = customer.Organization.Name,
+                Address1 = customer.Organization.Address1,
+                Address2 = customer.Organization.Address2,
+                City = customer.Organization.City,
+                Country = customer.Organization.Country,
+                State = customer.Organization.State,
+                PostalCode = customer.Organization.PostalCode,
+                SalesPerson = sales != null ? sales.Name : "VanAire",
+                Title = title,
+                IsOrder = false
+            };
+
+            db.Quotes.Add(quote);
+            db.SaveChanges();
+
+            return RedirectToAction("Edit", new { id = quote.QuoteId });
         }
 
         // GET: Quotes/Edit/5
@@ -103,10 +178,63 @@ namespace VaWorks.Web.Controllers
             {
                 db.Entry(quote).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Edit(quote.QuoteId);
             }
             // populate the organizations
             // set the user
+            return View(quote);
+        }
+
+        public ActionResult AddItem(int quoteId)
+        {
+            var quote = db.Quotes.Find(quoteId);
+            return View(quote);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateQuantity(int quoteItemId, int quantity)
+        {
+            var quoteItem = db.QuoteItems.Find(quoteItemId);
+            quoteItem.Quantity = quantity;
+
+            // we need to update the total on the quote
+            var quote = db.Quotes.Where(q => q.QuoteId == quoteItem.QuoteId).FirstOrDefault();
+            var customer = db.Users.Find(quote.CustomerId);
+            var org = db.Organizations.Where(o => o.OrganizationId == customer.OrganizationId).FirstOrDefault();
+            quote.Total = 0;
+            foreach (var i in quote.Items) {
+                var dis = org.Discounts.Where(d => d.Quantity < i.Quantity).OrderBy(d => d.Quantity).FirstOrDefault();
+                double discount = 1;
+                if (dis != null) {
+                    discount = dis.DiscountPercentage / 100;
+                }
+
+                double listPrice = db.Kits.Where(k => k.KitNumber == i.KitNumber).FirstOrDefault().Price;
+                i.Discount = discount;
+                i.PriceEach = listPrice * discount;
+                i.TotalPrice = i.PriceEach * i.Quantity;
+                quote.Total += i.TotalPrice;
+            }
+
+            db.SaveChanges();
+
+            return RedirectToAction("Edit", new { id = quoteItem.QuoteId });
+        }
+
+        public ActionResult SendQuote(int quoteId)
+        {
+            var quote = db.Quotes.Find(quoteId);
+            quote.IsSent = true;
+            
+
+            // TODO: Send email.
+
+            db.SystemMessages.Add(new SystemMessage() {
+                UserId = quote.CustomerId,
+                Message = $"{quote.SalesPerson} created a quote for you.  Quote: {quote.QuoteNumber}."
+            });
+
+            db.SaveChanges();
             return View(quote);
         }
 
@@ -144,5 +272,19 @@ namespace VaWorks.Web.Controllers
             }
             base.Dispose(disposing);
         }
+
+        #region Helpers
+
+        private void PopulateDropDown(object selected = null)
+        {
+            var users = from u in db.Users
+                        where u.IsSales == false
+                        orderby u.Name
+                        select u;
+
+            ViewBag.CustomerId = new SelectList(users, "Id", "Name", selected);
+        }
+
+        #endregion
     }
 }

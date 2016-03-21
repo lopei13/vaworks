@@ -214,6 +214,7 @@
     <Compile Include="Data\Entities\Valve.cs" />
     <Compile Include="Data\IDataWriter.cs" />
     <Compile Include="Data\ReleaseInitializer.cs" />
+    <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -230,12 +231,17 @@
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Drawings\drawing.txt" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\Gridmvc.css" />
     <Content Include="Content\gridmvc.datepicker.css" />
     <Content Include="Content\Images\evah_design.png" />
+    <Content Include="Content\Thumbnails\images.txt" />
     <Content Include="Content\tree.css" />
+    <Content Include="Content\Images\uploadify-cancel.png" />
+    <Content Include="Content\uploadify.css" />
+    <Content Include="Content\uploadify.swf" />
     <Content Include="Content\wizard-nav.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -270,6 +276,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.uploadify.js" />
+    <Content Include="Scripts\jquery.uploadify.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -396,6 +404,13 @@
     <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Views\Home\InternalError.cshtml" />
     <Content Include="Views\Home\NotFound.cshtml" />
+    <Content Include="Views\KitSelection\Search.cshtml" />
+    <Content Include="Views\Quotes\Edit2.cshtml" />
+    <Content Include="Views\Quotes\AddItem.cshtml" />
+    <Content Include="Views\Quotes\SendQuote.cshtml" />
+    <Content Include="Views\Quotes\_QuotesGrid.cshtml" />
+    <Content Include="Views\Kits\UploadThumbnails.cshtml" />
+    <Content Include="Views\Kits\UploadDrawings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

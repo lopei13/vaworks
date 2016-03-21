@@ -35,6 +35,8 @@ namespace VaWorks.Web.Data
                 context.Organizations.Add(new Organization() {
                     Name = "VanAire"
                 });
+
+                admin.Organization = context.Organizations.FirstOrDefault();
             }
         }
 

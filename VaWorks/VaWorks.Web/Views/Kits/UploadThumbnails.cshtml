@@ -1,0 +1,39 @@
+﻿
+<h3>Upload Kit Drawings</h3>
+<div>
+    Click Select files to upload files.
+    <input type="file" name="file_upload" id="file_upload" />
+</div>
+<div id="uploaded">
+</div>
+<div id="error">
+</div>
+
+@section scripts{
+    <script src="~/Scripts/jquery.uploadify.min.js" type="text/javascript"></script>
+    
+    <script type="text/javascript">
+        $(function () {
+            $('#file_upload').uploadify({
+                'swf': "@Url.Content("~/Content/uploadify.swf")",
+                'cancelImg': "@Url.Content("~/Content/uploadify-cancel.png")",
+                'uploader': "@Url.Action("UploadDrawingHandler", "Kits")",
+                'onUploadError' : function(file, data, response) {
+                    $("#error").append("<p>'" + file.name + " error!'</p>");
+                    $('#error').addClass('alert');
+                    $('#error').addClass('alert-danger');
+                },
+                'onUploadSuccess': function (file, data, response) {
+                    $("#uploaded").append("<p>'" + file.name + " complete!'</p>");
+                    $("#uploaded").addClass('alert');
+                    $("#uploaded").addClass('alert-success');
+                }
+        });
+        });
+    </script>
+
+    }
+
+@section styles{
+    <link href="~/Content/uploadify.css" rel="stylesheet"/>
+    }

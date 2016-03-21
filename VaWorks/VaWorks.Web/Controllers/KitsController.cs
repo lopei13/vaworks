@@ -96,6 +96,34 @@ namespace VaWorks.Web.Controllers
             return View("ImportKits", messages.Values);
         }
 
+        public ActionResult UploadThumbnails()
+        {
+            return View();
+        }
+
+        public ActionResult UploadThumbnailHandler()
+        {
+            var file = Request.Files["Filedata"];
+            string savePath = Server.MapPath(@"~\Content\Thumbnails\" + file.FileName);
+            file.SaveAs(savePath);
+
+            return Json(new { name = file.FileName }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UploadDrawings()
+        {
+            return View();
+        }
+
+        public ActionResult UploadDrawingHandler()
+        {
+            var file = Request.Files["Filedata"];
+            string savePath = Server.MapPath(@"~\Content\Drawings\" + file.FileName);
+            file.SaveAs(savePath);
+
+            return Json(new { name = file.FileName }, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Kits/Details/5
         public ActionResult Details(int? id)
         {

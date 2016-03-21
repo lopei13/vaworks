@@ -39,7 +39,7 @@ app.controller('mainController',
 
         $http({
             method: "GET",
-            url: "KitSelection/GetValveManufacturers"
+            url: "/KitSelection/GetValveManufacturers"
         }).then(function success(res){
             $scope.valves = res.data;
             $scope.hasValves = $scope.valves.length > 0;
@@ -55,7 +55,7 @@ app.controller('mainController',
             $scope.loading = true;
             $http({
                 method: "GET",
-                url: "KitSelection/GetValveModels",
+                url: "/KitSelection/GetValveModels",
                 params: { mfg: $scope.selectedValve }
             }).then(function success(res) {
                 $scope.valvemodels = res.data;
@@ -71,7 +71,7 @@ app.controller('mainController',
             $scope.loading = true;
             $http({
                 method: "GET",
-                url: "KitSelection/GetValveSizes",
+                url: "/KitSelection/GetValveSizes",
                 params: { mfg: $scope.selectedValve, model: $scope.selectedValveModel }
             }).then(function success(res) {
                 $scope.valvesizes = res.data;
@@ -87,7 +87,7 @@ app.controller('mainController',
             $scope.loading = true;
             $http({
                 method: "GET",
-                url: "KitSelection/GetActuators",
+                url: "/KitSelection/GetActuators",
                 params: { valveInterface: $scope.selectedValveSize.InterfaceCode }
             }).then(function success(res) {
                 $scope.actuators = res.data;
@@ -103,7 +103,7 @@ app.controller('mainController',
             $scope.loading = true;
             $http({
                 method: "GET",
-                url: "KitSelection/GetActuatorModels",
+                url: "/KitSelection/GetActuatorModels",
                 params: { valveInterface: $scope.selectedValveSize.InterfaceCode, mfg: $scope.selectedActuator }
             }).then(function success(res) {
                 $scope.actuatormodels = res.data;
@@ -119,7 +119,7 @@ app.controller('mainController',
             $scope.loading = true;
             $http({
                 method: "GET",
-                url: "KitSelection/GetActuatorSizes",
+                url: "/KitSelection/GetActuatorSizes",
                 params: { valveInterface: $scope.selectedValveSize.InterfaceCode, mfg: $scope.selectedActuator, model: $scope.selectedActuatorModel }
             }).then(function success(res) {
                 $scope.actuatorsizes = res.data;
@@ -135,7 +135,7 @@ app.controller('mainController',
             $scope.loading = true;
             $http({
                 method: "GET",
-                url: "KitSelection/GetKitMaterials",
+                url: "/KitSelection/GetKitMaterials",
                 params: { valveInterface: $scope.selectedValveSize.InterfaceCode, actuatorInterface: $scope.selectedActuatorSize.InterfaceCode }
             }).then(function success(res) {
                 $scope.materials = res.data;
@@ -153,7 +153,7 @@ app.controller('mainController',
             $scope.loading = true;
             $http({
                 method: "GET",
-                url: "KitSelection/GetKitOptions",
+                url: "/KitSelection/GetKitOptions",
                 params: { valveInterface: $scope.selectedValveSize.InterfaceCode, actuatorInterface: $scope.selectedActuatorSize.InterfaceCode, materialId: $scope.selectedMaterial.KitMaterialId }
             }).then(function success(res) {
                 $scope.options = res.data;
@@ -170,7 +170,7 @@ app.controller('mainController',
             $scope.loading = true;
             $http({
                 method: "GET",
-                url: "KitSelection/GetKit",
+                url: "/KitSelection/GetKit",
                 params: { valveInterface: $scope.selectedValveSize.InterfaceCode, actuatorInterface: $scope.selectedActuatorSize.InterfaceCode, materialId: $scope.selectedMaterial.KitMaterialId, optionId: $scope.selectedOption.KitOptionId }
             }).then(function success(res) {
                 if (res.data.length > 0) {

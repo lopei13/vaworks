@@ -51,7 +51,7 @@ namespace VaWorks.Web.Controllers
 
         // POST: ShoppingCartItems/RemoveItem
         [HttpPost]
-        public ActionResult RemoveItem(int shoppingCartItemId, int quantity)
+        public ActionResult RemoveItem(int shoppingCartItemId)
         {
             var item = db.ShoppingCartItems.Where(i => i.ShoppingCartItemId == shoppingCartItemId).FirstOrDefault();
             if (item != null) {
@@ -85,7 +85,17 @@ namespace VaWorks.Web.Controllers
                 .Include(i => i.Actuator)
                 .Include(i => i.Valve)
                 .Include(i => i.Kit);
+
+            if (items.Count() == 0) {
+                ViewBag.Error = "There are no items in your shopping cart.  Please add some items.";
+                return View("Error");
+            }
+
             var sales = user.Contacts.Where(c => c.IsSales).FirstOrDefault();
+
+            if(sales == null) {
+                sales = db.Users.Where(u => u.IsSales).FirstOrDefault();
+            }
 
             // get the next quote number
             var quoteNumber = db.QuoteNumber.OrderByDescending(n => n.Number).FirstOrDefault();
@@ -101,12 +111,13 @@ namespace VaWorks.Web.Controllers
 
             // take the shopping cart and turn it into a quote
             Quote quote = new Quote() {
-                UserId = userId,
+                CreatedById = userId,
                 CreatedDate = DateTimeOffset.Now,
                 IsSent = true,
                 QuoteNumber = quoteNumber.Number,
                 CustomerName = user.Name,
-                OrganizationId = (int)user.OrganizationId,
+                CreatedByName = user.Name,
+                CustomerId = user.Id,
                 CompanyName = user.Organization.Name,
                 Address1 = user.Organization.Address1,
                 Address2 = user.Organization.Address2,
@@ -114,7 +125,7 @@ namespace VaWorks.Web.Controllers
                 Country = user.Organization.Country,
                 State = user.Organization.State,
                 PostalCode = user.Organization.PostalCode,
-                SalesPerson = sales != null ? sales.Name : "",
+                SalesPerson = sales != null ? sales.Name : "VanAire",
                 Title = title,
                 IsOrder = false
             };

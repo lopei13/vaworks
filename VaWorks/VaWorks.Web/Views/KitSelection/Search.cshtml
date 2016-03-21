@@ -1,0 +1,25 @@
+﻿@model IEnumerable<VaWorks.Web.Data.Entities.Kit>
+
+<h3>Kits for @ViewBag.SearchText</h3>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.KitNumber)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.ActionLink(item.KitNumber, "Details", new{ id = item.KitId})
+        </td>
+
+        <td>
+            @Html.ActionLink("Add", "AddToCart", new { id=item.KitId })
+        </td>
+    </tr>
+    }
+
+</table>

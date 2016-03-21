@@ -48,30 +48,28 @@ namespace VaWorks.Web.Data.Entities
 
         public virtual ICollection<Discount> Discounts { get; set; }
 
-        public virtual ICollection<Quote> Quotes { get; set; }
-
         public virtual ICollection<Document> Documents { get; set; }
 
-        public IEnumerable<Quote> GetAllQuotes()
-        {
-            HashSet<Quote> quotes = new HashSet<Quote>();
+        //public IEnumerable<Quote> GetAllQuotes()
+        //{
+        //    HashSet<Quote> quotes = new HashSet<Quote>();
 
-            Stack<Organization> stack = new Stack<Organization>();
-            stack.Push(this);
+        //    Stack<Organization> stack = new Stack<Organization>();
+        //    stack.Push(this);
 
-            while (stack.Any()) {
-                var org = stack.Pop();
-                foreach (var q in org.Quotes) {
-                    quotes.Add(q);
-                }
+        //    while (stack.Any()) {
+        //        var org = stack.Pop();
+        //        foreach (var q in org.Quotes.Where(q => q.IsSent)) {
+        //            quotes.Add(q);
+        //        }
 
-                foreach (var o in org.Children) {
-                    stack.Push(o);
-                }
-            }
+        //        foreach (var o in org.Children) {
+        //            stack.Push(o);
+        //        }
+        //    }
 
-            return quotes.OrderByDescending(q => q.QuoteNumber);
-        }
+        //    return quotes.OrderByDescending(q => q.QuoteNumber);
+        //}
 
         public string GetCompanyName()
         {
@@ -85,6 +83,35 @@ namespace VaWorks.Web.Data.Entities
             }
 
             return name;
+        }
+
+        public IEnumerable<Organization> GetAllOrganizations()
+        {
+            yield return this;
+            foreach(var c in Children) {
+                foreach(var o in c.GetAllOrganizations()) {
+                    yield return o;
+                }
+            }
+        }
+
+        public IEnumerable<ApplicationUser> GetAllUsers()
+        {
+            foreach (var o in GetAllOrganizations()) {
+                foreach (var u in o.Users) {
+                    yield return u;
+                }
+            }
+
+        }
+
+        public IEnumerable<Quote> GetAllQuotes()
+        {
+            foreach(var u in GetAllUsers()) {
+                foreach(var q in u.Quotes) {
+                    yield return q;
+                }
+            }
         }
     }
 }

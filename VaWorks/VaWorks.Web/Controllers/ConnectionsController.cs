@@ -73,7 +73,7 @@ namespace VaWorks.Web.Controllers
                     ViewBag.Message = $"You are no longer connection to {contact.Name}";
                     return View("Message");
                 } else {
-                    ViewBag.Error = "A connection already exists.";
+                    ViewBag.Error = "Error removing contact.";
                     return View("Error");
                 }
             }

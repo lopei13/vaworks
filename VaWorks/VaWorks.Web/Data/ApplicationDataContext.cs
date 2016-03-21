@@ -118,6 +118,16 @@ namespace VaWorks.Web.Data
                 .WithRequired(m => m.User)
                 .WillCascadeOnDelete(true);
 
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(u => u.Quotes)
+                .WithOptional(q => q.Customer)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(u => u.QuotesCreated)
+                .WithRequired(q => q.CreatedBy)
+                .WillCascadeOnDelete(true);
+
             base.OnModelCreating(modelBuilder);
         }
 

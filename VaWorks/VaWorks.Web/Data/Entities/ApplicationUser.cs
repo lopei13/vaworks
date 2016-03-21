@@ -42,6 +42,8 @@ namespace VaWorks.Web.Data.Entities
 
         public virtual ICollection<Quote> Quotes { get; set; }
 
+        public virtual ICollection<Quote> QuotesCreated { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

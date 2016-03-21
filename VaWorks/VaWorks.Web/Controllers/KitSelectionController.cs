@@ -23,6 +23,20 @@ namespace VaWorks.Web.Controllers
             return View(user);
         }
 
+        public ActionResult Search(string searchText)
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            var organization = db.Organizations.Find(user.OrganizationId);
+
+            var kits = from k in organization.Kits
+                       where k.KitNumber.Contains(searchText.ToUpper())
+                       select k;
+
+            ViewBag.SearchText = searchText;
+
+            return View(kits);
+        }
+
         /// <summary>
         /// Gets the valve manufactureres
         /// </summary>
@@ -204,22 +218,54 @@ namespace VaWorks.Web.Controllers
         /// <param name="kitId"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        public ActionResult AddToCart(int valveId, int actuatorId, int kitId, int quantity)
+        public ActionResult AddToCart(int valveId, int actuatorId, int kitId, int quantity, int? quoteId)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
             var organization = db.Organizations.Find(user.OrganizationId);
 
-            db.ShoppingCartItems.Add(new Data.Entities.ShoppingCartItems() {
-                ActuatorId = actuatorId,
-                ValveId = valveId,
-                Quantity = quantity,
-                KitId = kitId,
-                UserId = user.Id
-            });
+            if (quoteId == null) {
+                db.ShoppingCartItems.Add(new Data.Entities.ShoppingCartItems() {
+                    ActuatorId = actuatorId,
+                    ValveId = valveId,
+                    Quantity = quantity,
+                    KitId = kitId,
+                    UserId = user.Id
+                });
 
-            db.SaveChanges();
+                db.SaveChanges();
+                return RedirectToAction("Index", "ShoppingCartItems");
+            } else {
+                var quote = db.Quotes.Find(quoteId);
+                var customer = db.Users.Find(quote.CustomerId);
+                var org = customer.Organization;
+                var dis = org.Discounts.Where(d => d.Quantity < quantity).OrderBy(d => d.Quantity).FirstOrDefault();
+                double discount = 1;
+                if (dis != null) {
+                    discount = dis.DiscountPercentage / 100;
+                }
+                var kit = db.Kits.Find(kitId);
+                var valve = db.Valves.Find(valveId);
+                var actuator = db.Actuators.Find(actuatorId);
+                double listPrice = kit.Price;
 
-            return RedirectToAction("Index", "ShoppingCartItems");
+                quote.Items.Add(new Data.Entities.QuoteItem() {
+                    Discount = discount,
+                    PriceEach = listPrice * discount,
+                    Description = $"KIT FOR {actuator.ToString()} TO {valve.ToString()}",
+                    KitNumber = kit.KitNumber,
+                    Quantity = quantity,
+                    Actuator = actuator.ToString(),
+                    Valve = valve.ToString(),
+                    TotalPrice = listPrice * discount * quantity
+                });
+
+                // update the price on the quote
+                quote.Total = 0;
+                quote.Total = quote.Items.Sum(q => q.TotalPrice);
+
+                db.SaveChanges();
+                return RedirectToAction("Edit", "Quotes", new { id = quoteId });
+            }            
         }
     }
 }

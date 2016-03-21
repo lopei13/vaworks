@@ -19,16 +19,18 @@ namespace VaWorks.Web.Data.Entities
         public int QuoteId { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public string CreatedById { get; set; }
 
-        [Required]
-        public int OrganizationId { get; set; }
+        public string CustomerId { get; set; }
 
         [Required]
         public int QuoteNumber { get; set; }
 
         [StringLength(5)]
         public string Revision { get; set; }
+
+        [Required]
+        public string CreatedByName { get; set; }
 
         [Required]
         public string CustomerName { get; set; }
@@ -69,11 +71,11 @@ namespace VaWorks.Web.Data.Entities
 
         public bool IsOrder { get; set; }
 
-        [ForeignKey("UserId")]
-        public virtual ApplicationUser User { get; set; }
+        [ForeignKey("CreatedById")]
+        public virtual ApplicationUser CreatedBy { get; set; }
 
-        [ForeignKey("OrganizationId")]
-        public virtual Organization Organization { get; set; }
+        [ForeignKey("CustomerId")]
+        public virtual ApplicationUser Customer { get; set; }
 
         public virtual IList<QuoteItem> Items { get; set; }
     }
@@ -83,6 +85,8 @@ namespace VaWorks.Web.Data.Entities
     {
         [Key]
         public int QuoteItemId { get; set; }
+
+        public  int QuoteId { get; set; }
 
         [MaxLength(100)]
         public string KitNumber { get; set; }
@@ -103,6 +107,9 @@ namespace VaWorks.Web.Data.Entities
         public double Discount { get; set; }
 
         public double TotalPrice { get; set; }
+
+        [ForeignKey("QuoteId")]
+        public virtual Quote Quote { get; set; }
     }
 
     [Table("Discounts")]

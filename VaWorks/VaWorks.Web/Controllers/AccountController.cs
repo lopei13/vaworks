@@ -22,7 +22,6 @@ namespace VaWorks.Web.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private ApplicationDbContext _db;
 
         public AccountController()
         {
@@ -63,7 +62,7 @@ namespace VaWorks.Web.Controllers
         {
             get
             {
-                return _db ?? HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+                return HttpContext.GetOwinContext().Get<ApplicationDbContext>();
             }
         }
 

@@ -79,12 +79,12 @@
                                     <img class="avatar img-circle" src="@c.ImageString" alt="">
                                 </div>
                                 <div class="pull-right btn-group-sm">
-                                    @using (Html.BeginForm("RemoveConnection", "Connections", FormMethod.Post)) {
+                                    @*@using (Html.BeginForm("DeleteUser", "Users", FormMethod.Post)) {
                                     <input type="hidden" name="userId" value="@c.Id" />
                                     <button type="submit" class="btn btn-danger">
                                         <i class="fa fa-trash"></i>
                                     </button>
-                                    }
+                                    }*@
                                 </div>
                                 <div class="info">
                                     <h4>@c.Name</h4>
