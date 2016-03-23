@@ -27,7 +27,7 @@ namespace VaWorks.Web.Data.DataWriters
         public void Write(IDataReader reader)
         {
             var organization = db.Organizations.Find(organizationId);
-
+            HashSet<string> map = new HashSet<string>();
             while (reader.Read()) {
                 // columns
                 // mfg, model, size, ValveIntCode
@@ -52,20 +52,25 @@ namespace VaWorks.Web.Data.DataWriters
                     .Where(v => v.Size == size).FirstOrDefault();
 
                 if(valve == null) {
-                    valve = new Valve() {
-                        Manufacturer = reader.GetString(0),
-                        Model = reader.GetString(1),
-                        Size = reader.GetString(2),
-                        InterfaceCode = valveIntCode
-                    };
-                    db.Valves.Add(valve);
-                    organization.Valves.Add(valve);
+                    if (!map.Contains($"{mfg} {model} {size}")) {
+                        map.Add($"{mfg} {model} {size}");
+                        valve = new Valve() {
+                            Manufacturer = reader.GetString(0),
+                            Model = reader.GetString(1),
+                            Size = reader.GetString(2),
+                            InterfaceCode = valveIntCode
+                        };
+                        db.Valves.Add(valve);
+                        organization.Valves.Add(valve);
+                    }
                 }
 
                 // link this valve to the organization
-                if (valve.ValveId > 0) {
-                    if (!organization.Valves.Where(v => v.ValveId == valve.ValveId).Any()) {
-                        organization.Valves.Add(valve);
+                if (valve != null) {
+                    if (valve.ValveId > 0) {
+                        if (!organization.Valves.Where(v => v.ValveId == valve.ValveId).Any()) {
+                            organization.Valves.Add(valve);
+                        }
                     }
                 }
             }

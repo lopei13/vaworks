@@ -28,6 +28,8 @@ namespace VaWorks.Web.Data.DataWriters
         {
             var organization = db.Organizations.Find(organizationId);
 
+            HashSet<string> map = new HashSet<string>();
+
             while (reader.Read()) {
                 // columns
                 // mfg, model, size, ActuatorIntCode
@@ -52,20 +54,26 @@ namespace VaWorks.Web.Data.DataWriters
                     .Where(v => v.Size == size).FirstOrDefault();
 
                 if(actuator == null) {
-                    actuator = new Actuator() {
-                        Manufacturer = reader.GetString(0),
-                        Model = reader.GetString(1),
-                        Size = reader.GetString(2),
-                        InterfaceCode = actuatorIntCode
-                    };
-                    db.Actuators.Add(actuator);
-                    organization.Actuators.Add(actuator);
+                    // check local cash
+                    if (!map.Contains($"{mfg} {model} {size}")) {
+                        map.Add($"{mfg} {model} {size}");
+                        actuator = new Actuator() {
+                            Manufacturer = reader.GetString(0),
+                            Model = reader.GetString(1),
+                            Size = reader.GetString(2),
+                            InterfaceCode = actuatorIntCode
+                        };
+                        db.Actuators.Add(actuator);
+                        organization.Actuators.Add(actuator);
+                    }
                 }
 
                 // link this actuator to the organization
-                if (actuator.ActuatorId > 0) {
-                    if (!organization.Actuators.Where(v => v.ActuatorId == actuator.ActuatorId).Any()) {
-                        organization.Actuators.Add(actuator);
+                if (actuator != null) {
+                    if (actuator.ActuatorId > 0) {
+                        if (!organization.Actuators.Where(v => v.ActuatorId == actuator.ActuatorId).Any()) {
+                            organization.Actuators.Add(actuator);
+                        }
                     }
                 }
             }
