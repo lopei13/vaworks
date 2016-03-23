@@ -59,6 +59,7 @@ namespace VaWorks.Web.Data.DataWriters
                         InterfaceCode = actuatorIntCode
                     };
                     db.Actuators.Add(actuator);
+                    organization.Actuators.Add(actuator);
                 }
 
                 // link this actuator to the organization
@@ -66,8 +67,6 @@ namespace VaWorks.Web.Data.DataWriters
                     if (!organization.Actuators.Where(v => v.ActuatorId == actuator.ActuatorId).Any()) {
                         organization.Actuators.Add(actuator);
                     }
-                } else {
-                    organization.Actuators.Add(actuator);
                 }
             }
         }

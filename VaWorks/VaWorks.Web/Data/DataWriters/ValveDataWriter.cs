@@ -59,6 +59,7 @@ namespace VaWorks.Web.Data.DataWriters
                         InterfaceCode = valveIntCode
                     };
                     db.Valves.Add(valve);
+                    organization.Valves.Add(valve);
                 }
 
                 // link this valve to the organization
@@ -66,8 +67,6 @@ namespace VaWorks.Web.Data.DataWriters
                     if (!organization.Valves.Where(v => v.ValveId == valve.ValveId).Any()) {
                         organization.Valves.Add(valve);
                     }
-                } else {
-                    organization.Valves.Add(valve);
                 }
             }
         }

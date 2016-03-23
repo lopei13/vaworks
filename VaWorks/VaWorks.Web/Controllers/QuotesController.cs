@@ -27,18 +27,23 @@ namespace VaWorks.Web.Controllers
         public ActionResult QuotesGrid()
         {
             var userId = User.Identity.GetUserId();
-            var user = db.Users.Include(u => u.Organization).Include(u => u.Quotes).Where(u => u.Id == userId).FirstOrDefault();
+            
+            var user = db.Users.Where(u => u.Id == userId).FirstOrDefault();
+            if (user.Organization != null) {
+                var users = user.Organization.GetAllUsers().Select(o => o.Id);
+                var contacts = user.Contacts.Select(c => c.Id);
 
-            var users = user.Organization.GetAllUsers().Select(o => o.Id);
-            var contacts = user.Contacts.Select(c => c.Id);
+                var quotes = db.Quotes.Where(q => q.CreatedById == userId ||
+                (users.Contains(q.CustomerId) && q.IsSent) ||
+                users.Contains(q.CreatedById) ||
+                contacts.Contains(q.CreatedById) ||
+                (q.CustomerId == userId && q.IsSent)).OrderByDescending(q => q.QuoteNumber);
 
-            var quotes = db.Quotes.Where(q => q.CreatedById == userId || 
-            (users.Contains(q.CustomerId) && q.IsSent) || 
-            users.Contains(q.CreatedById) ||
-            contacts.Contains(q.CreatedById) ||
-            (q.CustomerId == userId && q.IsSent)).OrderByDescending(q => q.QuoteNumber);
+                return PartialView("_QuotesGrid", quotes);
+            } else {
+                return PartialView("_QuoteGrid", new List<Quote>());
+            }
 
-            return PartialView("_QuotesGrid", quotes);
         }
 
         public ActionResult ViewQuote(int quoteId)
