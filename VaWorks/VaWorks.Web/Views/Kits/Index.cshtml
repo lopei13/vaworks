@@ -18,7 +18,7 @@
        columns.Add(m => m.Material.Name).Titled("Material").Filterable(true);
        columns.Add(m => m.Option.Name).Titled("Option").Filterable(true);
        columns.Add(m => m.Price).Encoded(false).Sanitized(false).Titled("Price").Sortable(true).Filterable(true);
-       columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<img src="@Url.Content("~/Content/Thumbnails/" + @m.KitNumber + ".png")" width="25px;"/>);
+       columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<img src="@Url.Content("~/Content/Thumbnails/" + @m.KitNumber + ".jpg")" width="50px;"/>);
        columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Delete", "DeleteProduct", new { id = m.KitId }));
    }).WithPaging(50).WithMultipleFilters().Selectable(false)
     </div>
