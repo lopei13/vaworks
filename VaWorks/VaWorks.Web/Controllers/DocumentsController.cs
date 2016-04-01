@@ -59,7 +59,7 @@ namespace VaWorks.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "DocumentId,Name,FileName,Description,FileData,ContentType")] Document document, HttpPostedFileBase file, int? organizationId)
+        public ActionResult Create(Document document, HttpPostedFileBase file, int? organizationId)
         {
             if (ModelState.IsValid)
             {
@@ -113,7 +113,7 @@ namespace VaWorks.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "DocumentId,Name,FileName,Description,FileData,ContentType")] Document document, HttpPostedFileBase file)
+        public ActionResult Edit(Document document, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {

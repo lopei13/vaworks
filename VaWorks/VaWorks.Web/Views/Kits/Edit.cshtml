@@ -1,11 +1,6 @@
-﻿@model VaWorks.Web.DataAccess.Entities.Kit
+﻿@model VaWorks.Web.Data.Entities.Kit
 
-@{
-    ViewBag.Title = "Edit";
-}
-
-<h2>Edit</h2>
-
+<h3>Edit Kit</h3>
 
 @using (Html.BeginForm())
 {
@@ -18,26 +13,50 @@
         @Html.HiddenFor(model => model.KitId)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.BaseNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.KitNumber, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.BaseNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.BaseNumber, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.KitNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.KitNumber, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ValveInterfaceCode, "ValveInterfaceCode", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ValveInterfaceCode, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("ValveInterfaceCode", null, htmlAttributes: new { @class = "form-control" })
+                @Html.EditorFor(model => model.ValveInterfaceCode, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ValveInterfaceCode, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ActuatorInterfaceCode, "ActuatorInterfaceCode", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ActuatorInterfaceCode, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("ActuatorInterfaceCode", null, htmlAttributes: new { @class = "form-control" })
+                @Html.EditorFor(model => model.ActuatorInterfaceCode, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ActuatorInterfaceCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.KitMaterialId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.KitMaterialId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.KitMaterialId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.KitOptionId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.KitOptionId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.KitOptionId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -52,7 +71,3 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

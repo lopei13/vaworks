@@ -18,7 +18,6 @@ namespace VaWorks.Web.Data.Entities
         [MaxLength(50)]
         public string Name { get; set; }
 
-        [Required]
         [Display(Name = "File Name")]
         [MaxLength(50)]
         public string FileName { get; set; }

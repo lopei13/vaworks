@@ -5,6 +5,7 @@ app.controller('mainController',
 
         $scope.loading = true;
 
+        $scope.organizationId;
         $scope.valves;
         $scope.valvemodels;
         $scope.valvesizes;
@@ -34,15 +35,41 @@ app.controller('mainController',
         $scope.quantity = 1;
 
         $scope.page = function (page) {
+            if (page == 4) {
+                if (!$scope.hasKit) {
+                    page -= 1;
+                }
+            }
+
+            if (page == 3) {
+                if (!$scope.hasOptions) {
+                    page -= 1;
+                }
+            }
+
+            if (page == 2) {
+                if (!$scope.hasMaterials) {
+                    page -= 1;
+                }
+            }
+
             $scope.currentStep = page;
         };
 
         $http({
             method: "GET",
-            url: "/KitSelection/GetValveManufacturers"
+            url: "/KitSelection/GetValveManufacturers",
+            params: { mfg: $scope.selectedValve, organizationId: $scope.organizationId }
         }).then(function success(res){
             $scope.valves = res.data;
             $scope.hasValves = $scope.valves.length > 0;
+            $scope.hasValveModels = false;
+            $scope.hasValveSizes = false;
+            $scope.hasActuators = false;
+            $scope.hasActuatorModels = false;
+            $scope.hasActuatorSizes = false;
+            $scope.hasMaterials = false;
+            $scope.hasOptions = false;
             $scope.page(1);
             $scope.$emit('DONE');
         }, function error(res){
@@ -53,13 +80,26 @@ app.controller('mainController',
 
         $scope.getValveModels = function () {
             $scope.loading = true;
+            $scope.hasValveSizes = false;
+            $scope.hasActuators = false;
+            $scope.hasActuatorModels = false;
+            $scope.hasActuatorSizes = false;
+            $scope.hasMaterials = false;
+            $scope.hasOptions = false;
+            $scope.selectedValveModel = "";
+            $scope.selectedValveSize = "";
+            $scope.selectedActuator = "";
+            $scope.selectedActuatorModel = "";
+            $scope.selectedActuatorSize = "";
+            $scope.selectedMaterial = "";
             $http({
                 method: "GET",
                 url: "/KitSelection/GetValveModels",
-                params: { mfg: $scope.selectedValve }
+                params: { mfg: $scope.selectedValve, organizationId: $scope.organizationId }
             }).then(function success(res) {
                 $scope.valvemodels = res.data;
                 $scope.hasValveModels = $scope.valvemodels.length > 0;
+
             }, function error(res) {
                 alert('No valves found.');
             }).finally(function () {
@@ -69,10 +109,20 @@ app.controller('mainController',
 
         $scope.getValveSizes = function () {
             $scope.loading = true;
+            $scope.hasActuators = false;
+            $scope.hasActuatorModels = false;
+            $scope.hasActuatorSizes = false;
+            $scope.hasMaterials = false;
+            $scope.hasOptions = false;
+            $scope.selectedValveSize = "";
+            $scope.selectedActuator = "";
+            $scope.selectedActuatorModel = "";
+            $scope.selectedActuatorSize = "";
+            $scope.selectedMaterial = "";
             $http({
                 method: "GET",
                 url: "/KitSelection/GetValveSizes",
-                params: { mfg: $scope.selectedValve, model: $scope.selectedValveModel }
+                params: { mfg: $scope.selectedValve, model: $scope.selectedValveModel, organizationId: $scope.organizationId }
             }).then(function success(res) {
                 $scope.valvesizes = res.data;
                 $scope.hasValveSizes = $scope.valvesizes.length > 0;
@@ -85,10 +135,18 @@ app.controller('mainController',
 
         $scope.getActuators = function () {
             $scope.loading = true;
+            $scope.hasActuatorModels = false;
+            $scope.hasActuatorSizes = false;
+            $scope.hasMaterials = false;
+            $scope.hasOptions = false;
+            $scope.selectedActuator = "";
+            $scope.selectedActuatorModel = "";
+            $scope.selectedActuatorSize = "";
+            $scope.selectedMaterial = "";
             $http({
                 method: "GET",
                 url: "/KitSelection/GetActuators",
-                params: { valveInterface: $scope.selectedValveSize.InterfaceCode }
+                params: { valveInterface: $scope.selectedValveSize.InterfaceCode, organizationId: $scope.organizationId }
             }).then(function success(res) {
                 $scope.actuators = res.data;
                 $scope.hasActuators = $scope.actuators.length > 0;
@@ -101,13 +159,20 @@ app.controller('mainController',
 
         $scope.getActuatorModels = function () {
             $scope.loading = true;
+            $scope.hasActuatorSizes = false;
+            $scope.hasMaterials = false;
+            $scope.hasOptions = false;
+            $scope.selectedActuatorModel = "";
+            $scope.selectedActuatorSize = "";
+            $scope.selectedMaterial = "";
             $http({
                 method: "GET",
                 url: "/KitSelection/GetActuatorModels",
-                params: { valveInterface: $scope.selectedValveSize.InterfaceCode, mfg: $scope.selectedActuator }
+                params: { valveInterface: $scope.selectedValveSize.InterfaceCode, mfg: $scope.selectedActuator, organizationId: $scope.organizationId }
             }).then(function success(res) {
                 $scope.actuatormodels = res.data;
                 $scope.hasActuatorModels = $scope.actuatormodels.length > 0;
+
             }, function error(res) {
                 alert('No actuators found.');
             }).finally(function () {
@@ -117,13 +182,18 @@ app.controller('mainController',
 
         $scope.getActuatorSizes = function () {
             $scope.loading = true;
+            $scope.hasMaterials = false;
+            $scope.hasOptions = false;
+            $scope.selectedActuatorSize = "";
+            $scope.selectedMaterial = "";
             $http({
                 method: "GET",
                 url: "/KitSelection/GetActuatorSizes",
-                params: { valveInterface: $scope.selectedValveSize.InterfaceCode, mfg: $scope.selectedActuator, model: $scope.selectedActuatorModel }
+                params: { valveInterface: $scope.selectedValveSize.InterfaceCode, mfg: $scope.selectedActuator, model: $scope.selectedActuatorModel, organizationId: $scope.organizationId }
             }).then(function success(res) {
                 $scope.actuatorsizes = res.data;
                 $scope.hasActuatorSizes = $scope.actuatorsizes.length > 0;
+
             }, function error(res) {
                 alert('No actuators found.');
             }).finally(function () {
@@ -133,13 +203,16 @@ app.controller('mainController',
 
         $scope.getMaterials = function () {
             $scope.loading = true;
+            $scope.hasOptions = false;
+            $scope.selectedMaterial = "";
             $http({
                 method: "GET",
                 url: "/KitSelection/GetKitMaterials",
-                params: { valveInterface: $scope.selectedValveSize.InterfaceCode, actuatorInterface: $scope.selectedActuatorSize.InterfaceCode }
+                params: { valveInterface: $scope.selectedValveSize.InterfaceCode, actuatorInterface: $scope.selectedActuatorSize.InterfaceCode, organizationId: $scope.organizationId }
             }).then(function success(res) {
                 $scope.materials = res.data;
                 $scope.hasMaterials = $scope.materials.length > 0;
+                
                 $scope.page(2);
             }, function error(res) {
                 alert('No materials found.');
@@ -154,7 +227,7 @@ app.controller('mainController',
             $http({
                 method: "GET",
                 url: "/KitSelection/GetKitOptions",
-                params: { valveInterface: $scope.selectedValveSize.InterfaceCode, actuatorInterface: $scope.selectedActuatorSize.InterfaceCode, materialId: $scope.selectedMaterial.KitMaterialId }
+                params: { valveInterface: $scope.selectedValveSize.InterfaceCode, actuatorInterface: $scope.selectedActuatorSize.InterfaceCode, materialId: $scope.selectedMaterial.KitMaterialId, organizationId: $scope.organizationId }
             }).then(function success(res) {
                 $scope.options = res.data;
                 $scope.hasOptions = $scope.options.length > 0;
@@ -171,7 +244,7 @@ app.controller('mainController',
             $http({
                 method: "GET",
                 url: "/KitSelection/GetKit",
-                params: { valveInterface: $scope.selectedValveSize.InterfaceCode, actuatorInterface: $scope.selectedActuatorSize.InterfaceCode, materialId: $scope.selectedMaterial.KitMaterialId, optionId: $scope.selectedOption.KitOptionId }
+                params: { valveInterface: $scope.selectedValveSize.InterfaceCode, actuatorInterface: $scope.selectedActuatorSize.InterfaceCode, materialId: $scope.selectedMaterial.KitMaterialId, optionId: $scope.selectedOption.KitOptionId, organizationId: $scope.organizationId }
             }).then(function success(res) {
                 if (res.data.length > 0) {
                     $scope.kit = res.data[0];

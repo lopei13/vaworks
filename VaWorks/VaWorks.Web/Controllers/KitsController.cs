@@ -188,7 +188,7 @@ namespace VaWorks.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "KitId,BaseNumber,ValveInterfaceCode,ActuatorInterfaceCode")] Kit kit)
+        public ActionResult Edit(Kit kit)
         {
             if (ModelState.IsValid)
             {
@@ -238,6 +238,50 @@ namespace VaWorks.Web.Controllers
             Kit kit = db.Kits.Find(id);
             db.Kits.Remove(kit);
             db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult ExportKits()
+        {
+            using (var writer = new StreamWriter(new MemoryStream())) {
+                
+                foreach(var k in db.Kits) {
+                    writer.WriteLine(k.ToString());
+                }
+                byte[] data = new byte[writer.BaseStream.Length];
+                writer.BaseStream.Read(data, 0, (int)writer.BaseStream.Length);
+                return File(data, "text/csv", "kits.csv");
+            }
+        }
+
+        public ActionResult UpdatePricing()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdatePricing(HttpPostedFileBase file)
+        {
+            CSVReader reader = new CSVReader(file.InputStream, true, '\t');
+
+            while (reader.Read()) {
+                string kitNumber = reader.GetString(0);
+
+                Kit kit = db.Kits.Where(k => k.KitNumber == kitNumber).FirstOrDefault();
+                if(kit != null) {
+
+                    // get the price
+                    try {
+                        double price = reader.GetDouble(reader.FieldCount - 1);
+                        kit.Price = price;
+                    } catch { }
+                }
+
+            }
+
+            int result = db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 

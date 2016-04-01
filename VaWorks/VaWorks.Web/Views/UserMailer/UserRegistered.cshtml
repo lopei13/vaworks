@@ -1,0 +1,13 @@
+@model VaWorks.Web.Data.Entities.ApplicationUser
+
+<h2>User Registered</h2>
+<p>A user has registered an account for VaWorks.</p>
+
+<p><a>User Name: <b>@Model.UserName</b></a></p>
+<p><a>Name: <b>@Model.Name</b></a></p>
+<p><a>Company: <b>@Model.Organization.GetCompanyName()</b></a></p>
+
+
+<p class="callout">
+    You are receiving this message because you are the system administrator.
+</p>

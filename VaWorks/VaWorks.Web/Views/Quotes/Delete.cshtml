@@ -12,19 +12,11 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.User.Name)
+            @Html.DisplayNameFor(model => model.CreatedByName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.User.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.OrganizationId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.OrganizationId)
+            @Html.DisplayFor(model => model.CreatedByName)
         </dd>
 
         <dt>
@@ -68,27 +60,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
+            @Html.DisplayNameFor(model => model.CreatedDate.Date)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ModifiedDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ModifiedDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.OrderDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.OrderDate)
+            @Html.DisplayFor(model => model.CreatedDate.Date)
         </dd>
 
         <dt>
@@ -105,14 +81,6 @@
 
         <dd>
             @Html.DisplayFor(model => model.IsSent)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.IsOrder)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsOrder)
         </dd>
 
     </dl>

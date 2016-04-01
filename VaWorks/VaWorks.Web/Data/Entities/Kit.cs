@@ -43,6 +43,11 @@ namespace VaWorks.Web.Data.Entities
         public virtual ActuatorInterfaceCode ActuatorInterfaceCodeEntity { get; set; }
 
         public virtual ICollection<Organization> Organizations { get; set; }
+
+        public override string ToString()
+        {
+            return $"{KitNumber}\t{ValveInterfaceCode}\t{ActuatorInterfaceCode}\t{Material.Code}\t{Option.Code}\t{Price}";
+        }
     }
 
     [Table("KitConfigurations")]

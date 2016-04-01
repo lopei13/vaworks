@@ -1,0 +1,11 @@
+﻿@model VaWorks.Web.Data.Entities.InvitationRequest
+
+<h2>Invitation Request</h2>
+<p>A user has requested access to VaWorks.  Please review the invitation and contact the customer.</p>
+
+<p><a>Company Name:<b>@Model.Company</b></a></p>
+<p><a>Email:<b>@Model.Email</b></a></p>
+
+<p class="callout">
+    <a href="@Url.Action("InvitationRequestList", "Administration", new { arg = "Pending" }, Request.Url.Scheme)">Click to view invitation requests</a>
+</p>

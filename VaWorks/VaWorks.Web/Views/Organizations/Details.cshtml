@@ -223,18 +223,18 @@
         <div class="tab-pane fade in" id="kits">
             <p>
                 @Html.ActionLink("Import Kits", "Import", "Kits", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" }) |
-                @Html.ActionLink("Delete All", "Import", "Kits", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" })
+                @Html.ActionLink("Remove All Kits", "RemoveAllKits", "Organizations", new { organizationId = Model.OrganizationId }, new { @class = "btn btn-link" })
             </p>
 
             @using GridMvc.Html
             @Html.Grid(Model.Kits).Columns(columns => {
-            columns.Add(m => m.KitNumber).Titled("Kit Number").Sortable(true).Filterable(true).SetWidth(220);
-            columns.Add(m => m.Material.Name).Titled("Material").Filterable(true).Sortable(true);
-            columns.Add(m => m.Option.Name).Titled("Option").Filterable(true).Sortable(true);
-            columns.Add(m => m.Price).Titled("Price").Sortable(true).Filterable(true);
-            columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @Html.ActionLink("Edit", "EditProduct", new { id = m.KitId }));
-            columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Delete", "DeleteProduct", new { id = m.KitId }));
-            }).WithPaging(10).WithMultipleFilters()
+           columns.Add(m => m.KitNumber).Titled("Kit Number").Sortable(true).Filterable(true).SetWidth(220);
+           columns.Add(m => m.Material.Name).Titled("Material").Filterable(true).Sortable(true);
+           columns.Add(m => m.Option.Name).Titled("Option").Filterable(true).Sortable(true);
+           columns.Add(m => m.Price).Titled("Price").Sortable(true).Filterable(true);
+           columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @Html.ActionLink("Edit", "Edit", "Kits", new { id = m.KitId }, null));
+           columns.Add().Encoded(false).Sanitized(false).SetWidth(100).RenderValueAs(m => Html.ActionLink("Remove Kit", "RemoveKit", new { kitId = m.KitId, organizationId = Model.OrganizationId }));
+       }).WithPaging(10).WithMultipleFilters()
         </div>
 
         <div class="tab-pane fade in" id="valves">

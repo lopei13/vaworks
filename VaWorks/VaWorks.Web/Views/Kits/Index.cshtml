@@ -8,7 +8,7 @@
 
     <p>
         @Html.ActionLink("Create New", "Create") |
-        @Html.ActionLink("Import Kits", "Import", "Kits", null, new { @class = "btn btn-link" }) |
+        @Html.ActionLink("Export Kits", "Export", "Kits", null, new { @class = "btn btn-link" }) |
         @Html.ActionLink("Update Pricing", "UpdatePricing", "Kits", null, new { @class = "btn btn-link" })
     </p>
     <div class="row">
@@ -19,7 +19,8 @@
        columns.Add(m => m.Option.Name).Titled("Option").Filterable(true);
        columns.Add(m => m.Price).Encoded(false).Sanitized(false).Titled("Price").Sortable(true).Filterable(true);
        columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<img src="@Url.Content("~/Content/Thumbnails/" + @m.KitNumber + ".jpg")" width="50px;"/>);
-       columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Delete", "DeleteProduct", new { id = m.KitId }));
+       columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @Html.ActionLink("Edit", "Edit", "Kits", new { id = m.KitId }, null));
+       columns.Add().Encoded(false).Sanitized(false).SetWidth(150).RenderValueAs(m => Html.ActionLink("Delete Forever", "Delete", new { id = m.KitId }));
    }).WithPaging(50).WithMultipleFilters().Selectable(false)
     </div>
 

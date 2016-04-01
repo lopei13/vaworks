@@ -1,0 +1,23 @@
+@model VaWorks.Web.Models.ValveActuatorRequestViewModel
+<h2>@Model.ValveOrActuator Request</h2>
+<p>A user has request a @Model.ValveOrActuator be added to the database.</p>
+
+<h3>User Info</h3>
+<p><a>User Name:<b>@Model.UserName</b></a></p>
+<p><a>User Email:<b>@Model.UserEmail</b></a></p>
+<p><a>Company:<b>@Model.UserCompany</b></a></p>
+<p><a>Location:<b>@Model.UserLocation</b></a></p>
+
+<h3>Component Info</h3>
+<p><a>Manufacturer:<b>@Model.Manufacturer</b></a></p>
+<p><a>Model:<b>@Model.Model</b></a></p>
+<p><a>Size:<b>@Model.Size</b></a></p>
+<p><a>Notes:<b>@Model.Notes</b></a></p>
+
+<h3>Sales Person</h3>
+<p><a>Sales Person:<b>@Model.SalesName</b></a></p>
+<p><a>Sales Email:<b>@Model.SalesEmail</b></a></p>
+
+<p class="callout">
+    You are receiving this message because either you are the system administrator or you are the sales person.
+</p>

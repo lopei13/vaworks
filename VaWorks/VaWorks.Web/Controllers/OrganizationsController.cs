@@ -154,6 +154,40 @@ namespace VaWorks.Web.Controllers
             return RedirectToAction("Details", new { id = organizationId });
         }
 
+        public ActionResult RemoveKit(int kitId, int organizationId)
+        {
+            var kit = db.Kits.Find(kitId);
+            ViewBag.OrganizationId = organizationId;
+            return View(kit);
+        }
+
+        [HttpPost, ActionName("RemoveKit")]
+        [ValidateAntiForgeryToken]
+        public ActionResult RemoveKitConfirmed(int kitId, int organizationId)
+        {
+            var organization = db.Organizations.Find(organizationId);
+            var kit = db.Kits.Find(kitId);
+            organization.Kits.Remove(kit);
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = organizationId });
+        }
+
+        public ActionResult RemoveAllKits(int organizationId)
+        {
+            ViewBag.OrganizationId = organizationId;
+            return View();
+        }
+
+        [HttpPost, ActionName("RemoveAllKits")]
+        [ValidateAntiForgeryToken]
+        public ActionResult RemoveAllKitsConfirmed(int organizationId)
+        {
+            var organization = db.Organizations.Find(organizationId);
+            organization.Kits.Clear();
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = organizationId });
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

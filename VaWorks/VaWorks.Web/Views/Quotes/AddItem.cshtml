@@ -2,4 +2,4 @@
 
 <h2>Add Item to Quote @Model.QuoteNumber</h2>
 
-@{Html.RenderAction("Index", "KitSelection");}
+@{Html.RenderAction("Index", "KitSelection", new { organizationId = Model.Customer.OrganizationId });}

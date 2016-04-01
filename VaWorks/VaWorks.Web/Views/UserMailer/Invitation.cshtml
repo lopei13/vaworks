@@ -1,0 +1,12 @@
+﻿@model VaWorks.Web.Data.Entities.Invitation
+
+<h2>Your Invitation!</h2>
+<p>You have been granted access to VanAire's online pricing guide. View thousands of available kits and share quotes across your company.</p>
+<p>Enter the invitation code below when registering your account.</p>
+
+
+<p><a>Invitation Code:<b>@Model.InvitationCode</b></a></p>
+
+<p class="callout">
+    <a href="@Url.Action("Register", "Account", new { code = Model.InvitationCode }, Request.Url.Scheme)">Click here for registration</a>
+</p>

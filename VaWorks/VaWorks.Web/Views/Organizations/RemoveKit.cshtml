@@ -1,6 +1,6 @@
 ﻿@model VaWorks.Web.Data.Entities.Kit
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to remove this kit from this organization?</h3>
 <div>
     <h4>Kit</h4>
     <hr />
@@ -57,9 +57,11 @@
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
-
+        
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <input type="hidden" name="kitId" value="@Model.KitId"/>
+            <input type="hidden" name="organizationId" value="@ViewBag.OrganizationId"/>
+            <input type="submit" value="Remove" class="btn btn-default" /> |
             @Html.ActionLink("Back to List", "Index")
         </div>
     }

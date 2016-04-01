@@ -241,6 +241,15 @@ namespace VaWorks.Web.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult Register(string code)
+        {
+            RegisterViewModel vm = new RegisterViewModel() {
+                InvitationCode = code
+            };
+            return View(vm);
+        }
+
         //
         // POST: /Account/Register
         [HttpPost]

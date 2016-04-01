@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Update Pricing";
+}
+
+<h2>Update Pricing</h2>
+
+<p>
+    @Html.ActionLink("Back", "Index", "Kits")
+</p>
+
+<div>
+
+    <div class="tab-pane fade active in" id="import">
+        @using (Html.BeginForm(actionName: "UpdatePricing", controllerName: "Kits", method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" })) {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true)
+                <p>You can imort a csv file to update the pricing of existing kits.</p>
+                <p> </p>
+                <p>Column 1: <i>Full Kit Number</i></p>
+                <p>Column n: <i>You can have any number of columns as long as the last column is the price</i></p>
+                <p>Last Column: <i>List Price</i></p>
+                <p>Example: <i>VA5682-COMCS-AA&nbsp;&nbsp;&nbsp;&nbsp;32&nbsp;&nbsp;&nbsp;448&nbsp;&nbsp;&nbsp;NA&nbsp;&nbsp;&nbsp;LD&nbsp;&nbsp;&nbsp;65.50</i></p>
+                <div class="form-group">
+                    @Html.Label("", "Import File", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input type="file" name="file" id="file1" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Import" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+

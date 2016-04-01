@@ -53,6 +53,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Mvc.Mailer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -218,6 +222,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Mailers\IUserMailer.cs" />
+    <Compile Include="Mailers\UserMailer.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
@@ -237,6 +243,7 @@
     <Content Include="Content\Gridmvc.css" />
     <Content Include="Content\gridmvc.datepicker.css" />
     <Content Include="Content\Images\evah_design.png" />
+    <Content Include="Content\Images\va_logo.png" />
     <Content Include="Content\Thumbnails\images.txt" />
     <Content Include="Content\tree.css" />
     <Content Include="Content\Images\uploadify-cancel.png" />
@@ -287,7 +294,9 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\spin.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -337,9 +346,7 @@
     <Content Include="Views\Actuators\ImportActuators.cshtml" />
     <Content Include="Views\Actuators\Index.cshtml" />
     <Content Include="Views\Kits\Create.cshtml" />
-    <Content Include="Views\Kits\Delete.cshtml" />
     <Content Include="Views\Kits\Details.cshtml" />
-    <Content Include="Views\Kits\Edit.cshtml" />
     <Content Include="Views\Kits\Import.cshtml" />
     <Content Include="Views\Kits\ImportKits.cshtml" />
     <Content Include="Views\Kits\Index.cshtml" />
@@ -411,6 +418,21 @@
     <Content Include="Views\Quotes\_QuotesGrid.cshtml" />
     <Content Include="Views\Kits\UploadThumbnails.cshtml" />
     <Content Include="Views\Kits\UploadDrawings.cshtml" />
+    <Content Include="Views\UserMailer\Invitation.cshtml" />
+    <Content Include="Views\UserMailer\InvitationRequest.cshtml" />
+    <Content Include="Views\UserMailer\PasswordReset.cshtml" />
+    <Content Include="Views\UserMailer\Quote.cshtml" />
+    <Content Include="Views\UserMailer\QuoteSubmit.cshtml" />
+    <Content Include="Views\UserMailer\QuoteUpdated.cshtml" />
+    <Content Include="Views\UserMailer\SubmitValveActuatorRequest.cshtml" />
+    <Content Include="Views\UserMailer\UserRegistered.cshtml" />
+    <Content Include="Views\UserMailer\Welcome.cshtml" />
+    <Content Include="Views\UserMailer\_Layout.cshtml" />
+    <Content Include="Views\Kits\Edit.cshtml" />
+    <Content Include="Views\Kits\Delete.cshtml" />
+    <Content Include="Views\Organizations\RemoveKit.cshtml" />
+    <Content Include="Views\Organizations\RemoveAllKits.cshtml" />
+    <Content Include="Views\Kits\UpdatePricing.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

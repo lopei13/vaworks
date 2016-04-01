@@ -1,0 +1,11 @@
+﻿@model VaWorks.Web.Data.Entities.Quote
+
+<h2>Quote Updated</h2>
+<p>A quote has been submitted by VanAire.  Please review the submitted quote.</p>
+
+<p><a>Quote Number:<b>@Model.QuoteNumber</b></a></p>
+
+<p class="callout">
+    <a href="@Url.Action("ViewQuote", "Quotes", new { id = Model.QuoteId }, Request.Url.Scheme)">Click here to view quote.</a>
+</p>
+

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using VaWorks.Web.Data;
+using VaWorks.Web.Data.Entities;
 
 namespace VaWorks.Web.Controllers
 {
@@ -15,12 +16,15 @@ namespace VaWorks.Web.Controllers
         ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: KitSelection
-        public ActionResult Index()
+        public ActionResult Index(int? organizationId)
         {
-            var userId = User.Identity.GetUserId();
-            var user = db.Users.Find(userId);
-
-            return View(user);
+            if (organizationId == null) {
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+                return View(user.OrganizationId);
+            } else {
+                return View(organizationId);
+            }
         }
 
         public ActionResult Search(string searchText)
@@ -41,10 +45,17 @@ namespace VaWorks.Web.Controllers
         /// Gets the valve manufactureres
         /// </summary>
         /// <returns></returns>
-        public JsonResult GetValveManufacturers()
+        public JsonResult GetValveManufacturers(int? organizationId)
         {
-            var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrganizationId);
+            Organization organization;
+            if (organizationId == null) {
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+                organization = db.Organizations.Find(user.OrganizationId);
+            } else {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                organization = db.Organizations.Find(organizationId);
+            }
 
             var valves = from v in organization.Valves
                          join k in organization.Kits on v.InterfaceCode equals k.ValveInterfaceCode
@@ -58,10 +69,17 @@ namespace VaWorks.Web.Controllers
         /// </summary>
         /// <param name="mfg"></param>
         /// <returns></returns>
-        public JsonResult GetValveModels(string mfg)
+        public JsonResult GetValveModels(string mfg, int? organizationId)
         {
-            var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrganizationId);
+            Organization organization;
+            if (organizationId == null) {
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+                organization = db.Organizations.Find(user.OrganizationId);
+            } else {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                organization = db.Organizations.Find(organizationId);
+            }
 
             var valves = from v in organization.Valves
                          join k in organization.Kits on v.InterfaceCode equals k.ValveInterfaceCode
@@ -77,10 +95,17 @@ namespace VaWorks.Web.Controllers
         /// <param name="mfg"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        public JsonResult GetValveSizes(string mfg, string model)
+        public JsonResult GetValveSizes(string mfg, string model, int? organizationId)
         {
-            var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrganizationId);
+            Organization organization;
+            if (organizationId == null) {
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+                organization = db.Organizations.Find(user.OrganizationId);
+            } else {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                organization = db.Organizations.Find(organizationId);
+            }
 
             var valves = from v in organization.Valves
                          join k in organization.Kits on v.InterfaceCode equals k.ValveInterfaceCode
@@ -96,10 +121,17 @@ namespace VaWorks.Web.Controllers
         /// </summary>
         /// <param name="valveInterface"></param>
         /// <returns></returns>
-        public JsonResult GetActuators(int valveInterface)
+        public JsonResult GetActuators(int valveInterface, int? organizationId)
         {
-            var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrganizationId);
+            Organization organization;
+            if (organizationId == null) {
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+                organization = db.Organizations.Find(user.OrganizationId);
+            } else {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                organization = db.Organizations.Find(organizationId);
+            }
 
             var actuators = from a in organization.Actuators
                             join k in organization.Kits on a.InterfaceCode equals k.ActuatorInterfaceCode
@@ -114,10 +146,17 @@ namespace VaWorks.Web.Controllers
         /// </summary>
         /// <param name="valveInterface"></param>
         /// <returns></returns>
-        public JsonResult GetActuatorModels(int valveInterface, string mfg)
+        public JsonResult GetActuatorModels(int valveInterface, string mfg, int? organizationId)
         {
-            var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrganizationId);
+            Organization organization;
+            if (organizationId == null) {
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+                organization = db.Organizations.Find(user.OrganizationId);
+            } else {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                organization = db.Organizations.Find(organizationId);
+            }
 
             var actuators = from a in organization.Actuators
                             join k in organization.Kits on a.InterfaceCode equals k.ActuatorInterfaceCode
@@ -135,10 +174,17 @@ namespace VaWorks.Web.Controllers
         /// <param name="mfg"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        public JsonResult GetActuatorSizes(int valveInterface, string mfg, string model)
+        public JsonResult GetActuatorSizes(int valveInterface, string mfg, string model, int? organizationId)
         {
-            var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrganizationId);
+            Organization organization;
+            if (organizationId == null) {
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+                organization = db.Organizations.Find(user.OrganizationId);
+            } else {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                organization = db.Organizations.Find(organizationId);
+            }
 
             var actuators = from a in organization.Actuators
                             join k in organization.Kits on a.InterfaceCode equals k.ActuatorInterfaceCode
@@ -156,10 +202,17 @@ namespace VaWorks.Web.Controllers
         /// <param name="valveInterface"></param>
         /// <param name="actuatorInterface"></param>
         /// <returns></returns>
-        public JsonResult GetKitMaterials(int valveInterface, int actuatorInterface)
+        public JsonResult GetKitMaterials(int valveInterface, int actuatorInterface, int? organizationId)
         {
-            var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrganizationId);
+            Organization organization;
+            if (organizationId == null) {
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+                organization = db.Organizations.Find(user.OrganizationId);
+            } else {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                organization = db.Organizations.Find(organizationId);
+            }
 
             var materials = from k in organization.Kits
                             where k.ValveInterfaceCode == valveInterface
@@ -175,10 +228,17 @@ namespace VaWorks.Web.Controllers
         /// <param name="valveInterface"></param>
         /// <param name="actuatorInterface"></param>
         /// <returns></returns>
-        public JsonResult GetKitOptions(int valveInterface, int actuatorInterface, int materialId)
+        public JsonResult GetKitOptions(int valveInterface, int actuatorInterface, int materialId, int? organizationId)
         {
-            var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrganizationId);
+            Organization organization;
+            if (organizationId == null) {
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+                organization = db.Organizations.Find(user.OrganizationId);
+            } else {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                organization = db.Organizations.Find(organizationId);
+            }
 
             var options = from k in organization.Kits
                           where k.ValveInterfaceCode == valveInterface
@@ -195,10 +255,17 @@ namespace VaWorks.Web.Controllers
         /// <param name="valveInterface"></param>
         /// <param name="actuatorInterface"></param>
         /// <returns></returns>
-        public JsonResult GetKit(int valveInterface, int actuatorInterface, int materialId, int optionId)
+        public JsonResult GetKit(int valveInterface, int actuatorInterface, int materialId, int optionId, int? organizationId)
         {
-            var user = db.Users.Find(User.Identity.GetUserId());
-            var organization = db.Organizations.Find(user.OrganizationId);
+            Organization organization;
+            if (organizationId == null) {
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+                organization = db.Organizations.Find(user.OrganizationId);
+            } else {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                organization = db.Organizations.Find(organizationId);
+            }
 
             var kit = from k in organization.Kits
                       where k.ValveInterfaceCode == valveInterface

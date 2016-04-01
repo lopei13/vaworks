@@ -1,0 +1,17 @@
+﻿<h3>Are you sure you want to remove all kits from this organization?</h3>
+<div>
+   
+    <hr />
+    <dl class="dl-horizontal">
+       
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        <input type="hidden" value="@ViewBag.OrganizationId" name="organizationId"/>
+        <div class="form-actions no-color">
+            <input type="submit" value="Remove All" class="btn btn-default" /> |
+            @Html.ActionLink("Cancel", "Details", new { id = ViewBag.OrganizationId })
+        </div>
+    }
+</div>
