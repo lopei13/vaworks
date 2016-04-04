@@ -17,7 +17,7 @@
             $('#file_upload').uploadify({
                 'swf': "@Url.Content("~/Content/uploadify.swf")",
                 'cancelImg': "@Url.Content("~/Content/uploadify-cancel.png")",
-                'uploader': "@Url.Action("UploadDrawingsHandler", "Kits")",
+                'uploader': "@Url.Action("UploadDrawingHandler", "Kits")",
                 'fileTypeExts': "*.pdf",
                 'onUploadError' : function(file, data, response) {
                     $("#error").append("<p>'" + file.name + " error!'</p>");
