@@ -52,7 +52,8 @@ namespace VaWorks.Web.Data
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-            Database.SetInitializer<ApplicationDbContext>(new ReleaseInitializer());
+            Database.SetInitializer<ApplicationDbContext>(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Migrations.Configuration>());
+            //Database.SetInitializer<ApplicationDbContext>(new ReleaseInitializer());
             var o = this.Organizations.FirstOrDefault();
         }
 

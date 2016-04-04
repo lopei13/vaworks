@@ -19,10 +19,10 @@ namespace VaWorks.Web.Data.Entities
         public string Name { get; set; }
 
         [Display(Name = "File Name")]
-        [MaxLength(50)]
+        [MaxLength(250)]
         public string FileName { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(250)]
         public string Description { get; set; }
 
         [Display(Name = "Document")]

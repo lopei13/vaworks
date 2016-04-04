@@ -38,9 +38,12 @@ namespace VaWorks.Web.Migrations
             }
 
             if(context.Organizations.Count() == 0) {
-                context.Organizations.Add(new Organization() {
+                var org = new Organization() {
                     Name = "VanAire"
-                });
+                };
+                org.Users.Add(admin);
+                admin.Organization = org;
+                context.Organizations.Add(org);
             }
 
             context.SaveChanges();
