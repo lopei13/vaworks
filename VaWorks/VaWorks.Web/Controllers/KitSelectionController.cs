@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -47,24 +48,19 @@ namespace VaWorks.Web.Controllers
         /// <returns></returns>
         public JsonResult GetValveManufacturers(int? organizationId)
         {
-            Organization organization;
-            if (organizationId == null) {
+            var id = organizationId;
+            if (id == null) {
                 var userId = User.Identity.GetUserId();
                 var user = db.Users.Find(userId);
-                organization = db.Organizations
-                    .Include("Kits")
-                    .Include("Valves")
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
-            } else {
-                organization = db.Organizations
-                    .Include("Kits")
-                    .Include("Valves")
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
-            }
+                id = user.OrganizationId;
+            } 
 
-            var valves = from v in organization.Valves
-                         where organization.Kits.Select(k => k.ValveInterfaceCode).Contains(v.InterfaceCode)
-                         select v.Manufacturer;
+            string sql = "select v.Manufacturer from OrganizationValves as ov " + 
+                         "inner join Valves as v on v.ValveId = ov.ValveId " + 
+                         "where v.InterfaceCode IN (select k.ValveInterfaceCode from OrganizationKits as ok join Kits as k on k.KitId = ok.KitId) and " +
+                         "ov.OrganizationId = @organizationId";
+
+            var valves = db.Database.SqlQuery<string>(sql, new SqlParameter("@organizationId", organizationId));          
 
             return Json(valves.OrderBy(x => x).Distinct(), JsonRequestBehavior.AllowGet);
         }
@@ -76,25 +72,25 @@ namespace VaWorks.Web.Controllers
         /// <returns></returns>
         public JsonResult GetValveModels(string mfg, int? organizationId)
         {
-            Organization organization;
-            if (organizationId == null) {
+            var id = organizationId;
+            if (id == null) {
                 var userId = User.Identity.GetUserId();
                 var user = db.Users.Find(userId);
-                organization = db.Organizations
-                    .Include("Kits")
-                    .Include("Valves")
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
-            } else {
-                organization = db.Organizations
-                    .Include("Kits")
-                    .Include("Valves")
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
+                id = user.OrganizationId;
             }
 
-            var valves = from v in organization.Valves
-                         where organization.Kits.Select(k => k.ValveInterfaceCode).Contains(v.InterfaceCode)
-                         where v.Manufacturer == mfg
-                         select v.Model;
+            string sql = "select v.Model from OrganizationValves as ov " +
+                         "inner join Valves as v on v.ValveId = ov.ValveId " +
+                         "where v.Manufacturer = @mfg and ov.OrganizationId = @organizationId and v.InterfaceCode IN (select k.ValveInterfaceCode from OrganizationKits as ok join Kits as k on k.KitId = ok.KitId)";
+
+            var valves = db.Database.SqlQuery<string>(sql, 
+                new SqlParameter("@organizationId", organizationId),
+                new SqlParameter("@mfg", mfg));
+
+            //var valves = from v in organization.Valves
+            //             where organization.Kits.Select(k => k.ValveInterfaceCode).Contains(v.InterfaceCode)
+            //             where v.Manufacturer == mfg
+            //             select v.Model;
 
             return Json(valves.OrderBy(x => x).Distinct(), JsonRequestBehavior.AllowGet);
         }
@@ -107,26 +103,21 @@ namespace VaWorks.Web.Controllers
         /// <returns></returns>
         public JsonResult GetValveSizes(string mfg, string model, int? organizationId)
         {
-            Organization organization;
-            if (organizationId == null) {
+            var id = organizationId;
+            if (id == null) {
                 var userId = User.Identity.GetUserId();
                 var user = db.Users.Find(userId);
-                organization = db.Organizations
-                    .Include("Kits")
-                    .Include("Valves")
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
-            } else {
-                organization = db.Organizations
-                    .Include("Kits")
-                    .Include("Valves")
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
+                id = user.OrganizationId;
             }
 
-            var valves = from v in organization.Valves
-                         where organization.Kits.Select(k => k.ValveInterfaceCode).Contains(v.InterfaceCode)
-                         where v.Manufacturer == mfg
-                         where v.Model == model
-                         select new { v.Size, v.InterfaceCode, v.ValveId };
+            string sql = "select v.Manufacturer, v.Model, v.Size, v.InterfaceCode, v.ValveId from OrganizationValves as ov " +
+                         "inner join Valves as v on v.ValveId = ov.ValveId " +
+                         "where v.Manufacturer = @mfg and v.Model = @model and ov.OrganizationId = @organizationId and v.InterfaceCode IN (select k.ValveInterfaceCode from OrganizationKits as ok join Kits as k on k.KitId = ok.KitId)";
+
+            var valves = db.Database.SqlQuery<Valve>(sql,
+                new SqlParameter("@organizationId", organizationId),
+                new SqlParameter("@mfg", mfg),
+                new SqlParameter("@model", model)).ToList();
 
             return Json(valves.OrderBy(x => x.Size).Distinct(), JsonRequestBehavior.AllowGet);
         }
@@ -138,25 +129,25 @@ namespace VaWorks.Web.Controllers
         /// <returns></returns>
         public JsonResult GetActuators(int valveInterface, int? organizationId)
         {
-            Organization organization;
-            if (organizationId == null) {
+            var id = organizationId;
+            if (id == null) {
                 var userId = User.Identity.GetUserId();
                 var user = db.Users.Find(userId);
-                organization = db.Organizations
-                    .Include("Kits")
-                    .Include("Actuators")
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
-            } else {
-                organization = db.Organizations
-                    .Include("Kits")
-                    .Include("Actuators")
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
+                id = user.OrganizationId;
             }
 
-            var actuators = from a in organization.Actuators
-                            where organization.Kits.Where(k => k.ValveInterfaceCode == valveInterface)
-                            .Select(k => k.ActuatorInterfaceCode).Contains(a.InterfaceCode)
-                            select a.Manufacturer;
+            string sql = "select a.Manufacturer from OrganizationActuators as oa " +
+                         "inner join Actuators as a on a.ActuatorId = oa.ActuatorId " +
+                         "where oa.OrganizationId = @organizationId and a.InterfaceCode IN (select k.ActuatorInterfaceCode from OrganizationKits as ok join Kits as k on k.KitId = ok.KitId where k.ValveInterfaceCode = @valveInterfaceCode)";
+
+            var actuators = db.Database.SqlQuery<string>(sql,
+                new SqlParameter("@organizationId", organizationId),
+                new SqlParameter("@valveInterfaceCode", valveInterface));
+
+            //var actuators = from a in organization.Actuators
+            //                where organization.Kits.Where(k => k.ValveInterfaceCode == valveInterface)
+            //                .Select(k => k.ActuatorInterfaceCode).Contains(a.InterfaceCode)
+            //                select a.Manufacturer;
 
             return Json(actuators.OrderBy(x => x).Distinct(), JsonRequestBehavior.AllowGet);
         }
@@ -168,26 +159,27 @@ namespace VaWorks.Web.Controllers
         /// <returns></returns>
         public JsonResult GetActuatorModels(int valveInterface, string mfg, int? organizationId)
         {
-            Organization organization;
-            if (organizationId == null) {
+            var id = organizationId;
+            if (id == null) {
                 var userId = User.Identity.GetUserId();
                 var user = db.Users.Find(userId);
-                organization = db.Organizations
-                    .Include("Kits")
-                    .Include("Actuators")
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
-            } else {
-                organization = db.Organizations
-                    .Include("Kits")
-                    .Include("Actuators")
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
+                id = user.OrganizationId;
             }
 
-            var actuators = from a in organization.Actuators
-                            where organization.Kits.Where(k => k.ValveInterfaceCode == valveInterface)
-                            .Select(k => k.ActuatorInterfaceCode).Contains(a.InterfaceCode)
-                            where a.Manufacturer == mfg
-                            select a.Model;
+            string sql = "select a.Model from OrganizationActuators as oa " +
+                         "inner join Actuators as a on a.ActuatorId = oa.ActuatorId " +
+                         "where a.Manufacturer = @mfg and oa.OrganizationId = @organizationId and a.InterfaceCode IN (select k.ActuatorInterfaceCode from OrganizationKits as ok join Kits as k on k.KitId = ok.KitId where k.ValveInterfaceCode = @valveInterfaceCode)";
+
+            var actuators = db.Database.SqlQuery<string>(sql,
+                new SqlParameter("@organizationId", organizationId),
+                new SqlParameter("@valveInterfaceCode", valveInterface),
+                new SqlParameter("@mfg", mfg));
+
+            //var actuators = from a in organization.Actuators
+            //                where organization.Kits.Where(k => k.ValveInterfaceCode == valveInterface)
+            //                .Select(k => k.ActuatorInterfaceCode).Contains(a.InterfaceCode)
+            //                where a.Manufacturer == mfg
+            //                select a.Model;
 
             return Json(actuators.OrderBy(x => x).Distinct(), JsonRequestBehavior.AllowGet);
         }
@@ -201,27 +193,29 @@ namespace VaWorks.Web.Controllers
         /// <returns></returns>
         public JsonResult GetActuatorSizes(int valveInterface, string mfg, string model, int? organizationId)
         {
-            Organization organization;
-            if (organizationId == null) {
+            var id = organizationId;
+            if (id == null) {
                 var userId = User.Identity.GetUserId();
                 var user = db.Users.Find(userId);
-                organization = db.Organizations
-                    .Include("Kits")
-                    .Include("Actuators")
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
-            } else {
-                organization = db.Organizations
-                    .Include("Kits")
-                    .Include("Actuators")
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
+                id = user.OrganizationId;
             }
 
-            var actuators = from a in organization.Actuators
-                            where organization.Kits.Where(k => k.ValveInterfaceCode == valveInterface)
-                            .Select(k => k.ActuatorInterfaceCode).Contains(a.InterfaceCode)
-                            where a.Manufacturer == mfg
-                            where a.Model == model
-                            select new { a.Size, a.InterfaceCode, a.ActuatorId };
+            string sql = "select a.Manufacturer, a.Model, a.Size, a.InterfaceCode, a.ActuatorId from OrganizationActuators as oa " +
+                         "inner join Actuators as a on a.ActuatorId = oa.ActuatorId " +
+                         "where a.Manufacturer = @mfg and a.Model = @model and oa.OrganizationId = @organizationId and a.InterfaceCode IN (select k.ActuatorInterfaceCode from OrganizationKits as ok join Kits as k on k.KitId = ok.KitId where k.ValveInterfaceCode = @valveInterfaceCode)";
+
+            var actuators = db.Database.SqlQuery<Actuator>(sql,
+                new SqlParameter("@organizationId", organizationId),
+                new SqlParameter("@valveInterfaceCode", valveInterface),
+                new SqlParameter("@mfg", mfg),
+                new SqlParameter("@model", model)).ToList();
+
+            //var actuators = from a in organization.Actuators
+            //                where organization.Kits.Where(k => k.ValveInterfaceCode == valveInterface)
+            //                .Select(k => k.ActuatorInterfaceCode).Contains(a.InterfaceCode)
+            //                where a.Manufacturer == mfg
+            //                where a.Model == model
+            //                select new { a.Size, a.InterfaceCode, a.ActuatorId };
 
             return Json(actuators.OrderBy(x => x.Size).Distinct(), JsonRequestBehavior.AllowGet);
         }
@@ -239,11 +233,9 @@ namespace VaWorks.Web.Controllers
                 var userId = User.Identity.GetUserId();
                 var user = db.Users.Find(userId);
                 organization = db.Organizations
-                    .Include("Kits")
                     .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
             } else {
                 organization = db.Organizations
-                    .Include("Kits")
                     .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
             }
 
@@ -268,11 +260,9 @@ namespace VaWorks.Web.Controllers
                 var userId = User.Identity.GetUserId();
                 var user = db.Users.Find(userId);
                 organization = db.Organizations
-                    .Include("Kits")
                     .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
             } else {
                 organization = db.Organizations
-                    .Include("Kits")
                     .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
             }
 
@@ -298,11 +288,9 @@ namespace VaWorks.Web.Controllers
                 var userId = User.Identity.GetUserId();
                 var user = db.Users.Find(userId);
                 organization = db.Organizations
-                    .Include("Kits")
                     .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
             } else {
                 organization = db.Organizations
-                    .Include("Kits")
                     .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
             }
 

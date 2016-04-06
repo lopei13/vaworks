@@ -22,6 +22,7 @@ app.controller('mainController',
         $scope.selectedActuatorModel;
         $scope.selectedActuatorSize;
         $scope.selectedMaterial;
+        $scope.selectedOption;
         $scope.hasValves = false;
         $scope.hasValveModels = false;
         $scope.hasValveSizes = false;
@@ -92,6 +93,7 @@ app.controller('mainController',
             $scope.selectedActuatorModel = "";
             $scope.selectedActuatorSize = "";
             $scope.selectedMaterial = "";
+            $scope.selectedOption = "";
             $http({
                 method: "GET",
                 url: "/KitSelection/GetValveModels",
@@ -119,6 +121,7 @@ app.controller('mainController',
             $scope.selectedActuatorModel = "";
             $scope.selectedActuatorSize = "";
             $scope.selectedMaterial = "";
+            $scope.selectedOption = "";
             $http({
                 method: "GET",
                 url: "/KitSelection/GetValveSizes",
@@ -143,6 +146,7 @@ app.controller('mainController',
             $scope.selectedActuatorModel = "";
             $scope.selectedActuatorSize = "";
             $scope.selectedMaterial = "";
+            $scope.selectedOption = "";
             $http({
                 method: "GET",
                 url: "/KitSelection/GetActuators",
@@ -165,6 +169,7 @@ app.controller('mainController',
             $scope.selectedActuatorModel = "";
             $scope.selectedActuatorSize = "";
             $scope.selectedMaterial = "";
+            $scope.selectedOption = "";
             $http({
                 method: "GET",
                 url: "/KitSelection/GetActuatorModels",
@@ -186,6 +191,7 @@ app.controller('mainController',
             $scope.hasOptions = false;
             $scope.selectedActuatorSize = "";
             $scope.selectedMaterial = "";
+            $scope.selectedOption = "";
             $http({
                 method: "GET",
                 url: "/KitSelection/GetActuatorSizes",
@@ -205,6 +211,7 @@ app.controller('mainController',
             $scope.loading = true;
             $scope.hasOptions = false;
             $scope.selectedMaterial = "";
+            $scope.selectedOption = "";
             $http({
                 method: "GET",
                 url: "/KitSelection/GetKitMaterials",
@@ -212,7 +219,8 @@ app.controller('mainController',
             }).then(function success(res) {
                 $scope.materials = res.data;
                 $scope.hasMaterials = $scope.materials.length > 0;
-                
+                $scope.selectedMaterial = "";
+                $scope.selectedOption = "";
                 $scope.page(2);
             }, function error(res) {
                 alert('No materials found.');
@@ -231,6 +239,7 @@ app.controller('mainController',
             }).then(function success(res) {
                 $scope.options = res.data;
                 $scope.hasOptions = $scope.options.length > 0;
+                $scope.selectedOption = "";
                 $scope.page(3);
             }, function error(res) {
                 alert('No options found.');
