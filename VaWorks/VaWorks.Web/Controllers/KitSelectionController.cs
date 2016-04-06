@@ -228,23 +228,24 @@ namespace VaWorks.Web.Controllers
         /// <returns></returns>
         public JsonResult GetKitMaterials(int valveInterface, int actuatorInterface, int? organizationId)
         {
-            Organization organization;
-            if (organizationId == null) {
+            var id = organizationId;
+            if (id == null) {
                 var userId = User.Identity.GetUserId();
                 var user = db.Users.Find(userId);
-                organization = db.Organizations
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
-            } else {
-                organization = db.Organizations
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
+                id = user.OrganizationId;
             }
 
-            var materials = from k in organization.Kits
-                            where k.ValveInterfaceCode == valveInterface
-                            where k.ActuatorInterfaceCode == actuatorInterface
-                            select new { k.Material.Name, k.KitMaterialId };
+            string sql = "select km.KitMaterialId, km.Name, km.SortOrder, km.Code from KitMaterials as km " +
+                         "inner join Kits as k on k.KitMaterialId = km.KitMaterialId " +
+                         "inner join OrganizationKits as ok on k.KitId = ok.KitId " +
+                         "where k.ValveInterfaceCode = @valveInterfaceCode and k.ActuatorInterfaceCode = @actuatorInterfaceCode and ok.OrganizationId = @organizationId";
 
-            return Json(materials.OrderBy(x => x.Name).Distinct(), JsonRequestBehavior.AllowGet);
+            var materials = db.Database.SqlQuery<KitMaterial>(sql,
+                new SqlParameter("@organizationId", organizationId),
+                new SqlParameter("@valveInterfaceCode", valveInterface),
+                new SqlParameter("@actuatorInterfaceCode", actuatorInterface)).ToList();
+
+            return Json(materials.OrderBy(x => x.SortOrder).Distinct(), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -255,24 +256,31 @@ namespace VaWorks.Web.Controllers
         /// <returns></returns>
         public JsonResult GetKitOptions(int valveInterface, int actuatorInterface, int materialId, int? organizationId)
         {
-            Organization organization;
-            if (organizationId == null) {
+            var id = organizationId;
+            if (id == null) {
                 var userId = User.Identity.GetUserId();
                 var user = db.Users.Find(userId);
-                organization = db.Organizations
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
-            } else {
-                organization = db.Organizations
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
+                id = user.OrganizationId;
             }
 
-            var options = from k in organization.Kits
-                          where k.ValveInterfaceCode == valveInterface
-                          where k.ActuatorInterfaceCode == actuatorInterface
-                          where k.KitMaterialId == materialId
-                          select new { k.Option.Name, k.KitOptionId };
+            string sql = "select ko.KitOptionId, ko.Name, ko.SortOrder, ko.Code from KitOptions as ko " +
+                         "inner join Kits as k on k.KitOptionId = ko.KitOptionId " +
+                         "inner join OrganizationKits as ok on k.KitId = ok.KitId " +
+                         "where k.KitMaterialId = @kitMaterialId and k.ValveInterfaceCode = @valveInterfaceCode and k.ActuatorInterfaceCode = @actuatorInterfaceCode and ok.OrganizationId = @organizationId";
 
-            return Json(options.OrderBy(x => x.Name).Distinct(), JsonRequestBehavior.AllowGet);
+            var options = db.Database.SqlQuery<KitOption>(sql,
+                new SqlParameter("@organizationId", organizationId),
+                new SqlParameter("@valveInterfaceCode", valveInterface),
+                new SqlParameter("@actuatorInterfaceCode", actuatorInterface),
+                new SqlParameter("@kitMaterialId", materialId)).ToList();
+
+            //var options = from k in organization.Kits
+            //              where k.ValveInterfaceCode == valveInterface
+            //              where k.ActuatorInterfaceCode == actuatorInterface
+            //              where k.KitMaterialId == materialId
+            //              select new { k.Option.Name, k.KitOptionId };
+
+            return Json(options.OrderBy(x => x.SortOrder).Distinct(), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -283,23 +291,34 @@ namespace VaWorks.Web.Controllers
         /// <returns></returns>
         public JsonResult GetKit(int valveInterface, int actuatorInterface, int materialId, int optionId, int? organizationId)
         {
-            Organization organization;
-            if (organizationId == null) {
+            var id = organizationId;
+            if (id == null) {
                 var userId = User.Identity.GetUserId();
                 var user = db.Users.Find(userId);
-                organization = db.Organizations
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
-            } else {
-                organization = db.Organizations
-                    .Where(o => o.OrganizationId == organizationId).FirstOrDefault();
+                id = user.OrganizationId;
             }
 
-            var kit = from k in organization.Kits
-                      where k.ValveInterfaceCode == valveInterface
-                      where k.ActuatorInterfaceCode == actuatorInterface
-                      where k.KitMaterialId == materialId
-                      where k.KitOptionId == optionId
-                      select new { k.KitNumber, k.KitId };
+            string sql = "select * from Kits as k " +
+                         "inner join OrganizationKits as ok on k.KitId = ok.KitId " +
+                         "where k.KitMaterialId = @kitMaterialId and " + 
+                         "k.ValveInterfaceCode = @valveInterfaceCode and " + 
+                         "k.ActuatorInterfaceCode = @actuatorInterfaceCode and " + 
+                         "k.KitOptionId = @optionId and " + 
+                         "ok.OrganizationId = @organizationId";
+
+            var kit = db.Database.SqlQuery<Kit>(sql,
+                new SqlParameter("@organizationId", organizationId),
+                new SqlParameter("@valveInterfaceCode", valveInterface),
+                new SqlParameter("@actuatorInterfaceCode", actuatorInterface),
+                new SqlParameter("@optionId", optionId),
+                new SqlParameter("@kitMaterialId", materialId)).ToList();
+
+            //var kit = from k in organization.Kits
+            //          where k.ValveInterfaceCode == valveInterface
+            //          where k.ActuatorInterfaceCode == actuatorInterface
+            //          where k.KitMaterialId == materialId
+            //          where k.KitOptionId == optionId
+            //          select new { k.KitNumber, k.KitId };
 
             return Json(kit, JsonRequestBehavior.AllowGet);
         }
