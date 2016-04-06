@@ -96,7 +96,7 @@ namespace VaWorks.Web.Data.DataReaders
         {
             get
             {
-                return _map.Count;
+                return _list.Count;
             }
         }
 

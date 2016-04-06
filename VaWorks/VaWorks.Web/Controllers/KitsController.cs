@@ -263,7 +263,7 @@ namespace VaWorks.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult UpdatePricing(HttpPostedFileBase file)
         {
-            CSVReader reader = new CSVReader(file.InputStream, true, '\t');
+            CSVReader reader = new CSVReader(file.InputStream, false, '\t');
 
             while (reader.Read()) {
                 string kitNumber = reader.GetString(0);
