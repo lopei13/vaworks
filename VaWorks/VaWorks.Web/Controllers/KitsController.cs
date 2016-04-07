@@ -285,6 +285,28 @@ namespace VaWorks.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult KitsWithoutImages()
+        {
+            List<Kit> kits = new List<Kit>();
+            foreach(var k in db.Kits) {
+                if (!System.IO.File.Exists(Server.MapPath($"~/Content/Thumbnails/{k.KitNumber}.jpg"))) {
+                    kits.Add(k);
+                }
+            }
+            return View("Index", kits);
+        }
+
+        public ActionResult KitsWithoutDrawings()
+        {
+            List<Kit> kits = new List<Kit>();
+            foreach (var k in db.Kits) {
+                if (!System.IO.File.Exists(Server.MapPath($"~/Content/Drawings/{k.KitNumber}.pdf"))) {
+                    kits.Add(k);
+                }
+            }
+            return View("Index", kits);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

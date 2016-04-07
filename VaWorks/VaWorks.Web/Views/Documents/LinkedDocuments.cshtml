@@ -1,0 +1,11 @@
+﻿@model IEnumerable<VaWorks.Web.Data.Entities.Document>
+
+<div class="btn-group">
+    <h3>Design Standards</h3>
+    <ul>
+        @foreach (var d in Model) {
+            <li>@Html.ActionLink(@d.Name, "Download", "Documents", new { documentId = d.DocumentId }, null)</li>
+        }
+    </ul>
+</div>
+

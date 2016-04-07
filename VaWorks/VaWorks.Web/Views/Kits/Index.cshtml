@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<VaWorks.Web.Data.Entities.Kit>
 
     @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Kits";
     }
 
     <h2>All Kits <span class="badge">@Model.Count()</span></h2>
@@ -9,7 +9,9 @@
     <p>
         @Html.ActionLink("Create New", "Create") |
         @Html.ActionLink("Export Kits", "Export", "Kits", null, new { @class = "btn btn-link" }) |
-        @Html.ActionLink("Update Pricing", "UpdatePricing", "Kits", null, new { @class = "btn btn-link" })
+        @Html.ActionLink("Update Pricing", "UpdatePricing", "Kits", null, new { @class = "btn btn-link" }) | 
+        @Html.ActionLink("View Kits Without Images", "KitsWithoutImages", "Kits", null, new { @class = "btn btn-link" }) |
+        @Html.ActionLink("View Kits Without PDFs", "KitsWithoutDrawings", "Kits", null, new { @class = "btn btn-link" })
     </p>
     <div class="row">
         @using GridMvc.Html

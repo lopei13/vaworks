@@ -181,6 +181,12 @@ namespace VaWorks.Web.Controllers
             return RedirectToAction("Details", "Organizations", new { id = organizationId });
         }
 
+        public ActionResult LinkedDocuments(int organizationId)
+        {
+            var org = db.Organizations.Find(organizationId);
+            return View(org.Documents);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

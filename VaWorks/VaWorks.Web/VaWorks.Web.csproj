@@ -433,6 +433,7 @@
     <Content Include="Views\Organizations\RemoveKit.cshtml" />
     <Content Include="Views\Organizations\RemoveAllKits.cshtml" />
     <Content Include="Views\Kits\UpdatePricing.cshtml" />
+    <Content Include="Views\Documents\LinkedDocuments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
