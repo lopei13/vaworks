@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using VaWorks.Web.Data;
 using VaWorks.Web.Data.Entities;
+using VaWorks.Web.Mailers;
 using VaWorks.Web.ViewModels;
 
 namespace VaWorks.Web.Controllers
@@ -75,8 +76,8 @@ namespace VaWorks.Web.Controllers
         {
             var invite = db.Invitations.Find(id);
             if(invite != null) {
-                // TODO: Resend
-
+                IUserMailer UserMailer = new UserMailer();
+                UserMailer.Invitation(invite).SendAsync();
                 AddSuccess("Invitation resent.");
             } else {
                 AddDanger("Invitation not found.");
@@ -157,7 +158,10 @@ namespace VaWorks.Web.Controllers
                 }
 
                 if (count > 0) {
-                    // TODO: Mail all of the invites
+                    IUserMailer UserMailer = new UserMailer();
+                    foreach (var i in invites) {
+                        UserMailer.Invitation(i).SendAsync();
+                    }
                 }
                 return Confirmation();
             }

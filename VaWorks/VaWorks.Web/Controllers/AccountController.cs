@@ -14,6 +14,7 @@ using VaWorks.Web.Data;
 using System.Collections.Generic;
 using System.Web.Security;
 using Microsoft.AspNet.Identity.EntityFramework;
+using VaWorks.Web.Mailers;
 
 namespace VaWorks.Web.Controllers
 {
@@ -172,17 +173,37 @@ namespace VaWorks.Web.Controllers
         {
             if (ModelState.IsValid) {
 
-                Database.InvitationRequests.Add(new InvitationRequest() {
+                var invitationRequest = new InvitationRequest() {
                     RequestDate = DateTimeOffset.Now,
                     Company = model.Company,
                     Email = model.Email,
                     Name = model.Name,
                     Status = RequestStatus.New
-                });
+                };
+
+                Database.InvitationRequests.Add(invitationRequest);
 
                 Database.SaveChanges();
 
-                // TODO: Send admin an email
+                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(Database));
+
+                var admins = from role in roleManager.Roles
+                             where role.Name == "System Administrator"
+                             from u in role.Users
+                             select u.UserId;
+
+                IUserMailer mailer = new UserMailer();
+                foreach (var admin in admins) {
+                    Database.SystemMessages.Add(new SystemMessage() {
+                        UserId = admin,
+                        DateSent = DateTimeOffset.Now,
+                        Message = $"{model.Name} from {model.Company} is requesting access."
+                    });
+
+                    // send the admin an email
+                    var email = Database.Users.Where(u => u.Id == admin).FirstOrDefault().Email;
+                    mailer.InvitationRequest(invitationRequest, email).SendAsync();
+                }
 
                 return View("RequestAccessConfirmation");
             }
@@ -242,12 +263,12 @@ namespace VaWorks.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Register(string code)
+        public ActionResult RegisterWithCode(string code)
         {
             RegisterViewModel vm = new RegisterViewModel() {
                 InvitationCode = code
             };
-            return View(vm);
+            return View("Register", vm);
         }
 
         //

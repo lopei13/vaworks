@@ -8,5 +8,5 @@
 <p><a>Invitation Code:<b>@Model.InvitationCode</b></a></p>
 
 <p class="callout">
-    <a href="@Url.Action("Register", "Account", new { code = Model.InvitationCode }, Request.Url.Scheme)">Click here for registration</a>
+    <a href="@Url.Action("RegisterWithCode", "Account", new { code = Model.InvitationCode }, Request.Url.Scheme)">Click here for registration</a>
 </p>

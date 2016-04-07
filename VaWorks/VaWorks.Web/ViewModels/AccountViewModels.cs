@@ -139,7 +139,7 @@ namespace VaWorks.Web.ViewModels
         [Required]
         public InvitationType Type { get; set; }
 
-        public int RequestId { get; set; }
+        public int? RequestId { get; set; }
     }
 
     public class ResetPasswordViewModel
