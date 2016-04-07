@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using VaWorks.Web.Data;
 using VaWorks.Web.Data.Entities;
+using VaWorks.Web.Mailers;
 
 namespace VaWorks.Web.Controllers
 {
@@ -157,11 +158,15 @@ namespace VaWorks.Web.Controllers
             // clear cart
             db.ShoppingCartItems.RemoveRange(db.ShoppingCartItems.Where(c => c.UserId == userId));
 
+            IUserMailer mailer = new UserMailer();
+
             // send a message
             string message = $"Thank you for submitting quote number {quoteNumber.Number}.  You should receive an email with the quote and drawings attached.  ";
             if(quote.Items.Any(i => i.PriceEach == 0)) {
                 message += "It looks like some of the items you requested have not been priced yet.  A salesperson will review the items and get back to you.";
             }
+
+            mailer.Quote(quote, quote.Customer.Email);
 
             db.SystemMessages.Add(new SystemMessage() {
                 UserId = userId,
@@ -169,12 +174,16 @@ namespace VaWorks.Web.Controllers
                 Message = message
             });
 
+            
+
             if (sales != null) {
                 db.SystemMessages.Add(new SystemMessage() {
                     UserId = sales.Id,
                     DateSent = DateTimeOffset.Now,
                     Message = $"{user.Name} from {user.Organization.Name} submitted quote number {quoteNumber.Number}.  Please review and get in touch with the customer.  Email: {user.Email}, Phone: {user.PhoneNumber}. "
                 });
+
+                mailer.QuoteSubmit(quote, sales.Email);
             }
 
             db.SaveChanges();

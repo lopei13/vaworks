@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using VaWorks.Web.Data;
 using VaWorks.Web.Data.Entities;
 using VaWorks.Web.Extensions;
+using VaWorks.Web.Mailers;
 
 namespace VaWorks.Web.Controllers
 {
@@ -230,9 +231,10 @@ namespace VaWorks.Web.Controllers
         {
             var quote = db.Quotes.Find(quoteId);
             quote.IsSent = true;
-            
 
-            // TODO: Send email.
+
+            IUserMailer mailer = new UserMailer();
+            mailer.Quote(quote, quote.Customer.Email).SendAsync();
 
             db.SystemMessages.Add(new SystemMessage() {
                 UserId = quote.CustomerId,
