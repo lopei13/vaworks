@@ -209,7 +209,7 @@ namespace VaWorks.Web.Controllers
             var org = db.Organizations.Where(o => o.OrganizationId == customer.OrganizationId).FirstOrDefault();
             quote.Total = 0;
             foreach (var i in quote.Items) {
-                var dis = org.Discounts.Where(d => d.Quantity < i.Quantity).OrderBy(d => d.Quantity).FirstOrDefault();
+                var dis = org.Discounts.Where(d => d.Quantity >= i.Quantity).OrderBy(d => d.Quantity).FirstOrDefault();
                 double discount = 1;
                 if (dis != null) {
                     discount = dis.DiscountPercentage / 100;
