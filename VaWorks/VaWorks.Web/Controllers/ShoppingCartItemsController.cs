@@ -149,8 +149,8 @@ namespace VaWorks.Web.Controllers
                         Description = i.ToString(),
                         Discount = discount,
                         Quantity = i.Quantity,
-                        PriceEach = i.Kit.Price * discount,
-                        TotalPrice = i.Kit.Price * discount * i.Quantity
+                        PriceEach = i.Kit.Price * (1 - discount),
+                        TotalPrice = i.Kit.Price * (1 - discount) * i.Quantity
                     });
                 }
             }

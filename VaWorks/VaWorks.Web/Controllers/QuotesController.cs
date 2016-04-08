@@ -217,7 +217,7 @@ namespace VaWorks.Web.Controllers
 
                 double listPrice = db.Kits.Where(k => k.KitNumber == i.KitNumber).FirstOrDefault().Price;
                 i.Discount = discount;
-                i.PriceEach = listPrice * discount;
+                i.PriceEach = listPrice * (1 - discount);
                 i.TotalPrice = i.PriceEach * i.Quantity;
                 quote.Total += i.TotalPrice;
             }
