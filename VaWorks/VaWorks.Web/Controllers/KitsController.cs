@@ -132,7 +132,7 @@ namespace VaWorks.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Customer, Sales")]
+        [AllowAnonymous]
         public ActionResult GetKits(string searchText, int? organizationId)
         {
             if (!searchText.ToUpper().StartsWith("VA")) {
@@ -183,7 +183,7 @@ namespace VaWorks.Web.Controllers
             return View("KitDetails", new { Kit = kit, Valve = valve, Actuator = actuator });
         }
 
-        [Authorize(Roles = "Customer, Sales")]
+        [AllowAnonymous]
         public JsonResult GetValves(int kitId, int organizationId)
         {
             string sql = "select v.Manufacturer, v.Model, v.Size, v.InterfaceCode, v.ValveId from OrganizationValves as ov " +
@@ -198,7 +198,7 @@ namespace VaWorks.Web.Controllers
             return Json(valves, JsonRequestBehavior.AllowGet);
         }
 
-        [Authorize(Roles = "Customer, Sales")]
+        [AllowAnonymous]
         public JsonResult GetActuators(int kitId, int organizationId)
         {
             string sql = "select a.Manufacturer, a.Model, a.Size, a.InterfaceCode, a.ActuatorId from OrganizationActuators as oa " +
