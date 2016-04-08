@@ -1,0 +1,25 @@
+﻿
+
+<h2>Search for Kit</h2>
+
+<div class="row">
+    @if(ViewBag.Error != null) {
+        <div class="alert alert-warning">
+            @ViewBag.Error
+        </div>
+    }
+    <div class="col-md-6">
+        @using (Html.BeginForm("SearchResults", "Kits", FormMethod.Post)) {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="organizationId" value="@ViewBag.OrganizationId" />
+            <div class="form-group">
+                <label class="control-label">Kit Number</label>
+                <input name="searchText" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-default" />
+            </div>
+        }
+    </div>
+    <div class="col-md-6"></div>
+</div>

@@ -1,0 +1,75 @@
+﻿
+@{ 
+    ViewBag.Title = "Kit Details";
+    VaWorks.Web.Data.Entities.Kit kit = (dynamic)Model.Kit;
+    VaWorks.Web.Data.Entities.Valve valve = (dynamic)Model.Valve;
+    VaWorks.Web.Data.Entities.Actuator actuator = (dynamic)Model.Actuator;
+}
+
+<h2>Kit Details</h2>
+
+<div class="row">
+    <div class="col-lg-4">
+
+    </div>
+    <div class="col-lg-10">
+        <h4></h4>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4 class="panel-title">@kit.KitNumber</h4>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                Kit Number
+                            </dt>
+                            <dd>
+                                @kit.KitNumber
+                            </dd>
+                            <dt>
+                                Valve
+                            </dt>
+
+                            <dd>
+                                @valve.ToString()
+                            </dd>
+                            <dt>Actuator</dt>
+                            <dd>
+                                @actuator.ToString()
+                            </dd>
+
+                        </dl>
+
+
+                    </div>
+                    <div class="col-lg-6">
+                        <!-- show drawing-->
+                        <p>Drawing</p>
+                        <img src="@("~/Content/Thumbnails/" + kit.KitNumber + ".jpg")" width="350" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @using (Html.BeginForm("AddToCart", "KitSelection")) {
+                            <input hidden name="quoteId" value="@Request.Params["quoteId"]" />
+                            <input hidden name="actuatorId" value="@actuator.ActuatorId" />
+                            <input hidden name="valveId" value="@valve.ValveId" />
+                            <input hidden name="kitId" value="@kit.KitId" />
+                            <div class="form-group">
+                                <label class="control-label">Quantity</label>
+                                <input ng-model="quantity" name="quantity" type="number" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Add" class="btn btn-default" />
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4"></div>
+</div>

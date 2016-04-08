@@ -276,6 +276,9 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\client\controllers\selectController.js" />
+    <Content Include="Scripts\client\controllers\searchController.js" />
+    <Content Include="Scripts\client\controllers\selectController-copy.js" />
     <Content Include="Scripts\client\controllers\mainController.js" />
     <Content Include="Scripts\gridmvc.js" />
     <Content Include="Scripts\gridmvc.lang.ru.js" />
@@ -434,6 +437,10 @@
     <Content Include="Views\Organizations\RemoveAllKits.cshtml" />
     <Content Include="Views\Kits\UpdatePricing.cshtml" />
     <Content Include="Views\Documents\LinkedDocuments.cshtml" />
+    <Content Include="Views\Kits\Search.cshtml" />
+    <Content Include="Views\Kits\SearchResults.cshtml" />
+    <Content Include="Views\Kits\SelectResult.cshtml" />
+    <Content Include="Views\Kits\KitDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

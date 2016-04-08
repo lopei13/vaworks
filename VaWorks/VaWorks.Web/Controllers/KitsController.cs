@@ -12,6 +12,8 @@ using VaWorks.Web.Data.Entities;
 using VaWorks.Web.Data.DataReaders;
 using VaWorks.Web.Data.DataWriters;
 using VaWorks.Web.ViewModels;
+using Microsoft.AspNet.Identity;
+using System.Data.SqlClient;
 
 namespace VaWorks.Web.Controllers
 {
@@ -56,7 +58,7 @@ namespace VaWorks.Web.Controllers
                         AlertType = "Success"
                     });
 
-                } catch(Exception ex) {
+                } catch (Exception ex) {
 
                     if (!messages.ContainsKey(ex.Message)) {
                         messages.Add(ex.Message, new MessageViewModel() {
@@ -122,6 +124,91 @@ namespace VaWorks.Web.Controllers
             file.SaveAs(savePath);
 
             return Json(new { name = file.FileName }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Search(int? organizationId)
+        {
+            ViewBag.OrganizationId = organizationId;
+            return View();
+        }
+
+        public ActionResult GetKits(string searchText, int? organizationId)
+        {
+            if (!searchText.ToUpper().StartsWith("VA")) {
+                searchText = "VA" + searchText;
+            }
+            if (searchText.Length >= 6) {
+
+                var id = organizationId;
+                if (id == null) {
+                    var userId = User.Identity.GetUserId();
+                    var user = db.Users.Find(userId);
+                    id = user.OrganizationId;
+                }
+
+                string sql = "select k.KitId, k.KitNumber, k.Price, k.ActuatorInterfaceCode, k.ValveInterfaceCode, k.KitOptionId, k.KitMaterialId from Kits as k " +
+                             "inner join OrganizationKits as ok on k.KitId = ok.KitId " +
+                             "where k.KitNumber LIKE @searchText and ok.OrganizationId = @organizationId";
+
+                var kits = db.Database.SqlQuery<Kit>(sql,
+                    new SqlParameter("@searchText", searchText + "%"),
+                    new SqlParameter("@organizationId", organizationId)).ToList();
+
+                ViewBag.OrganizationId = organizationId;
+                return Json(kits, JsonRequestBehavior.AllowGet);
+            }
+
+            return HttpNotFound();
+        }
+    
+
+        public ActionResult SelectResult(int kitId, int organizationId)
+        {
+            var kit = db.Kits.Find(kitId);
+
+            ViewBag.OrganizationId = organizationId;
+
+            return View(kit);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SelectResult(int kitId, int organizationId, int valveId, int actuatorId)
+        {
+            var kit = db.Kits.Find(kitId);
+            ViewBag.OrganizationId = organizationId;
+            var valve = db.Valves.Find(valveId);
+            var actuator = db.Actuators.Find(actuatorId);
+
+            return View("KitDetails", new { Kit = kit, Valve = valve, Actuator = actuator });
+        }
+
+        public JsonResult GetValves(int kitId, int organizationId)
+        {
+            string sql = "select v.Manufacturer, v.Model, v.Size, v.InterfaceCode, v.ValveId from OrganizationValves as ov " +
+                        "inner join Valves as v on v.ValveId = ov.ValveId " +
+                        "where v.InterfaceCode IN (select k.ValveInterfaceCode from OrganizationKits as ok join Kits as k on k.KitId = ok.KitId where ok.KitId = @kitId) and " +
+                        "ov.OrganizationId = @organizationId";
+
+            var valves = db.Database.SqlQuery<Valve>(sql,
+                new SqlParameter("@kitId", kitId),
+                new SqlParameter("@organizationId", organizationId)).ToList();
+
+            return Json(valves, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetActuators(int kitId, int organizationId)
+        {
+            string sql = "select a.Manufacturer, a.Model, a.Size, a.InterfaceCode, a.ActuatorId from OrganizationActuators as oa " +
+                            "inner join Actuators as a on a.ActuatorId = oa.ActuatorId " +
+                            "where a.InterfaceCode IN (select k.ActuatorInterfaceCode from OrganizationKits as ok join Kits as k on k.KitId = ok.KitId where ok.KitId = @kitId) and " +
+                            "oa.OrganizationId = @organizationId";
+
+            var actuators = db.Database.SqlQuery<Actuator>(sql,
+                new SqlParameter("@kitId", kitId),
+                new SqlParameter("@organizationId", organizationId)).ToList();
+
+            return Json(actuators, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Kits/Details/5

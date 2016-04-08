@@ -1,0 +1,42 @@
+﻿@model VaWorks.Web.Data.Entities.Kit
+
+<h2>@Model.KitNumber</h2>
+
+<div class="row" ng-app="MainApp" ng-init="organizationId = @ViewBag.OrganizationId; kitId = @Model.KitId">
+    <div ng-controller="selectController">
+    @using (Html.BeginForm()) {
+        <div class="col-lg-4">
+            <div class="form-horizontal">
+                <h4>Select Valve</h4>
+                <div class="radio" ng-repeat="valve in valves">
+                    <label>
+                        <input type="radio" ng-model="valveId" name="valve" value="{{valve.ValveId}}" required />
+                        {{valve.Manufacturer}} {{valve.Model}} {{valve.Size}}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-horizontal">
+                <h4>Select Actuator</h4>
+                <div class="radio" ng-repeat="act in actuators">
+                    <label>
+                        <input type="radio" ng-model="actuatorId" name="actuator" value="{{act.ActuatorId}}" required />
+                        {{act.Manufacturer}} {{act.Model}} {{act.Size}}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <input type="submit" value="Details" ng-disabled="!valveId || !actuatorId"/>
+    }
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/spin.js" type="text/javascript"></script>
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/angular-resource.js"></script>
+    <script src="~/Scripts/angular-busy.js"></script>
+    <script src="~/Scripts/client/app.js"></script>
+    <script src="~/Scripts/client/controllers/selectController.js"></script>
+
+}

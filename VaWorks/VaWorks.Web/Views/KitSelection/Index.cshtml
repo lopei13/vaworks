@@ -1,6 +1,7 @@
-﻿@model int
+﻿@model int?
 
 <h2>Select Kit</h2>
+
 @*<div class="pull-right">
     @using(Html.BeginForm("Search", "KitSelection")){
     <div class="form-inline">
@@ -17,177 +18,318 @@
 </div>*@
 <div ng-app="MainApp" ng-init="organizationId = @Model">
     <div ng-controller="mainController">
-        <ul class="nav nav-pills nav-wizard">
-            <li ng-class="{'active': currentStep > 0}"><a ng-click="page(1)">Select Valve and Actuator</a><div class="nav-arrow"></div></li>
-            <li ng-class="{'active': currentStep > 1}"><div class="nav-wedge"></div><a ng-click="page(2)">Select Material</a><div class="nav-arrow"></div></li>
-            <li ng-class="{'active': currentStep > 2}"><div class="nav-wedge"></div><a ng-click="page(3)">Select Options</a><div class="nav-arrow"></div></li>
-            <li ng-class="{'active': currentStep > 3}"><div class="nav-wedge"></div><a ng-click="page(4)">Preview Details</a></li>
+        <ul class="nav nav-pills">
+            <li ng-class="{'active': searchActive}" >
+                <button class="btn btn-link" ng-click="toggleSearch()" >{{searchToggleButtonText}}</button>
+            </li>
         </ul>
 
+        <div ng-controller="searchController" ng-hide="!searchActive">
+            <ul class="nav nav-pills nav-wizard">
+                <li ng-class="{'active': currentStep > 0}"><a ng-click="page(1)">Search for Kit</a><div class="nav-arrow"></div></li>
+                <li ng-class="{'active': currentStep > 1}"><a ng-click="page(2)"><div class="nav-wedge"></div>Select Valve and Actuator</a><div class="nav-arrow"></div></li>
+                <li ng-class="{'active': currentStep > 2}"><div class="nav-wedge"></div><a ng-click="page(3)">Preview Details</a></li>
+            </ul>
 
-        <div class="tab-content">
-            <div id="start" class="tab-pane fade in" ng-class="{'active': currentStep == 1}">
-                <div class="col-lg-4">
-                    <div class="form-horizontal">
-                        <h4>Valve Information</h4>
-                        <div class="form-group">
-                            <label>Manufacturer</label>
-                            <select id="valves" class="form-control" ng-model="selectedValve"
-                                    ng-change="getValveModels()"
-                                    ng-options="v as v for v in valves">
-                                <option value="">Select Manufacturer</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Model</label>
-                            <select id="valvemodels" ng-disabled="!hasValveModels" ng-model="selectedValveModel"
-                                    ng-change="getValveSizes()"
-                                    ng-options="v as v for v in valvemodels" class="form-control">
-                                <option value="">Select Model</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Size</label>
-                            <select id="valvesizes" ng-disabled="!hasValveSizes" ng-model="selectedValveSize"
-                                    ng-change="getActuators()"
-                                    ng-options="v as v.Size for v in valvesizes track by v.InterfaceCode" class="form-control">
-                                <option value="">Select Size</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="form-horizontal">
-                        <h4>Actuator Information</h4>
-                        <div class="form-group">
-                            <label>Manufacturer</label>
-                            <select id="actuators" ng-disabled="!hasActuators" ng-model="selectedActuator"
-                                    ng-change="getActuatorModels()"
-                                    ng-options="a as a for a in actuators" class="form-control">
-                                <option value="">Select Manufacturer</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Model</label>
-                            <select id="actuatormodels" ng-disabled="!hasActuatorModels" ng-model="selectedActuatorModel"
-                                    ng-change="getActuatorSizes()"
-                                    ng-options="a as a for a in actuatormodels" class="form-control">
-                                <option value="">Select Model</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Size</label>
-                            <select id="actuatorsizes" ng-disabled="!hasActuatorSizes" ng-model="selectedActuatorSize"
-                                    ng-change="getMaterials()"
-                                    ng-options="a as a.Size for a in actuatorsizes track by a.InterfaceCode" class="form-control">
-                                <option value="">Select Size</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="material" class="tab-pane fade in" ng-class="{active: currentStep == 2}">
-                <div class="col-lg-4">
-                    <div class="form-horizontal">
-                        <h4>Select Material</h4>
-                        <div class="form-group">
-                            <label>Material</label>
-                            <select id="valves" class="form-control" ng-model="selectedMaterial"
-                                    ng-disabled="!hasMaterials"
-                                    ng-change="getOptions()"
-                                    ng-options="m as m.Name for m in materials track by m.KitMaterialId">
-                                <option value="">Select Material</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            @{ Html.RenderAction("LinkedDocuments", "Documents", new { organizationId = Model }); }
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="options" class="tab-pane fade in" ng-class="{active: currentStep == 3}">
-                <div class="col-lg-4">
-                    <div class="form-horizontal">
-                        <h4>Select Option</h4>
-                        <div class="form-group">
-                            <label>Options</label>
-                            <select id="valves" class="form-control" ng-model="selectedOption"
-                                    ng-disabled="!hasOptions"
-                                    ng-change="getKit()"
-                                    ng-options="o as o.Name for o in options track by o.KitOptionId">
-                                <option value="">Select Option</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="finish" class="tab-pane fade in" ng-class="{active: currentStep == 4}">
-                <div class="col-lg-4">
-
-                </div>
-                <div class="col-lg-10">
-                    <h4></h4>
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">{{kit.KitNumber}}</h4>
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <dl class="dl-horizontal">
-                                        <dt>
-                                            Kit Number
-                                        </dt>
-                                        <dd>
-                                            {{kit.KitNumber}}
-                                        </dd>
-                                        <dt>
-                                            Valve
-                                        </dt>
-
-                                        <dd>
-                                            {{selectedValve}} {{selectedValveModel}} {{selectedValveSize.Name}}
-                                        </dd>
-                                        <dt>Actuator</dt>
-                                        <dd>
-                                            {{selectedActuator}} {{selectedActuatorModel}} {{selectedActuatorSize.Name}}
-                                        </dd>
-
-                                    </dl>
-
-
-                                </div>
-                                <div class="col-lg-6">
-                                    <!-- show drawing-->
-                                    <p>Drawing</p>
-                                    <img src="~/Content/Thumbnails/{{kit.KitNumber}}.jpg" width="350" />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    @using (Html.BeginForm("AddToCart", "KitSelection")) {
-                                        <input hidden name="quoteId" value="@Request.Params["quoteId"]" />
-                                        <input hidden name="actuatorId" value="{{selectedActuatorSize.ActuatorId}}" />
-                                        <input hidden name="valveId" value="{{selectedValveSize.ValveId}}" />
-                                        <input hidden name="kitId" value="{{kit.KitId}}" />
-                                        <div class="form-group">
-                                            <label class="control-label">Quantity</label>
-                                            <input ng-model="quantity" name="quantity" type="number" class="form-control" />
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="submit" value="Add" class="btn btn-default" />
-                                        </div>
-                                    }
-                                </div>
-                                <div class="col-md-6"></div>
+            <div class="tab-content">
+                <div class="tab-pane fade in" ng-class="{'active': currentStep == 2}">
+                    <div class="col-lg-4">
+                        <div class="form-horizontal">
+                            <h4>Select Valve</h4>
+                            <div class="radio" ng-repeat="valve in valves">
+                                <label>
+                                    <input type="radio" name="valve" ng-click="selectValve(valve)" required />
+                                    {{valve.Manufacturer}} {{valve.Model}} {{valve.Size}}
+                                </label>
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-4">
+                        <div class="form-horizontal">
+                            <h4>Select Actuator</h4>
+                            <div class="radio" ng-repeat="act in actuators">
+                                <label>
+                                    <input type="radio" name="actuator" ng-click="selectActuator(act)" required />
+                                    {{act.Manufacturer}} {{act.Model}} {{act.Size}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: 25px;">
+                            <button class="btn btn-primary" ng-click="page(3)">Next</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-lg-4"></div>
+
+                <div id="finish" class="tab-pane fade in" ng-class="{active: currentStep == 3}">
+                    <div class="col-lg-4">
+
+                    </div>
+                    <div class="col-lg-10">
+                        <h4></h4>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">{{kit.KitNumber}}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <dl class="dl-horizontal">
+                                            <dt>
+                                                Kit Number
+                                            </dt>
+                                            <dd>
+                                                {{kit.KitNumber}}
+                                            </dd>
+                                            <dt>
+                                                Valve
+                                            </dt>
+
+                                            <dd>
+                                                {{selectedValve.Manufacturer}} {{selectedValve.Model}} {{selectedValve.Size}}
+                                            </dd>
+                                            <dt>Actuator</dt>
+                                            <dd>
+                                                {{selectedActuator.Manufacturer}} {{selectedActuator.Model}} {{selectedActuator.Size}}
+                                            </dd>
+
+                                        </dl>
+
+
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <!-- show drawing-->
+                                        <p>Drawing</p>
+                                        <img src="~/Content/Thumbnails/{{kit.KitNumber}}.jpg" width="350" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        @using (Html.BeginForm("AddToCart", "KitSelection")) {
+                                            <input hidden name="quoteId" value="@Request.Params["quoteId"]" />
+                                            <input hidden name="actuatorId" value="{{selectedActuator.ActuatorId}}" />
+                                            <input hidden name="valveId" value="{{selectedValve.ValveId}}" />
+                                            <input hidden name="kitId" value="{{kit.KitId}}" />
+                                            <div class="form-group">
+                                                <label class="control-label">Quantity</label>
+                                                <input ng-model="quantity" name="quantity" type="number" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="Add" class="btn btn-default" />
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="col-md-6"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4"></div>
+                </div>
+
+                <div id="search" class="tab-pane fade in" ng-class="{'active': currentStep == 1}">
+                    <h2>Search for Kit</h2>
+                    <p class="text-muted">Example: VA1234</p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="searchText" placeholder="Kit Number" ng-model="searchText" ng-keydown="keyDownSearch($event)">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="submit" ng-click="search()"><i class="fa fa-search"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+
+                            <ul class="nav nav-pills nav-stacked">
+                                <li ng-repeat="k in kits"><button class="btn btn-link" ng-click="selectKit(k.KitId)">{{k.KitNumber}}</button></li>
+                            </ul>
+
+                            <p ng-hide="hasSearchResults">No search results.</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div ng-controller="selectController" ng-hide="searchActive">
+            <ul class="nav nav-pills nav-wizard">
+                <li ng-class="{'active': currentStep > 0}"><a ng-click="page(1)">Select Valve and Actuator</a><div class="nav-arrow"></div></li>
+                <li ng-class="{'active': currentStep > 1}"><div class="nav-wedge"></div><a ng-click="page(2)">Select Material</a><div class="nav-arrow"></div></li>
+                <li ng-class="{'active': currentStep > 2}"><div class="nav-wedge"></div><a ng-click="page(3)">Select Options</a><div class="nav-arrow"></div></li>
+                <li ng-class="{'active': currentStep > 3}"><div class="nav-wedge"></div><a ng-click="page(4)">Preview Details</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="start" class="tab-pane fade in" ng-class="{'active': currentStep == 1}">
+                    <div class="col-lg-4">
+                        <div class="form-horizontal">
+                            <h4>Valve Information</h4>
+                            <div class="form-group">
+                                <label>Manufacturer</label>
+                                <select id="valves" class="form-control" ng-model="selectedValve"
+                                        ng-change="getValveModels()"
+                                        ng-options="v as v for v in valves">
+                                    <option value="">Select Manufacturer</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Model</label>
+                                <select id="valvemodels" ng-disabled="!hasValveModels" ng-model="selectedValveModel"
+                                        ng-change="getValveSizes()"
+                                        ng-options="v as v for v in valvemodels" class="form-control">
+                                    <option value="">Select Model</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Size</label>
+                                <select id="valvesizes" ng-disabled="!hasValveSizes" ng-model="selectedValveSize"
+                                        ng-change="getActuators()"
+                                        ng-options="v as v.Size for v in valvesizes track by v.InterfaceCode" class="form-control">
+                                    <option value="">Select Size</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-horizontal">
+                            <h4>Actuator Information</h4>
+                            <div class="form-group">
+                                <label>Manufacturer</label>
+                                <select id="actuators" ng-disabled="!hasActuators" ng-model="selectedActuator"
+                                        ng-change="getActuatorModels()"
+                                        ng-options="a as a for a in actuators" class="form-control">
+                                    <option value="">Select Manufacturer</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Model</label>
+                                <select id="actuatormodels" ng-disabled="!hasActuatorModels" ng-model="selectedActuatorModel"
+                                        ng-change="getActuatorSizes()"
+                                        ng-options="a as a for a in actuatormodels" class="form-control">
+                                    <option value="">Select Model</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Size</label>
+                                <select id="actuatorsizes" ng-disabled="!hasActuatorSizes" ng-model="selectedActuatorSize"
+                                        ng-change="getMaterials()"
+                                        ng-options="a as a.Size for a in actuatorsizes track by a.InterfaceCode" class="form-control">
+                                    <option value="">Select Size</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="material" class="tab-pane fade in" ng-class="{active: currentStep == 2}">
+                    <div class="col-lg-4">
+                        <div class="form-horizontal">
+                            <h4>Select Material</h4>
+                            <div class="form-group">
+                                <label>Material</label>
+                                <select id="valves" class="form-control" ng-model="selectedMaterial"
+                                        ng-disabled="!hasMaterials"
+                                        ng-change="getOptions()"
+                                        ng-options="m as m.Name for m in materials track by m.KitMaterialId">
+                                    <option value="">Select Material</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                @{ Html.RenderAction("LinkedDocuments", "Documents", new { organizationId = Model }); }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="options" class="tab-pane fade in" ng-class="{active: currentStep == 3}">
+                    <div class="col-lg-4">
+                        <div class="form-horizontal">
+                            <h4>Select Option</h4>
+                            <div class="form-group">
+                                <label>Options</label>
+                                <select id="valves" class="form-control" ng-model="selectedOption"
+                                        ng-disabled="!hasOptions"
+                                        ng-change="getKit()"
+                                        ng-options="o as o.Name for o in options track by o.KitOptionId">
+                                    <option value="">Select Option</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="finish" class="tab-pane fade in" ng-class="{active: currentStep == 4}">
+                    <div class="col-lg-4">
+
+                    </div>
+                    <div class="col-lg-10">
+                        <h4></h4>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">{{kit.KitNumber}}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <dl class="dl-horizontal">
+                                            <dt>
+                                                Kit Number
+                                            </dt>
+                                            <dd>
+                                                {{kit.KitNumber}}
+                                            </dd>
+                                            <dt>
+                                                Valve
+                                            </dt>
+
+                                            <dd>
+                                                {{selectedValve}} {{selectedValveModel}} {{selectedValveSize.Name}}
+                                            </dd>
+                                            <dt>Actuator</dt>
+                                            <dd>
+                                                {{selectedActuator}} {{selectedActuatorModel}} {{selectedActuatorSize.Name}}
+                                            </dd>
+
+                                        </dl>
+
+
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <!-- show drawing-->
+                                        <p>Drawing</p>
+                                        <img src="~/Content/Thumbnails/{{kit.KitNumber}}.jpg" width="350" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        @using (Html.BeginForm("AddToCart", "KitSelection")) {
+                                            <input hidden name="quoteId" value="@Request.Params["quoteId"]" />
+                                            <input hidden name="actuatorId" value="{{selectedActuatorSize.ActuatorId}}" />
+                                            <input hidden name="valveId" value="{{selectedValveSize.ValveId}}" />
+                                            <input hidden name="kitId" value="{{kit.KitId}}" />
+                                            <div class="form-group">
+                                                <label class="control-label">Quantity</label>
+                                                <input ng-model="quantity" name="quantity" type="number" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="Add" class="btn btn-default" />
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="col-md-6"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -200,6 +342,8 @@
 <script src="~/Scripts/angular-busy.js"></script>
 <script src="~/Scripts/client/app.js"></script>
 <script src="~/Scripts/client/controllers/mainController.js"></script>
+<script src="~/Scripts/client/controllers/searchController.js"></script>
+<script src="~/Scripts/client/controllers/selectController.js"></script>
 
     }
 
