@@ -8,7 +8,6 @@ app.controller('mainController',
         $scope.organizationId;
         $scope.quantity = 1;
         $scope.searchActive = false;
-        $scope.searchText = "VA4565";
         $scope.searchToggleButtonText = "Search Kit"
 
         $scope.toggleSearch = function () {

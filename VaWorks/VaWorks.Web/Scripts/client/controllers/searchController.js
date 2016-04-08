@@ -17,7 +17,7 @@ app.controller('searchController',
         $scope.hasActuators = false;
         $scope.hasKit = false;
         $scope.currentStep = 1;
-        $scope.searchText = "VA4565";
+        $scope.searchText;
         $scope.kits;
         $scope.hasSearchResults = true;
 
