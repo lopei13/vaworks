@@ -241,6 +241,17 @@ namespace VaWorks.Web.Controllers
                 Message = $"{quote.SalesPerson} created a quote for you.  Quote: {quote.QuoteNumber}."
             });
 
+            var msg = mailer.Quote(quote, quote.Customer.Email);
+
+            foreach (var item in quote.Items) {
+                string file = Server.MapPath($"~/Content/Drawings/{item.KitNumber}.pdf");
+                if (System.IO.File.Exists(file)) {
+                    msg.Attachments.Add(new System.Net.Mail.Attachment(file));
+                }
+            }
+
+            msg.SendAsync();
+
             db.SaveChanges();
             return View(quote);
         }

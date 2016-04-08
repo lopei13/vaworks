@@ -166,7 +166,16 @@ namespace VaWorks.Web.Controllers
                 message += "It looks like some of the items you requested have not been priced yet.  A salesperson will review the items and get back to you.";
             }
 
-            mailer.Quote(quote, quote.Customer.Email);
+            var msg = mailer.Quote(quote, quote.Customer.Email);
+
+            foreach(var item in quote.Items) {
+                string file = Server.MapPath($"~/Content/Drawings/{item.KitNumber}.pdf");
+                if (System.IO.File.Exists(file)) {
+                    msg.Attachments.Add(new System.Net.Mail.Attachment(file));
+                }
+            }
+
+            msg.SendAsync();
 
             db.SystemMessages.Add(new SystemMessage() {
                 UserId = userId,
@@ -183,7 +192,8 @@ namespace VaWorks.Web.Controllers
                     Message = $"{user.Name} from {user.Organization.Name} submitted quote number {quoteNumber.Number}.  Please review and get in touch with the customer.  Email: {user.Email}, Phone: {user.PhoneNumber}. "
                 });
 
-                mailer.QuoteSubmit(quote, sales.Email);
+                var msg2 = mailer.QuoteSubmit(quote, sales.Email);
+                msg2.SendAsync();
             }
 
             db.SaveChanges();
