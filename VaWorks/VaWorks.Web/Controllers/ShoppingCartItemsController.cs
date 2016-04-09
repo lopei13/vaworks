@@ -137,7 +137,7 @@ namespace VaWorks.Web.Controllers
                 if (i.Actuator != null && i.Valve != null && i.Kit != null) {
                     // get the discount
                     var dis = org.Discounts.Where(d => d.Quantity >= i.Quantity).OrderBy(d => d.Quantity).FirstOrDefault();
-                    double discount = 1;
+                    double discount = 0;
                     if (dis != null) {
                         discount = dis.DiscountPercentage / 100;
                     }

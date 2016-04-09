@@ -22,9 +22,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @if (Request.IsAuthenticated) {
-                        <li>@Html.ActionLink("Home", "Index", "Account")</li>
-                    }
+
+                    <li><a href="http://vanaireinc.com/evah/contact" class="navbar-brand">Contact</a></li>
+                    
 
                     @if(User.IsInRole("System Administrator")) {
                         <li class="dropdown">

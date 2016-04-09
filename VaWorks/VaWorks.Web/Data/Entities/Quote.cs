@@ -65,6 +65,7 @@ namespace VaWorks.Web.Data.Entities
         [MaxLength(100)]
         public string Title { get; set; }
 
+        [DataType(DataType.Currency)]
         public double Total { get; set; }
 
         public bool IsSent { get; set; }
@@ -102,10 +103,12 @@ namespace VaWorks.Web.Data.Entities
 
         public int Quantity { get; set; }
 
+        [DataType(DataType.Currency)]
         public double PriceEach { get; set; }
 
         public double Discount { get; set; }
 
+        [DataType(DataType.Currency)]
         public double TotalPrice { get; set; }
 
         [ForeignKey("QuoteId")]

@@ -14,6 +14,7 @@ using VaWorks.Web.Mailers;
 
 namespace VaWorks.Web.Controllers
 {
+    [Authorize]
     public class QuotesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -47,6 +48,7 @@ namespace VaWorks.Web.Controllers
 
         }
 
+        [AllowAnonymous]
         public ActionResult ViewQuote(int quoteId)
         {
             var quote = db.Quotes.Find(quoteId);
@@ -60,9 +62,9 @@ namespace VaWorks.Web.Controllers
                 return HttpNotFound();
             }
 
-            if(!quote.IsSent && quote.CreatedById != User.Identity.GetUserId()) {
-                return HttpNotFound();
-            }
+            //if(!quote.IsSent && quote.CreatedById != User.Identity.GetUserId()) {
+            //    return HttpNotFound();
+            //}
 
             return View(quote);
         }
@@ -163,7 +165,7 @@ namespace VaWorks.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Quote quote = db.Quotes.Find(id);
+            Quote quote = db.Quotes.Include("Items").Where(q=> q.QuoteId == id).FirstOrDefault();
             if (quote == null)
             {
                 return HttpNotFound();
@@ -210,7 +212,7 @@ namespace VaWorks.Web.Controllers
             quote.Total = 0;
             foreach (var i in quote.Items) {
                 var dis = org.Discounts.Where(d => d.Quantity >= i.Quantity).OrderBy(d => d.Quantity).FirstOrDefault();
-                double discount = 1;
+                double discount = 0;
                 if (dis != null) {
                     discount = dis.DiscountPercentage / 100;
                 }
