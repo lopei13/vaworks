@@ -2,10 +2,13 @@
 
 <div class="btn-group">
     <h3>Design Standards</h3>
-    <ul>
+    <table>
         @foreach (var d in Model) {
-            <li>@Html.ActionLink(@d.Name, "Download", "Documents", new { documentId = d.DocumentId }, null)</li>
+            <tr>
+            <td style="padding-right: 25px;">@Html.ActionLink(@d.Name, "Download", "Documents", new { documentId = d.DocumentId }, null)</td>
+            <td>@d.Description</td>
+            </tr>
         }
-    </ul>
+    </table>
 </div>
 

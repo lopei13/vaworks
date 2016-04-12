@@ -16,17 +16,13 @@
         @if (User.IsInRole("System Administrator")) {
         <li class=""><a href="#requests" data-toggle="tab" aria-expanded="false">Requests @{Html.RenderAction("PendingRequestsCount", "Invitations");}</a></li>
         <li class=""><a href="#invitations" data-toggle="tab" aria-expanded="false">Invitations @{Html.RenderAction("PendingInvitationsCount", "Invitations");}</a></li>
-        }
+            }
     </ul>
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade in" id="quotes">
             <h4>Quotes</h4>
             <div class="btn-group">
-                @if (User.IsInRole("Sales")) {
-                    @Html.ActionLink("Create Quote", "Create", "Quotes", null, new { @class = "btn btn-link" })
-                } else {
-                    @Html.ActionLink("Select Kit", "Index", "KitSelection", null, new { @class = "btn btn-link" })
-                }
+                @{ Html.RenderAction("CartLink", "ShoppingCartItems", null); }
             </div>
             @{ Html.RenderAction("QuotesGrid", "Quotes");}
         </div>

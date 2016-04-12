@@ -441,6 +441,7 @@
     <Content Include="Views\Kits\SearchResults.cshtml" />
     <Content Include="Views\Kits\SelectResult.cshtml" />
     <Content Include="Views\Kits\KitDetails.cshtml" />
+    <Content Include="Views\ShoppingCartItems\CartLink.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

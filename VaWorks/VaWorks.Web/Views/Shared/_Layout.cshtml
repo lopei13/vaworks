@@ -23,7 +23,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
 
-                    <li><a href="http://vanaireinc.com/evah/contact" class="navbar-brand">Contact</a></li>
+                    <li><a href="http://vanaireinc.com/evah/contact">Contact</a></li>
                     
 
                     @if(User.IsInRole("System Administrator")) {
@@ -57,5 +57,12 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.dropdown-toggle').dropdown();
+        });
+    </script>
+
 </body>
 </html>

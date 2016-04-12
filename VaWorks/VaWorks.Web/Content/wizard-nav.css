@@ -56,11 +56,11 @@
   color: #fff;
 }
 .nav-pills.nav-wizard > li.active .nav-arrow {
-  border-color: transparent transparent transparent #428bca;
+  border-color: transparent transparent transparent #3e648d;
 }
 .nav-pills.nav-wizard > li.active .nav-wedge {
-  border-color: #428bca #428bca #428bca transparent;
+  border-color: #3e648d #3e648d #3e648d transparent;
 }
 .nav-pills.nav-wizard > li.active a {
-  background-color: #428bca;
+  background-color: #3e648d;
 }

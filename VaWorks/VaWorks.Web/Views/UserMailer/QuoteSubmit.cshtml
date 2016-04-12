@@ -3,10 +3,12 @@
 <h2>Quote Submitted</h2>
 <p>A quote has been submitted by a customer.  Please review the quote and follow up with the customer.</p>
 
-<p><a>Quote Number:<b>@Model.QuoteNumber</b></a></p>
+<p><a>Quote Number:<b>@Model.QuoteNumber</b> @if (!string.IsNullOrEmpty(Model.Revision)) {
+    <b>- @Model.Revision</b>;
+}</a></p>
                
 <p class="callout">
-    <a href="@Url.Action("ViewQuote", "Quotes", new { id = Model.QuoteId }, Request.Url.Scheme)">Click here to view quote.</a>
+    <a href="@Url.Action("ViewQuote", "Quotes", new { quoteId = Model.QuoteId }, Request.Url.Scheme)">Click here to view quote.</a>
 </p>
 
        

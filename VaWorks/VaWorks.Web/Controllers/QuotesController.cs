@@ -53,7 +53,7 @@ namespace VaWorks.Web.Controllers
         {
             var quote = db.Quotes.Find(quoteId);
             if (base.Request.UrlReferrer == null || base.Request.UrlReferrer.Host != base.Request.Url.Host) {
-                ViewBag.ReturnUrl = new UrlHelper().Action("Index", "Account");
+                ViewBag.ReturnUrl = new UrlHelper(HttpContext.Request.RequestContext).Action("Index", "Account");
             } else {
                 ViewBag.ReturnUrl = base.Request.UrlReferrer;
             }

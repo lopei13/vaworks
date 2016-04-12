@@ -38,6 +38,13 @@ namespace VaWorks.Web.Controllers
             return View(shoppingCartItems.ToList());
         }
 
+        public ActionResult CartLink()
+        {
+            var id = User.Identity.GetUserId();
+            var count = db.ShoppingCartItems.Where(i => i.UserId == id).Count();
+            return View(count);
+        }
+
         // POST: ShoppingCartItems/UpdateQuantity
         [HttpPost]
         public ActionResult UpdateQuantity(int shoppingCartItemId, int quantity)
@@ -142,7 +149,7 @@ namespace VaWorks.Web.Controllers
                         discount = dis.DiscountPercentage / 100;
                     }
 
-                    quote.Items.Add(new QuoteItem() {
+                    QuoteItem item = new QuoteItem() {
                         Actuator = i.Actuator.ToString(),
                         Valve = i.Valve.ToString(),
                         KitNumber = i.Kit.KitNumber,
@@ -151,12 +158,18 @@ namespace VaWorks.Web.Controllers
                         Quantity = i.Quantity,
                         PriceEach = i.Kit.Price * (1 - discount),
                         TotalPrice = i.Kit.Price * (1 - discount) * i.Quantity
-                    });
+                    };
+
+                    quote.Total += item.TotalPrice;
+                    quote.Items.Add(item);
                 }
             }
 
+
             // clear cart
             db.ShoppingCartItems.RemoveRange(db.ShoppingCartItems.Where(c => c.UserId == userId));
+
+            db.SaveChanges();
 
             IUserMailer mailer = new UserMailer();
 
@@ -182,8 +195,6 @@ namespace VaWorks.Web.Controllers
                 DateSent = DateTimeOffset.Now,
                 Message = message
             });
-
-            
 
             if (sales != null) {
                 db.SystemMessages.Add(new SystemMessage() {

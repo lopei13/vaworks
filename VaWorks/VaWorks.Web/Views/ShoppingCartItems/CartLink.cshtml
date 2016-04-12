@@ -1,0 +1,8 @@
+﻿@model int?
+
+@if (Model == 0) {
+    @Html.ActionLink("Create Quote", "Index", "KitSelection", null, new { @class = "btn btn-link" })
+} else {
+    @Html.ActionLink("Add Kit to Current Quote", "Index", "KitSelection", null, new { @class = "btn btn-link" })
+}
+
