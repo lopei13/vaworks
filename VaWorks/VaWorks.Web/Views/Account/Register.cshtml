@@ -9,13 +9,7 @@
         <h2>Register</h2>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary();
-        <div class="form-group">
-            @Html.LabelFor(m => m.InvitationCode, new { @class = "col-md-2 control-label" })
-            <div class="col-md-2">
-                @Html.TextBoxFor(m => m.InvitationCode, new { @class = "form-control", placeholder = "Invitation Code", type = "text" })
-            </div>
-        </div>
-            <hr />
+        <hr />
 
         <div class="form-group">
             @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })

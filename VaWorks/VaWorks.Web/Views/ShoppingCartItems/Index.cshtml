@@ -6,6 +6,14 @@
 
     <h2>Current quote</h2>
 
+    @if (Model.Count() > 0) {
+        <h3>
+            @if (@Model.ElementAt(0).QuoteNumber != null) {
+                <p>Quote Number @Model.ElementAt(0).QuoteNumber</p>
+            }
+        </h3>}
+
+
     <table class="table">
         <tr>
             <th>

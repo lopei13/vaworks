@@ -5,8 +5,6 @@
 <p>Enter the invitation code below when registering your account.</p>
 
 
-<p><a>Invitation Code:<b>@Model.InvitationCode</b></a></p>
-
 <p class="callout">
-    <a href="@Url.Action("RegisterWithCode", "Account", new { code = Model.InvitationCode }, Request.Url.Scheme)">Click here for registration</a>
+    <a href="@Url.Action("RegisterFromEmail", "Account", new { code = Model.Email }, Request.Url.Scheme)">Click here for registration</a>
 </p>

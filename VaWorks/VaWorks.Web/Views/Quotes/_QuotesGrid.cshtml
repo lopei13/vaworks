@@ -6,7 +6,7 @@
     columns.Add(m => m.Revision).Sortable(true).Filterable(true);
     columns.Add(m => m.Title).Sortable(true).Filterable(true);
     columns.Add(m => m.CreatedByName).Titled("Created By").Sortable(true).Filterable(true);
-    columns.Add(m => m.CreatedDate.Date).Titled("Date").Sortable(true).Filterable(true).Format("{0:MM/dd/yyyy}");
+    columns.Add(m => m.CreatedDate).Titled("Date").Sortable(true).Filterable(true).Format("{0:MM/dd/yyyy hh:mm tt}");
     if (User.IsInRole("Sales")) {
         columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Send", "SendQuote", "Quotes", new { id = m.QuoteId }, null));
     }
@@ -14,5 +14,5 @@
         columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Edit", "Edit", "Quotes", new { id = m.QuoteId }, null));
     }
     columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("View", "ViewQuote", "Quotes", new { quoteId = m.QuoteId }, null));
-    //columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Edit", "EditQuote", "Quotes", new { quoteId = m.QuoteId }, null));
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Edit", "Edit", "Quotes", new { id = m.QuoteId }, null));
 }).WithPaging(50).WithMultipleFilters().Selectable(false)

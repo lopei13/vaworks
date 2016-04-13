@@ -1,5 +1,6 @@
 using Mvc.Mailer;
 using VaWorks.Web.Data.Entities;
+using VaWorks.Web.ViewModels;
 
 namespace VaWorks.Web.Mailers
 {
@@ -13,6 +14,6 @@ namespace VaWorks.Web.Mailers
         MvcMailMessage QuoteSubmit(Quote quote, string eamil);
         MvcMailMessage QuoteUpdated(Quote quote, string email);
         MvcMailMessage PasswordReset(string email, string pw);
-        //MvcMailMessage SubmitValveActuatorRequest(ValveActuatorRequestViewModel model);
+        MvcMailMessage SubmitValveActuatorRequest(ValveActuatorRequestViewModel model, string email);
     }
 }

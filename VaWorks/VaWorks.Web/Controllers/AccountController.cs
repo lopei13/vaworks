@@ -263,10 +263,10 @@ namespace VaWorks.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult RegisterWithCode(string code)
+        public ActionResult RegisterFromEmail(string email)
         {
             RegisterViewModel vm = new RegisterViewModel() {
-                InvitationCode = code
+                Email = email
             };
             return View("Register", vm);
         }
@@ -280,7 +280,7 @@ namespace VaWorks.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var invite = Database.Invitations.Where(i => i.InvitationCode == model.InvitationCode).FirstOrDefault();
+                var invite = Database.Invitations.Where(i => i.Email == model.Email).FirstOrDefault();
 
                 if (invite == null || invite.IsClaimed) {
                     return View("Confirmation", new List<MessageViewModel>() { new MessageViewModel() { AlertType = "Warning", Message = "Invitation code is not valid." } });
@@ -338,6 +338,12 @@ namespace VaWorks.Web.Controllers
                             DateSent = DateTimeOffset.Now,
                             Message = $"{user.Name} from {org.Name} has registered."
                         });
+                    }
+
+                    // let's see if we can add a sales contact right away
+                    var sales = Database.Users.Where(u => u.Email == invite.SalesPersonEmail).FirstOrDefault();
+                    if (sales != null) {
+                        user.Friend(sales);
                     }
 
                     Database.SaveChanges();
@@ -630,6 +636,47 @@ namespace VaWorks.Web.Controllers
                 return Redirect(Url.RouteUrl(new { controller = "Account", action = "Index" }) + "#messages");
             }
             return HttpNotFound();
+        }
+
+        [HttpPost]
+        public ActionResult SubmitComponentRequest(ValveActuatorRequestViewModel viewModel, HttpPostedFileBase file)
+        {
+            var user = Database.Users.Find(User.Identity.GetUserId());
+
+            if (user != null) {
+                viewModel.UserName = user.Name;
+                viewModel.UserEmail = user.Email;
+                viewModel.UserCompany = user.Organization.Name;
+
+                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(Database));
+
+                var admins = from role in roleManager.Roles
+                             where role.Name == "System Administrator"
+                             from u in role.Users
+                             select u.UserId;
+
+                string message = $"{user.Name} has requested a new {viewModel.ValveOrActuator} be added to the system." + 
+                    $"{viewModel.Manufacturer} {viewModel.Model} { viewModel.Size}";
+                IUserMailer mailer = new UserMailer();
+                foreach (var admin in admins) {
+                    Database.SystemMessages.Add(new SystemMessage() {
+                        UserId = admin,
+                        DateSent = DateTimeOffset.Now,
+                        Message = message
+                    });
+
+                    // send the email
+                    var a = Database.Users.Where(u => u.Id == admin).FirstOrDefault();
+
+                    var msg = mailer.SubmitValveActuatorRequest(viewModel, a.Email);
+                    if (file != null) {
+                        msg.Attachments.Add(new System.Net.Mail.Attachment(file.InputStream, file.FileName));
+                    }
+                    msg.Send();
+                }
+            }
+
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

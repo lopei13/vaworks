@@ -105,24 +105,37 @@ namespace VaWorks.Web.Controllers
                 sales = db.Users.Where(u => u.IsSales).FirstOrDefault();
             }
 
-            // get the next quote number
-            var quoteNumber = db.QuoteNumber.OrderByDescending(n => n.Number).FirstOrDefault();
+            
+            var quoteNumber = items.FirstOrDefault().QuoteNumber;
+            var revision = "";
             if (quoteNumber == null) {
-                quoteNumber = new QuoteNumber() {
-                    Number = 20000
-                };
-                db.QuoteNumber.Add(quoteNumber);
-            }
-            quoteNumber.Number += 1;
+                // get the next quote number
+                var e = db.QuoteNumber.OrderByDescending(n => n.Number).FirstOrDefault();
+                if (e == null) {
+                    e = new QuoteNumber() {
+                        Number = 20000
+                    };
+                    db.QuoteNumber.Add(e);
+                }
+                e.Number += 1;
+                db.SaveChanges();
+                quoteNumber = e.Number;
+            } else {
+                // lets get the next rev
+                var d = db.Quotes.Where(q => q.QuoteNumber == quoteNumber).OrderByDescending(q => q.Revision).FirstOrDefault();
 
-            db.SaveChanges();
+                revision = RevManager.Next(d.Revision);
+
+            }
+            
 
             // take the shopping cart and turn it into a quote
             Quote quote = new Quote() {
                 CreatedById = userId,
                 CreatedDate = DateTimeOffset.Now,
                 IsSent = true,
-                QuoteNumber = quoteNumber.Number,
+                QuoteNumber = (int)quoteNumber,
+                Revision = revision,
                 CustomerName = user.Name,
                 CreatedByName = user.Name,
                 CustomerId = user.Id,
@@ -174,7 +187,7 @@ namespace VaWorks.Web.Controllers
             IUserMailer mailer = new UserMailer();
 
             // send a message
-            string message = $"Thank you for submitting quote number {quoteNumber.Number}.  You should receive an email with the quote and drawings attached.  ";
+            string message = $"Thank you for submitting quote number {quoteNumber}.  You should receive an email with the quote and drawings attached.  ";
             if(quote.Items.Any(i => i.PriceEach == 0)) {
                 message += "It looks like some of the items you requested have not been priced yet.  A salesperson will review the items and get back to you.";
             }
@@ -200,7 +213,7 @@ namespace VaWorks.Web.Controllers
                 db.SystemMessages.Add(new SystemMessage() {
                     UserId = sales.Id,
                     DateSent = DateTimeOffset.Now,
-                    Message = $"{user.Name} from {user.Organization.Name} submitted quote number {quoteNumber.Number}.  Please review and get in touch with the customer.  Email: {user.Email}, Phone: {user.PhoneNumber}. "
+                    Message = $"{user.Name} from {user.Organization.Name} submitted quote number {quoteNumber}.  Please review and get in touch with the customer.  Email: {user.Email}, Phone: {user.PhoneNumber}. "
                 });
 
                 var msg2 = mailer.QuoteSubmit(quote, sales.Email);
@@ -219,6 +232,26 @@ namespace VaWorks.Web.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+    }
+
+    public static class RevManager
+    {
+        private static List<string> _revisions = new List<string>() { "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "R", "T", "U", "V", "W", "Y", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AJ", "AK", "AL", "AM", "AN", "AP", "AR", "AT", "AU", "AV", "AW", "AY", "BA", "BB", "BC", "BD", "BE", "BF", "BG", "BH", "BJ", "BK", "BL", "BM", "BN", "BP", "BR", "BT", "BU", "BV", "BW", "BY", "CA", "CB", "CC", "CD", "CE", "CF", "CG", "CH", "CJ", "CK", "CL", "CM", "CN", "CP", "CR", "CT", "CU", "CV", "CW", "CY", "DA", "DB", "DC", "DD", "DE", "DF", "DG", "DH", "DJ", "DK", "DL", "DM", "DN", "DP", "DR", "DT", "DU", "DV", "DW", "DY", "EA", "EB", "EC", "ED", "EE", "EF", "EG", "EH", "EJ", "EK", "EL", "EM", "EN", "EP", "ER", "ET", "EU", "EV", "EW", "EY", "FA", "FB", "FC", "FD", "FE", "FF", "FG", "FH", "FJ", "FK", "FL", "FM", "FN", "FP", "FR", "FT", "FU", "FV", "FW", "FY", "GA", "GB", "GC", "GD", "GE", "GF", "GG", "GH", "GJ", "GK", "GL", "GM", "GN", "GP", "GR", "GT", "GU", "GV", "GW", "GY", "HA", "HB", "HC", "HD", "HE", "HF", "HG", "HH", "HJ", "HK", "HL", "HM", "HN", "HP", "HR", "HT", "HU", "HV", "HW", "HY", "JA", "JB", "JC", "JD", "JE", "JF", "JG", "JH", "JJ", "JK", "JL", "JM", "JN", "JP", "JR", "JT", "JU", "JV", "JW", "JY", "KA", "KB", "KC", "KD", "KE", "KF", "KG", "KH", "KJ", "KK", "KL", "KM", "KN", "KP", "KR", "KT", "KU", "KV", "KW", "KY", "LA", "LB", "LC", "LD", "LE", "LF", "LG", "LH", "LJ", "LK", "LL", "LM", "LN", "LP", "LR", "LT", "LU", "LV", "LW", "LY", "MA", "MB", "MC", "MD", "ME", "MF", "MG", "MH", "MJ", "MK", "ML", "MM", "MN", "MP", "MR", "MT", "MU", "MV", "MW", "MY", "NA", "NB", "NC", "ND", "NE", "NF", "NG", "NH", "NJ", "NK", "NL", "NM", "NN", "NP", "NR", "NT", "NU", "NV", "NW", "NY", "PA", "PB", "PC", "PD", "PE", "PF", "PG", "PH", "PJ", "PK", "PL", "PM", "PN", "PP", "PR", "PT", "PU", "PV", "PW", "PY", "RA", "RB", "RC", "RD", "RE", "RF", "RG", "RH", "RJ", "RK", "RL", "RM", "RN", "RP", "RR", "RT", "RU", "RV", "RW", "RY", "TA", "TB", "TC", "TD", "TE", "TF", "TG", "TH", "TJ", "TK", "TL", "TM", "TN", "TP", "TR", "TT", "TU", "TV", "TW", "TY", "UA", "UB", "UC", "UD", "UE", "UF", "UG", "UH", "UJ", "UK", "UL", "UM", "UN", "UP", "UR", "UT", "UU", "UV", "UW", "UY", "VA", "VB", "VC", "VD", "VE", "VF", "VG", "VH", "VJ", "VK", "VL", "VM", "VN", "VP", "VR", "VT", "VU", "VV", "VW", "VY", "WA", "WB", "WC", "WD", "WE", "WF", "WG", "WH", "WJ", "WK", "WL", "WM", "WN", "WP", "WR", "WT", "WU", "WV", "WW", "WY", "YA", "YB", "YC", "YD", "YE", "YF", "YG", "YH", "YJ", "YK", "YL", "YM", "YN", "YP", "YR", "YT", "YU", "YV", "YW", "YY" };
+
+        public static string Next(string rev)
+        {
+            if (string.IsNullOrEmpty(rev)) {
+                return _revisions[0];
+            }
+
+            int index = _revisions.IndexOf(rev) + 1;
+
+            if (index >= _revisions.Count) {
+                return "Too many revisions";
+            }
+
+            return _revisions[index];
         }
     }
 }

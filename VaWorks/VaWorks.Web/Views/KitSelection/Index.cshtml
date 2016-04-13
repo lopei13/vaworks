@@ -168,63 +168,146 @@
 
             <div class="tab-content">
                 <div id="start" class="tab-pane fade in" ng-class="{'active': currentStep == 1}">
-                    <div class="col-sm-4 well" style="margin: 10px">
-                        <div class="form-horizontal">
-                            <h4>Valve Information</h4>
-                            <div class="form-group">
-                                <label>Manufacturer</label>
-                                <select id="valves" class="form-control" ng-model="selectedValve"
-                                        ng-change="getValveModels()"
-                                        ng-options="v as v for v in valves">
-                                    <option value="">Select Manufacturer</option>
-                                </select>
+                    <div class="row">
+                        <div class="col-sm-4 well" style="margin: 10px">
+                            <div class="form-horizontal">
+                                <h4>Valve Information</h4>
+                                <div class="form-group">
+                                    <label>Manufacturer</label>
+                                    <select id="valves" class="form-control" ng-model="selectedValve"
+                                            ng-change="getValveModels()"
+                                            ng-options="v as v for v in valves">
+                                        <option value="">Select Manufacturer</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Model</label>
+                                    <select id="valvemodels" ng-disabled="!hasValveModels" ng-model="selectedValveModel"
+                                            ng-change="getValveSizes()"
+                                            ng-options="v as v for v in valvemodels" class="form-control">
+                                        <option value="">Select Model</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Size</label>
+                                    <select id="valvesizes" ng-disabled="!hasValveSizes" ng-model="selectedValveSize"
+                                            ng-change="getActuators()"
+                                            ng-options="v as v.Size for v in valvesizes track by v.InterfaceCode" class="form-control">
+                                        <option value="">Select Size</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Model</label>
-                                <select id="valvemodels" ng-disabled="!hasValveModels" ng-model="selectedValveModel"
-                                        ng-change="getValveSizes()"
-                                        ng-options="v as v for v in valvemodels" class="form-control">
-                                    <option value="">Select Model</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Size</label>
-                                <select id="valvesizes" ng-disabled="!hasValveSizes" ng-model="selectedValveSize"
-                                        ng-change="getActuators()"
-                                        ng-options="v as v.Size for v in valvesizes track by v.InterfaceCode" class="form-control">
-                                    <option value="">Select Size</option>
-                                </select>
+                        </div>
+                        <div class="col-sm-4 well" style="margin: 10px">
+                            <div class="form-horizontal">
+                                <h4>Actuator Information</h4>
+                                <div class="form-group">
+                                    <label>Manufacturer</label>
+                                    <select id="actuators" ng-disabled="!hasActuators" ng-model="selectedActuator"
+                                            ng-change="getActuatorModels()"
+                                            ng-options="a as a for a in actuators" class="form-control">
+                                        <option value="">Select Manufacturer</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Model</label>
+                                    <select id="actuatormodels" ng-disabled="!hasActuatorModels" ng-model="selectedActuatorModel"
+                                            ng-change="getActuatorSizes()"
+                                            ng-options="a as a for a in actuatormodels" class="form-control">
+                                        <option value="">Select Model</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Size</label>
+                                    <select id="actuatorsizes" ng-disabled="!hasActuatorSizes" ng-model="selectedActuatorSize"
+                                            ng-change="getMaterials()"
+                                            ng-options="a as a.Size for a in actuatorsizes track by a.InterfaceCode" class="form-control">
+                                        <option value="">Select Size</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4 well" style="margin: 10px">
-                        <div class="form-horizontal">
-                            <h4>Actuator Information</h4>
-                            <div class="form-group">
-                                <label>Manufacturer</label>
-                                <select id="actuators" ng-disabled="!hasActuators" ng-model="selectedActuator"
-                                        ng-change="getActuatorModels()"
-                                        ng-options="a as a for a in actuators" class="form-control">
-                                    <option value="">Select Manufacturer</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Model</label>
-                                <select id="actuatormodels" ng-disabled="!hasActuatorModels" ng-model="selectedActuatorModel"
-                                        ng-change="getActuatorSizes()"
-                                        ng-options="a as a for a in actuatormodels" class="form-control">
-                                    <option value="">Select Model</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Size</label>
-                                <select id="actuatorsizes" ng-disabled="!hasActuatorSizes" ng-model="selectedActuatorSize"
-                                        ng-change="getMaterials()"
-                                        ng-options="a as a.Size for a in actuatorsizes track by a.InterfaceCode" class="form-control">
-                                    <option value="">Select Size</option>
-                                </select>
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">Valve or Actuator is not Listed</button>
+                        </div>
+
+                        <div class="modal fade" id="myModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        <h4 class="modal-title">Request to include Valve or Actuator</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        @using (Html.BeginForm("SubmitComponentRequest", "Account", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" })) {
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="col-lg-2 control-label">Type</label>
+                                                    <div class="col-lg-10">
+                                                        <div class="radio">
+                                                            <label>
+                                                                <input type="radio" name="ValveOrActuator" id="optionsRadios1" value="Valve" checked="" >
+                                                                Valve
+                                                            </label>
+                                                        </div>
+                                                        <div class="radio">
+                                                            <label>
+                                                                <input type="radio" name="ValveOrActuator" id="optionsRadios2" value="Actuator" >
+                                                                Actuator
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.Label("", "Manufacturer", new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        <input type="text" name="Manufacturer" id="Manufacturer"  class="form-control"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.Label("", "Model", new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        <input type="text" name="Model"  class="form-control"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.Label("", "Size", new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        <input type="text" name="Size"  class="form-control"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.Label("", "Notes", new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        <textarea type="text" name="Notes" class="form-control"></textarea>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.Label("", "File", new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        <input type="file" name="file" id="file" class="form-control"/>
+                                                    </div>
+                                                </div>
+
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                <input type="submit" value="Submit" class="btn btn-primary"/>
+                                            </div>
+
+                                        }
+                                        <div class="modal-footer">
+                                            <p>A message will be sent to the engineering department to review your request.</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 

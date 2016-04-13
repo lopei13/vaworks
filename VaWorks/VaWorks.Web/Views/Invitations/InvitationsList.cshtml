@@ -7,7 +7,6 @@
 @using GridMvc.Html
 @Html.Grid(Model).Columns(columns => {
 columns.Add(m => m.Company).Titled("Company").Sortable(true);
-columns.Add(m => m.InvitationCode).Titled("Invitation Code");
 columns.Add(m => m.Email).Titled("Email").Sortable(true);
 columns.Add(m => m.CreatedDate).Titled("Sent Date").Sortable(true).RenderValueAs(m => m.CreatedDate.Date.ToShortDateString());
 columns.Add(m => m.IsClaimed).Titled("Claimed").Sortable(true);

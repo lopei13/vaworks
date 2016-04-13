@@ -23,6 +23,10 @@ namespace VaWorks.Web.Data.Entities
 
         public int Quantity { get; set; }
 
+        public int? QuoteNumber { get; set; }
+
+        public string Revision { get; set; }
+
         [ForeignKey("KitId")]
         public virtual Kit Kit { get; set; }
 

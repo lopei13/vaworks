@@ -65,10 +65,6 @@ namespace VaWorks.Web.ViewModels
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name = "Invitation Code")]
-        public string InvitationCode { get; set; }
-
-        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -124,17 +120,16 @@ namespace VaWorks.Web.ViewModels
     public class InvitationViewModel
     {
         [Required]
-        [Display(Name = "Invitation Code")]
-        [StringLength(25)]
-        public string InvitationCode { get; set; }
-
-        [Required]
         [Display(Name = "Organization")]
         public int OrganizationId { get; set; }
 
         [Required]
         [DataType(DataType.MultilineText)]
         public string Emails { get; set; }
+
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "Sales Person Email")]
+        public string SalesPersonEmail { get; set; }
 
         [Required]
         public InvitationType Type { get; set; }
@@ -169,5 +164,21 @@ namespace VaWorks.Web.ViewModels
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+    }
+
+    public class ValveActuatorRequestViewModel
+    {
+        public string Manufacturer { get; set; }
+        public string Model { get; set; }
+        public string Size { get; set; }
+        public string Notes { get; set; }
+        public string ValveOrActuator { get; set; }
+        public string UserName { get; set; }
+        public string UserEmail { get; set; }
+        public string UserPhone { get; set; }
+        public string UserCompany { get; set; }
+        public string UserLocation { get; set; }
+        public string SalesEmail { get; set; }
+        public string SalesName { get; set; }
     }
 }

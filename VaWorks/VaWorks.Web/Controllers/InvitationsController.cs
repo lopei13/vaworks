@@ -137,7 +137,7 @@ namespace VaWorks.Web.Controllers
                     Invitation invite = new Invitation() {
                         CreatedDate = DateTimeOffset.Now,
                         Email = email.Trim(),
-                        InvitationCode = invitation.InvitationCode,
+                        SalesPersonEmail = invitation.SalesPersonEmail,
                         Company = org.Name,
                         OrganizationId = invitation.OrganizationId,
                         Type = invitation.Type

@@ -22,8 +22,8 @@ namespace VaWorks.Web.Controllers
         // GET: Quotes
         public ActionResult Index()
         {
-            var quotes = db.Quotes.Include(q => q.CreatedBy);
-            return View(quotes.ToList());
+            var quotes = db.Quotes.Include(q => q.CreatedBy).OrderByDescending(q => q.CreatedDate);
+            return View(quotes);
         }
 
         public ActionResult QuotesGrid()
@@ -39,7 +39,7 @@ namespace VaWorks.Web.Controllers
                 (users.Contains(q.CustomerId) && q.IsSent) ||
                 users.Contains(q.CreatedById) ||
                 contacts.Contains(q.CreatedById) ||
-                (q.CustomerId == userId && q.IsSent)).OrderByDescending(q => q.QuoteNumber);
+                (q.CustomerId == userId && q.IsSent)).OrderByDescending(q => q.CreatedDate);
 
                 return PartialView("_QuotesGrid", quotes);
             } else {
@@ -180,17 +180,34 @@ namespace VaWorks.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Quote quote)
+        public ActionResult EditConfirm(int quoteId)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(quote).State = EntityState.Modified;
+            var userId = User.Identity.GetUserId();
+            
+            var quote = db.Quotes.Include("Items").Where(q => q.QuoteId == quoteId).FirstOrDefault();
+
+            if(quote != null) {
+                // add all of these items to the users current shopping cart
+                db.ShoppingCartItems.RemoveRange(db.ShoppingCartItems.Where(i => i.UserId == userId));
+
+                foreach(var i in quote.Items) {
+                    var kit = db.Kits.Where(k => k.KitNumber == i.KitNumber).FirstOrDefault();
+                    var valve = db.Valves.Where(v => v.Manufacturer + " " + v.Model + " " + v.Size == i.Valve).FirstOrDefault();
+                    var actuator = db.Actuators.Where(a => a.Manufacturer + " " + a.Model + " " + a.Size == i.Actuator).FirstOrDefault();
+
+                    db.ShoppingCartItems.Add(new ShoppingCartItems() {
+                        UserId = userId,
+                        Actuator = actuator,
+                        Valve = valve,
+                        Kit = kit,
+                        QuoteNumber = quote.QuoteNumber,
+                        Quantity = i.Quantity
+                    });
+                }
                 db.SaveChanges();
-                return Edit(quote.QuoteId);
             }
-            // populate the organizations
-            // set the user
-            return View(quote);
+
+            return RedirectToAction("Index", "ShoppingCartItems", null);
         }
 
         public ActionResult AddItem(int quoteId)

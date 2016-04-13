@@ -1,4 +1,4 @@
-@model VaWorks.Web.Models.ValveActuatorRequestViewModel
+@model VaWorks.Web.ViewModels.ValveActuatorRequestViewModel
 <h2>@Model.ValveOrActuator Request</h2>
 <p>A user has request a @Model.ValveOrActuator be added to the database.</p>
 
@@ -14,10 +14,7 @@
 <p><a>Size:<b>@Model.Size</b></a></p>
 <p><a>Notes:<b>@Model.Notes</b></a></p>
 
-<h3>Sales Person</h3>
-<p><a>Sales Person:<b>@Model.SalesName</b></a></p>
-<p><a>Sales Email:<b>@Model.SalesEmail</b></a></p>
 
 <p class="callout">
-    You are receiving this message because either you are the system administrator or you are the sales person.
+    You are receiving this message because either you are the system administrator.
 </p>

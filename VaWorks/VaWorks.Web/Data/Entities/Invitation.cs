@@ -22,11 +22,6 @@ namespace VaWorks.Web.Data.Entities
         [Required]
         public int OrganizationId { get; set; }
 
-        [Required]
-        [Display(Name = "Invitation Code")]
-        [StringLength(25)]
-        public string InvitationCode { get; set; }
-
         [StringLength(50)]
         public string Name { get; set; }
 
@@ -37,6 +32,10 @@ namespace VaWorks.Web.Data.Entities
         [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        public string SalesPersonEmail { get; set; }
 
         [Required]
         public InvitationType Type { get; set; }

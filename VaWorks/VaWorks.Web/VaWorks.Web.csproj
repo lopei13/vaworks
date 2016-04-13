@@ -406,7 +406,7 @@
     <Content Include="Views\Quotes\Create.cshtml" />
     <Content Include="Views\Quotes\Delete.cshtml" />
     <Content Include="Views\Quotes\Details.cshtml" />
-    <Content Include="Views\Quotes\Edit.cshtml" />
+    <Content Include="Views\Quotes\Edit3.cshtml" />
     <Content Include="Views\Quotes\Index.cshtml" />
     <Content Include="Views\Quotes\ViewQuote.cshtml" />
     <Content Include="Views\Quotes\QuoteItemEdit.cshtml" />
@@ -442,6 +442,7 @@
     <Content Include="Views\Kits\SelectResult.cshtml" />
     <Content Include="Views\Kits\KitDetails.cshtml" />
     <Content Include="Views\ShoppingCartItems\CartLink.cshtml" />
+    <Content Include="Views\Quotes\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

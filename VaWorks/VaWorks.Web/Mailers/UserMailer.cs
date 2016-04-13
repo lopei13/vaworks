@@ -1,5 +1,6 @@
 using Mvc.Mailer;
 using VaWorks.Web.Data.Entities;
+using VaWorks.Web.ViewModels;
 
 namespace VaWorks.Web.Mailers
 { 
@@ -102,21 +103,15 @@ namespace VaWorks.Web.Mailers
             });
         }
 
-        //public MvcMailMessage SubmitValveActuatorRequest(ValveActuatorRequestViewModel model)
-        //{
-        //    ViewData = new System.Web.Mvc.ViewDataDictionary(model);
+        public MvcMailMessage SubmitValveActuatorRequest(ValveActuatorRequestViewModel model, string email)
+        {
+            ViewData = new System.Web.Mvc.ViewDataDictionary(model);
 
-        //    return Populate(x =>
-        //    {
-        //        x.Subject = "VaWorks Component Request from " + model.UserName;
-        //        x.ViewName = "SubmitValveActuatorRequest";
-        //        x.To.Add("tlambert@vanaireinc.com");
-        //        if(!string.IsNullOrEmpty(model.SalesEmail))
-        //        {
-        //            x.To.Add(model.SalesEmail);
-        //        }
-
-        //    });
-        //}
- 	}
+            return Populate(x => {
+                x.Subject = "VaWorks Component Request from " + model.UserName;
+                x.ViewName = "SubmitValveActuatorRequest";
+                x.To.Add(email);
+            });
+        }
+    }
 }
