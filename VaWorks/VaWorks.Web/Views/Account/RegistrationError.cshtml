@@ -1,0 +1,26 @@
+﻿@model IEnumerable<VaWorks.Web.ViewModels.MessageViewModel>
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Back", "Index", "Account", null, new { @class = "btn btn-link" })
+</p>
+
+<ul>
+    @foreach (var item in Model) {
+        if (item.AlertType == "Success") {
+            <li class="alert alert-success">@item.Message</li>
+        }
+        if (item.AlertType == "Warning") {
+            <li class="alert alert-warning">@item.Message</li>
+        }
+        if (item.AlertType == "Danger") {
+            <li class="alert alert-danger">@item.Message</li>
+        }
+        if (item.AlertType == "Info") {
+            <li class="alert alert-info">@item.Message</li>
+        }
+    }
+</ul>
+
+@Html.ActionLink("Request Access", "RequestAccess")

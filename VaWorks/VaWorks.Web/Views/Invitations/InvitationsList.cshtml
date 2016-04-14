@@ -1,5 +1,11 @@
 ﻿@model IEnumerable<VaWorks.Web.Data.Entities.Invitation>
 
+@{
+    ViewBag.Title = "VaWorks";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<h2>Invitations</h2>
 <p>
     @Html.ActionLink("Create New Invite", "Create") | @Html.ActionLink("Delete All", "DeleteInvitations")
 </p>
@@ -11,6 +17,19 @@ columns.Add(m => m.Email).Titled("Email").Sortable(true);
 columns.Add(m => m.CreatedDate).Titled("Sent Date").Sortable(true).RenderValueAs(m => m.CreatedDate.Date.ToShortDateString());
 columns.Add(m => m.IsClaimed).Titled("Claimed").Sortable(true);
 columns.Add(m => m.ClaimedDate).Titled("Claimed Date").Sortable(true).RenderValueAs(m => m.ClaimedDate.Date.ToShortDateString());
-columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<form action = "Invitations/ResendInvitation" method = "post" >@if(!m.IsClaimed) {<input type = "hidden" value = "@m.InvitationId" name = "id" /> <input type = "submit" value = "Resend" class="btn btn-link"/>}</form>);
-columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<form action="Invitations/DeleteInvitation" method="post"><input type="hidden" value="@m.InvitationId" name="id"/> <input type="submit" value="Delete" class="btn btn-link" /></form>);
+columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<form action = "ResendInvitation" method = "post" >@if(!m.IsClaimed) {<input type = "hidden" value = "@m.InvitationId" name = "id" /> <input type = "submit" value = "Resend" class="btn btn-link"/>}</form>);
+columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<form action="DeleteInvitation" method="post"><input type="hidden" value="@m.InvitationId" name="id"/> <input type="submit" value="Delete" class="btn btn-link" /></form>);
 }).WithPaging(50)
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/gridmvc.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js" type="text/javascript"></script>
+}
+
+@section styles{
+    <link href="~/Content/Gridmvc.css" rel="stylesheet">
+    <link href="~/Content/gridmvc.datepicker.css" rel="stylesheet">
+    <link href="~/Content/tree.css" rel="stylesheet" />
+}

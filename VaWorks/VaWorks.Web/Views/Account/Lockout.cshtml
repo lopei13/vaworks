@@ -1,0 +1,11 @@
+﻿@model VaWorks.Web.Data.Entities.ApplicationUser
+
+<h2>Lock out @Model.Name</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => Model.Id)
+    <input type="submit" class="btn btn-primary" value="Lockout" />
+}
+
+<p style="margin-top: 25px;">@Html.ActionLink("Cancel", "Index", "Users")</p>

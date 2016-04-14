@@ -11,6 +11,7 @@
     columns.Add(m => m.Name).Sortable(true).Filterable(true);
     columns.Add(m => m.Organization.Name).Sortable(true).Filterable(true).Titled("Organization");
     columns.Add(m => m.Email).Sortable(true).Filterable(true);
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => m.LockoutEndDateUtc == null ? Html.ActionLink("Lockout", "Lockout", "Account", new { userId = m.Id }, null) : Html.ActionLink("Unlock", "Unlock", "Account", new { userId = m.Id }, null));
 }).WithPaging(50).WithMultipleFilters().Selectable(false)
 
 @section styles{

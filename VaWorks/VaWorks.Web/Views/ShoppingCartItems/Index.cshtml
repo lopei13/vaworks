@@ -54,11 +54,11 @@
             </td>
             <td>
                 <div class="form-inline">
-                    @using (Html.BeginForm("UpdateQuantity", "ShoppingCartItems", FormMethod.Post)) {
+                    @using (Html.BeginForm("UpdateQuantity", "ShoppingCartItems", FormMethod.Post, new { id = "myForm" + item.ShoppingCartItemId })) {
                     <input type="hidden" value="@item.ShoppingCartItemId" name="shoppingCartItemId" />
                     <div class="form-group">
-                        <input type="number" value="@item.Quantity" class="form-control" name="quantity" style="width: 100px;" />
-                        <input value="Update" type="submit" class="btn btn-link" />
+                        <input type="number" value="@item.Quantity" class="form-control" name="quantity" style="width: 100px;" onchange="submit(@item.ShoppingCartItemId)" />
+                        @*<input value="Update" type="submit" class="btn btn-link" />*@
                     </div>
                     }
                 </div>
@@ -86,7 +86,7 @@
         <p>
             <div class="form-inline">
                 @using(Html.BeginForm("SubmitQuote", "ShoppingCartItems")){
-                <input id="title" class="form-control" type="text" name="title" placeholder="Title" />
+                <input id="title" class="form-control" type="text" name="title" placeholder="Title (Required)" />
                 <input id="submitButton" class="btn btn-default" type="submit" value="Submit Quote" />
                 }
 
@@ -103,6 +103,10 @@
                 $('#submitButton').prop('disabled', this.value == "" ? true : false);
             })
         });
+
+        function submit(id){
+            document.getElementById("myForm" + id).submit();
+        }
     </script>
     
     }

@@ -135,6 +135,7 @@ namespace VaWorks.Web.Controllers
                 CreatedDate = DateTimeOffset.Now,
                 IsSent = true,
                 QuoteNumber = (int)quoteNumber,
+                OrganizationId = org.OrganizationId,
                 Revision = revision,
                 CustomerName = user.Name,
                 CreatedByName = user.Name,

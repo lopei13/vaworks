@@ -1,0 +1,25 @@
+﻿@{ 
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "VaWorks";
+}
+
+
+<h2>@{Html.RenderAction("GetName", "Account", null); }</h2>
+<h4 class="text-muted organization">@{Html.RenderAction("GetOrganizationName", "Account", null); }</h4>
+
+<ul class="nav nav-tabs">
+    <li>@Html.ActionLink("Profile", "Index", "Account")</li>
+    <li>@Html.ActionLink("My Quotes", "MyQuotes", "Account")</li>
+    <li>@Html.ActionLink("Company Quotes", "CompanyQuotes", "Account")</li>
+    <li>@Html.ActionLink("Contacts", "MyContacts", "Connections")</li>
+    <li><a href="@Url.Action("MyMessages", "Account")">Messages @{Html.RenderAction("GetNewMessageCount", "Account");}</a></li>
+    @if (User.IsInRole("System Administrator")) {
+        <li class=""><a href="@Url.Action("InvitationRequestsList", "Invitations")">Requests @{Html.RenderAction("PendingRequestsCount", "Invitations");}</a></li>
+        <li class=""><a href="@Url.Action("InvitationsList", "Invitations")">Invitations @{Html.RenderAction("PendingInvitationsCount", "Invitations");}</a></li>
+            }
+</ul>
+
+@RenderBody()
+
+@RenderSection("Styles", false)
+@RenderSection("Scripts", false)

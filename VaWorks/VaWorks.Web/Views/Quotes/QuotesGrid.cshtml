@@ -1,13 +1,14 @@
 ﻿@model IEnumerable<VaWorks.Web.Data.Entities.Quote>
 
-@{
-    ViewBag.Title = "All Quotes";
+@{ 
+    ViewBag.Title = "VaWorks";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
 }
 
 <h2>Quotes</h2>
 
 @using GridMvc.Html;
-@Html.Grid(Model).Columns(columns => {
+    @Html.Grid(Model).Columns(columns => {
     columns.Add(m => m.QuoteNumber).Sortable(true).Filterable(true);
     columns.Add(m => m.Revision).Sortable(true).Filterable(true);
     columns.Add(m => m.Title).Sortable(true).Filterable(true);
@@ -23,7 +24,7 @@
 
     <script src="~/Scripts/gridmvc.min.js" type="text/javascript"></script>
     <script src="~/Scripts/bootstrap-datepicker.js" type="text/javascript"></script>
-}
+    }
 
 @section styles{
     <link href="~/Content/Gridmvc.css" rel="stylesheet">

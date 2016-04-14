@@ -23,6 +23,8 @@ namespace VaWorks.Web.Data.Entities
 
         public string CustomerId { get; set; }
 
+        public int OrganizationId { get; set; }
+
         [Required]
         public int QuoteNumber { get; set; }
 

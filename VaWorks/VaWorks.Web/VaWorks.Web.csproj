@@ -380,7 +380,7 @@
     <Content Include="Views\Connections\Delete.cshtml" />
     <Content Include="Views\Connections\Details.cshtml" />
     <Content Include="Views\Connections\Edit.cshtml" />
-    <Content Include="Views\Connections\Index.cshtml" />
+    <Content Include="Views\Connections\MyContacts.cshtml" />
     <Content Include="Views\Connections\Search.cshtml" />
     <Content Include="Views\Shared\Message.cshtml" />
     <Content Include="Views\Documents\Create.cshtml" />
@@ -419,7 +419,7 @@
     <Content Include="Views\Quotes\Edit2.cshtml" />
     <Content Include="Views\Quotes\AddItem.cshtml" />
     <Content Include="Views\Quotes\SendQuote.cshtml" />
-    <Content Include="Views\Quotes\_QuotesGrid.cshtml" />
+    <Content Include="Views\Quotes\QuotesGrid.cshtml" />
     <Content Include="Views\Kits\UploadThumbnails.cshtml" />
     <Content Include="Views\Kits\UploadDrawings.cshtml" />
     <Content Include="Views\UserMailer\Invitation.cshtml" />
@@ -445,6 +445,11 @@
     <Content Include="Views\ShoppingCartItems\CartLink.cshtml" />
     <Content Include="Views\Quotes\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Shared\_AccountLayout.cshtml" />
+    <Content Include="Views\Account\MyMessages.cshtml" />
+    <Content Include="Views\Account\RegistrationError.cshtml" />
+    <Content Include="Views\Account\Unlock.cshtml" />
+    <Content Include="Views\Account\Lockout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

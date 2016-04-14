@@ -37,7 +37,7 @@ namespace VaWorks.Web.Data.Entities
 
         public override string ToString()
         {
-            return $"{Manufacturer} {Model} {Size}";
+            return $"{Size}IN {Manufacturer} {Model}";
         }
     }
 

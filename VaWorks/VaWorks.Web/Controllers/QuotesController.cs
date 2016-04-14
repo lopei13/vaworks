@@ -26,37 +26,37 @@ namespace VaWorks.Web.Controllers
             return View(quotes);
         }
 
-        public ActionResult QuotesGrid()
+        public ActionResult CompanyQuotes()
         {
             var userId = User.Identity.GetUserId();
-            
+
             var user = db.Users.Where(u => u.Id == userId).FirstOrDefault();
             if (user.Organization != null) {
-                var users = user.Organization.GetAllUsers().Select(o => o.Id);
+                var orgs = user.Organization.GetAllOrganizations().Select(o => o.OrganizationId);
                 var contacts = user.Contacts.Select(c => c.Id);
 
-                var quotes = db.Quotes.Where(q => q.CreatedById == userId ||
-                (users.Contains(q.CustomerId) && q.IsSent) ||
-                users.Contains(q.CreatedById) ||
-                contacts.Contains(q.CreatedById) ||
-                (q.CustomerId == userId && q.IsSent)).OrderByDescending(q => q.CreatedDate);
+                var quotes = db.Quotes.Where(q => orgs.Contains(q.OrganizationId)).OrderByDescending(q => q.CreatedDate);
 
-                return PartialView("_QuotesGrid", quotes);
+                return View("QuotesGrid", quotes);
             } else {
-                return PartialView("_QuoteGrid", new List<Quote>());
+                return View("QuotesGrid", new List<Quote>());
             }
+        }
 
+        public ActionResult MyQuotes()
+        {
+            var userId = User.Identity.GetUserId();
+            var quotes = db.Quotes.Where(q => q.CreatedById == userId).OrderByDescending(q => q.CreatedDate);
+            return View("QuotesGrid", quotes);
         }
 
         [AllowAnonymous]
         public ActionResult ViewQuote(int quoteId)
         {
             var quote = db.Quotes.Find(quoteId);
-            if (base.Request.UrlReferrer == null || base.Request.UrlReferrer.Host != base.Request.Url.Host) {
-                ViewBag.ReturnUrl = new UrlHelper(HttpContext.Request.RequestContext).Action("Index", "Account");
-            } else {
-                ViewBag.ReturnUrl = base.Request.UrlReferrer;
-            }
+
+            ViewBag.ReturnUrl = new UrlHelper(HttpContext.Request.RequestContext).Action("MyQuotes", "Quotes");
+ 
 
             if(quote == null) {
                 return HttpNotFound();

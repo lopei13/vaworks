@@ -78,6 +78,16 @@ namespace VaWorks.Web.Controllers
             return View(user);
         }
 
+        public ActionResult MyQuotes()
+        {
+            return RedirectToAction("MyQuotes", "Quotes", null);
+        }
+
+        public ActionResult CompanyQuotes()
+        {
+            return RedirectToAction("CompanyQuotes", "Quotes", null);
+        }
+
         public ActionResult Menu()
         {
             if(User.IsInRole("System Administrator")) {
@@ -85,6 +95,48 @@ namespace VaWorks.Web.Controllers
             }
 
             return View("_Menu");
+        }
+
+        [Authorize(Roles = "System Administrator")]
+        public ActionResult Lockout(string userId)
+        {
+            var user = Database.Users.Where(u => u.Id == userId).FirstOrDefault();
+            if (user.LockoutEnabled) {
+                return View(user);
+            } else {
+                ViewBag.Heading = "Error";
+                ViewBag.Message = $"You cannot lock out {user.Name}.";
+                return View("Message");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Lockout")]
+        public ActionResult LockoutConfirmed(string userId)
+        {
+            var user = Database.Users.Where(u => u.Id == userId).FirstOrDefault();
+            user.LockoutEndDateUtc = DateTime.Now.AddYears(100);
+            Database.SaveChanges();
+            return RedirectToAction("Index", "Users", null);
+        }
+
+        [Authorize(Roles = "System Administrator")]
+        public ActionResult Unlock(string userId)
+        {
+            var user = Database.Users.Where(u => u.Id == userId).FirstOrDefault();
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Unlock")]
+        public ActionResult UnlockConfirmed(string userId)
+        {
+            var user = Database.Users.Where(u => u.Id == userId).FirstOrDefault();
+            user.LockoutEndDateUtc = null;
+            Database.SaveChanges();
+            return RedirectToAction("Index", "Users", null);
         }
 
         [HttpPost]
@@ -283,7 +335,7 @@ namespace VaWorks.Web.Controllers
                 var invite = Database.Invitations.Where(i => i.Email == model.Email).FirstOrDefault();
 
                 if (invite == null || invite.IsClaimed) {
-                    return View("Confirmation", new List<MessageViewModel>() { new MessageViewModel() { AlertType = "Warning", Message = $"Please request an invitation for {model.Email}." } });
+                    return View("Confirmation", new List<MessageViewModel>() { new MessageViewModel() { AlertType = "Warning", Message = $"You must request access before registering.  Please request an invitation for {model.Email}." } });
                 }
 
                 var user = new ApplicationUser {
@@ -609,6 +661,13 @@ namespace VaWorks.Web.Controllers
             return Json(org, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult MyMessages()
+        {
+            var userId = User.Identity.GetUserId();
+            var msgs = Database.SystemMessages.Where(m => m.UserId == userId);
+            return View(msgs);
+        }
+
         [HttpPost]
         public ActionResult MarkMessageAsRead(int messageId)
         {
@@ -621,7 +680,7 @@ namespace VaWorks.Web.Controllers
                 message.IsRead = true;
                 message.DateRead = DateTimeOffset.Now;
                 Database.SaveChanges();
-                return Redirect(Url.RouteUrl(new { controller = "Account", action = "Index" }) + "#messages");
+                return RedirectToAction("MyMessages");
             }
             return HttpNotFound();
         }
@@ -637,7 +696,7 @@ namespace VaWorks.Web.Controllers
             if (message != null) {
                 Database.SystemMessages.Remove(message);
                 Database.SaveChanges();
-                return Redirect(Url.RouteUrl(new { controller = "Account", action = "Index" }) + "#messages");
+                return RedirectToAction("MyMessages");
             }
             return HttpNotFound();
         }
@@ -681,6 +740,20 @@ namespace VaWorks.Web.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        public ActionResult GetName()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = Database.Users.Find(userId);
+            return Content(user.Name);
+        }
+
+        public ActionResult GetOrganizationName()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = Database.Users.Find(userId);
+            return Content(user.Organization.Name);
         }
 
         protected override void Dispose(bool disposing)

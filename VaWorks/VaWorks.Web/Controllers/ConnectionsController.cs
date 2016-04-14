@@ -18,6 +18,12 @@ namespace VaWorks.Web.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        public ActionResult MyContacts()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = db.Users.Include("Contacts").Where(u => u.Id == userId).FirstOrDefault();
+            return View(user.Contacts);
+        }
 
         public ActionResult Search(string email)
         {

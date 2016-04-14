@@ -58,6 +58,20 @@ namespace VaWorks.Web.Controllers
         }
 
         [HttpPost]
+        public ActionResult DeleteRequest(int id)
+        {
+            var request = db.InvitationRequests.Find(id);
+            if (request != null) {
+                db.InvitationRequests.Remove(request);
+                db.SaveChanges();
+                AddSuccess("Invitation Reqeust deleted.");
+            } else {
+                AddDanger("Invitation Request not found.");
+            }
+            return Confirmation();
+        }
+
+        [HttpPost]
         public ActionResult DeleteInvitation(int id)
         {
             var invite = db.Invitations.Find(id);

@@ -1,5 +1,11 @@
 ﻿@model IEnumerable<VaWorks.Web.Data.Entities.InvitationRequest>
 
+@{
+    ViewBag.Title = "VaWorks";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<h2>Invitation Requests</h2>
 
 @using GridMvc.Html
 @Html.Grid(Model).Columns(columns => {
@@ -9,5 +15,18 @@
     columns.Add(m => m.RequestDate).Titled("Request Date").Sortable(true).RenderValueAs(m => m.RequestDate.Date.ToShortDateString());
     columns.Add(m => m.Status).Titled("Request Status").Sortable(true);
     columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Grant", "AcceptRequest", new { id = m.InvitationRequestId }));
-    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Reject", "RejectRequest", new { id = m.InvitationRequestId }));
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<form action="DeleteRequest" method="post"><input type="hidden" value="@m.InvitationRequestId" name="id" /> <input type="submit" value="Delete" class="btn btn-link" /></form>);
 }).WithPaging(50)
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/gridmvc.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js" type="text/javascript"></script>
+}
+
+@section styles{
+    <link href="~/Content/Gridmvc.css" rel="stylesheet">
+    <link href="~/Content/gridmvc.datepicker.css" rel="stylesheet">
+    <link href="~/Content/tree.css" rel="stylesheet" />
+}
