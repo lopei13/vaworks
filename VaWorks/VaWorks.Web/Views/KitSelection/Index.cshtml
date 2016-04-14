@@ -324,11 +324,9 @@
                                     <option value="">Select Material</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                @{ Html.RenderAction("LinkedDocuments", "Documents", new { organizationId = Model }); }
-                            </div>
                         </div>
                     </div>
+                    @{ Html.RenderAction("LinkedDocuments", "Documents", new { organizationId = Model }); }
                 </div>
 
                 <div id="options" class="tab-pane fade in" ng-class="{active: currentStep == 3}">

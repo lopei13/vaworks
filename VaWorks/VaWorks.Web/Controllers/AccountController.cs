@@ -283,7 +283,7 @@ namespace VaWorks.Web.Controllers
                 var invite = Database.Invitations.Where(i => i.Email == model.Email).FirstOrDefault();
 
                 if (invite == null || invite.IsClaimed) {
-                    return View("Confirmation", new List<MessageViewModel>() { new MessageViewModel() { AlertType = "Warning", Message = "Invitation code is not valid." } });
+                    return View("Confirmation", new List<MessageViewModel>() { new MessageViewModel() { AlertType = "Warning", Message = $"Please request an invitation for {model.Email}." } });
                 }
 
                 var user = new ApplicationUser {
@@ -341,9 +341,13 @@ namespace VaWorks.Web.Controllers
                     }
 
                     // let's see if we can add a sales contact right away
-                    var sales = Database.Users.Where(u => u.Email == invite.SalesPersonEmail).FirstOrDefault();
-                    if (sales != null) {
-                        user.Friend(sales);
+                    if (invite.Email != invite.SalesPersonEmail) {
+                        var sales = Database.Users.Where(u => u.Email == invite.SalesPersonEmail).FirstOrDefault();
+                        if (sales != null) {
+                            Database.Entry(sales).Collection("Contacts").Load();
+                            Database.Entry(user).Collection("Contacts").Load();
+                            user.Friend(sales);
+                        }
                     }
 
                     Database.SaveChanges();

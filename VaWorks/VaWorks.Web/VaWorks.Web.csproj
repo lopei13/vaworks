@@ -200,6 +200,7 @@
     <Compile Include="Controllers\OrganizationsController.cs" />
     <Compile Include="Controllers\QuotesController.cs" />
     <Compile Include="Controllers\ShoppingCartItemsController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValvesController.cs" />
     <Compile Include="Data\ApplicationDataContext.cs" />
     <Compile Include="Data\DataReaders\CSVReader.cs" />
@@ -443,6 +444,7 @@
     <Content Include="Views\Kits\KitDetails.cshtml" />
     <Content Include="Views\ShoppingCartItems\CartLink.cshtml" />
     <Content Include="Views\Quotes\Edit.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -13,6 +13,11 @@ namespace VaWorks.Web.Data.Entities
 {
     public class ApplicationUser : IdentityUser
     {
+        public ApplicationUser()
+        {
+            Contacts = new HashSet<ApplicationUser>();
+        }
+
         public int? OrganizationId { get; set; }
 
         [MaxLength(100)]
