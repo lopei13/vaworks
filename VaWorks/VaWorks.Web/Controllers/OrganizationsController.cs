@@ -91,23 +91,26 @@ namespace VaWorks.Web.Controllers
             if (ModelState.IsValid)
             {
                 // check to see if we are trying to move the item down the tree
-                Stack<Organization> stack = new Stack<Organization>();
-                stack.Push(Organization);
+                var org = db.Organizations.Include("Children").Where(o => o.OrganizationId == Organization.OrganizationId).FirstOrDefault();
 
-                while(stack.Any()) {
-                    var next = stack.Pop();
+                var ids = org.GetAllOrganizations().Select(o => o.OrganizationId);
 
-                    if(next.ParentId == Organization.OrganizationId) {
-                        ViewBag.Error = "You cannot move an organization to a decendant.";
-                        PopulateDropDown(Organization.ParentId);
-                        return View(Organization);
-                    }
-                    foreach (var c in db.Organizations.Where(b => b.ParentId == next.OrganizationId)) {
-                        stack.Push(c);
-                    }
+                if (ids.Contains((int)Organization.ParentId)) {
+                    ViewBag.Error = "You cannot move an organization to a decendant.";
+                    PopulateDropDown(Organization.ParentId);
+                    return View("Details", org);
                 }
 
-                db.Entry(Organization).State = EntityState.Modified;
+                org.ParentId = Organization.ParentId;
+                org.Address1 = Organization.Address1;
+                org.Address2 = Organization.Address2;
+                org.City = Organization.City;
+                org.State = Organization.State;
+                org.PostalCode = Organization.PostalCode;
+                org.Country = Organization.Country;
+                org.Description = Organization.Description;
+                org.Name = Organization.Name;
+                
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
