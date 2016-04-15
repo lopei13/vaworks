@@ -1,9 +1,7 @@
 ﻿@model VaWorks.Web.Data.Entities.Invitation
 
 <h2>Your Invitation!</h2>
-<p>You have been granted access to VanAire's online pricing guide. View thousands of available kits and share quotes across your company.</p>
-<p>Enter the invitation code below when registering your account.</p>
-
+<p>This online guide provides easy access to VanAire kit numbers, prices, drawings, and engineering standards for your company’s predefined standard combinations.</p>
 
 <p class="callout">
     <a href="@Url.Action("RegisterFromEmail", "Account", new { code = Model.Email }, Request.Url.Scheme)">Click here for registration</a>
