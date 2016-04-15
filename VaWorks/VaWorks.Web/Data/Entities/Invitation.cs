@@ -33,7 +33,6 @@ namespace VaWorks.Web.Data.Entities
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Required]
         [DataType(DataType.EmailAddress)]
         public string SalesPersonEmail { get; set; }
 
