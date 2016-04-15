@@ -10,7 +10,7 @@
 @using GridMvc.Html;
 @Html.Grid(Model.OrderByDescending(m => m.DateSent)).Columns(columns => {
        columns.Add(m => m.Message).Sortable(false).Filterable(false).SetWidth(400);
-       columns.Add(m => m.DateSent).Titled("Date").Sortable(true).Filterable(true).RenderValueAs(m => m.DateSent.Date.ToShortDateString());
+       columns.Add(m => m.DateSent).Titled("Date").Sortable(true).Filterable(true).Format("{0:MM/dd/yyyy hh:mm tt}");
        columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<form action="MarkMessageAsRead" method="post">@if (!m.IsRead) {<input type="hidden" value="@m.UserMessageId" name="messageId" /> <input type="submit" value="Mark as Read" class="btn btn-link" />}</form>);
        columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => @<form action="DeleteMessage" method="post"><input type="hidden" value="@m.UserMessageId" name="messageId" /> <input type="submit" value="Delete" class="btn btn-link" /></form>);
 
