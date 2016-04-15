@@ -13,21 +13,10 @@
     columns.Add(m => m.Revision).Sortable(true).Filterable(true);
     columns.Add(m => m.Title).Sortable(true).Filterable(true);
     columns.Add(m => m.CreatedByName).Titled("Created By").Sortable(true).Filterable(true);
+    columns.Add(m => m.SalesPerson).Titled("Sales Person").Sortable(true).Filterable(true);
     columns.Add(m => m.CreatedDate).Titled("Date").Sortable(true).Filterable(true).Format("{0:MM/dd/yyyy hh:mm tt}");
     columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("View", "ViewQuote", "Quotes", new { quoteId = m.QuoteId }, null));
     //columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(m => Html.ActionLink("Edit", "Edit", "Quotes", new { id = m.QuoteId }, null));
 }).WithPaging(50).WithMultipleFilters().Selectable(false)
 
 
-@section scripts{
-    @Scripts.Render("~/bundles/jqueryval")
-
-    <script src="~/Scripts/gridmvc.min.js" type="text/javascript"></script>
-    <script src="~/Scripts/bootstrap-datepicker.js" type="text/javascript"></script>
-    }
-
-@section styles{
-    <link href="~/Content/Gridmvc.css" rel="stylesheet">
-    <link href="~/Content/gridmvc.datepicker.css" rel="stylesheet">
-    <link href="~/Content/tree.css" rel="stylesheet" />
-}
