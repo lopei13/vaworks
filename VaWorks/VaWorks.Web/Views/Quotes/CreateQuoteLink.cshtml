@@ -1,0 +1,7 @@
+﻿@model bool
+
+@if (Model) {
+    <p>@Html.ActionLink("Select Kit", "Index", "KitSelection", null, new { @class = "btn btn-link" })</p>
+} else {
+    <p>@Html.ActionLink("Create Quote", "Index", "KitSelection", null, new { @class = "btn btn-link" })</p>
+}

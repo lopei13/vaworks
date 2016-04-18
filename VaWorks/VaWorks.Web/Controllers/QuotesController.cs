@@ -301,6 +301,14 @@ namespace VaWorks.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult CreateQuoteLink()
+        {
+            var userId = User.Identity.GetUserId();
+            var items = db.ShoppingCartItems.Where(u => u.UserId == userId);
+
+            return View("CreateQuoteLink", items.Count() > 0);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
