@@ -374,7 +374,7 @@ namespace VaWorks.Web.Controllers
                     Database.SystemMessages.Add(new SystemMessage() {
                         UserId = user.Id,
                         DateSent = DateTimeOffset.Now,
-                        Message = "Welcome to VAWORKS - The largest database of mounting hardware in the world.  If you have any questions, please do not hesitate to contact VanAire directly."
+                        Message = "Welcome to VAWORKS - This online guide provides easy access to VanAire kit numbers, prices, drawings, and engineering standards for your company’s predefined standard combinations."
                     });
 
                     var org = Database.Organizations.Find(invite.OrganizationId);
