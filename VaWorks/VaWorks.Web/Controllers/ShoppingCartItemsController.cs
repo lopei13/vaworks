@@ -200,6 +200,16 @@ namespace VaWorks.Web.Controllers
                 if (System.IO.File.Exists(file)) {
                     msg.Attachments.Add(new System.Net.Mail.Attachment(file));
                 }
+
+                // get the VES doc
+                var vesNum = item.KitNumber.Split('-').LastOrDefault();
+                if (!string.IsNullOrEmpty(vesNum)) {
+                    var doc = db.Documents.Where(d => d.Name.Contains(vesNum)).FirstOrDefault();
+                    if (doc != null) {
+                        System.IO.MemoryStream ms = new System.IO.MemoryStream(doc.FileData, false);
+                        msg.Attachments.Add(new System.Net.Mail.Attachment(ms, doc.FileName));
+                    }
+                }
             }
 
             msg.SendAsync();
