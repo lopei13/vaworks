@@ -195,6 +195,8 @@ namespace VaWorks.Web.Controllers
 
             var msg = mailer.Quote(quote, quote.Customer.Email);
 
+            HashSet<string> numbers = new HashSet<string>();
+
             foreach(var item in quote.Items) {
                 string file = Server.MapPath($"~/Content/Drawings/{item.KitNumber}.pdf");
                 if (System.IO.File.Exists(file)) {
@@ -204,10 +206,13 @@ namespace VaWorks.Web.Controllers
                 // get the VES doc
                 var vesNum = item.KitNumber.Split('-').LastOrDefault();
                 if (!string.IsNullOrEmpty(vesNum)) {
-                    var doc = db.Documents.Where(d => d.Name.Contains(vesNum)).FirstOrDefault();
-                    if (doc != null) {
-                        System.IO.MemoryStream ms = new System.IO.MemoryStream(doc.FileData, false);
-                        msg.Attachments.Add(new System.Net.Mail.Attachment(ms, doc.FileName));
+                    if (!numbers.Contains(vesNum)) {
+                        numbers.Add(vesNum);
+                        var doc = db.Documents.Where(d => d.Name.Contains(vesNum)).FirstOrDefault();
+                        if (doc != null) {
+                            System.IO.MemoryStream ms = new System.IO.MemoryStream(doc.FileData, false);
+                            msg.Attachments.Add(new System.Net.Mail.Attachment(ms, doc.FileName));
+                        }
                     }
                 }
             }
