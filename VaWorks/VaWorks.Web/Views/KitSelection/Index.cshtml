@@ -192,7 +192,7 @@
                                     <label>Size</label>
                                     <select id="valvesizes" ng-disabled="!hasValveSizes" ng-model="selectedValveSize"
                                             ng-change="getActuators()"
-                                            ng-options="v as v.Size for v in valvesizes track by v.InterfaceCode" class="form-control">
+                                            ng-options="v as v.Size for v in valvesizes track by v.ValveId" class="form-control">
                                         <option value="">Select Size</option>
                                     </select>
                                 </div>
