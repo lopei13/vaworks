@@ -32,11 +32,15 @@ namespace VaWorks.Web.Data
             }
 
             if (context.Organizations.Count() == 0) {
-                context.Organizations.Add(new Organization() {
+                Organization vanaire = new Organization() {
                     Name = "VanAire"
-                });
+                };
 
-                admin.Organization = context.Organizations.FirstOrDefault();
+                context.Organizations.Add(vanaire);
+
+                admin.Organization = vanaire;
+
+                context.SaveChanges();
             }
         }
 
