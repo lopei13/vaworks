@@ -13,6 +13,7 @@ using Microsoft.Owin.Security;
 using VaWorks.Web.ViewModels;
 using VaWorks.Web.Data.Entities;
 using VaWorks.Web.Data;
+using VaWorks.Web.Mailers;
 
 namespace VaWorks.Web
 {
@@ -20,8 +21,8 @@ namespace VaWorks.Web
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            IUserMailer mailer = new UserMailer();
+            return mailer.SendMessage(message.Destination, message.Subject, message.Body).SendAsync();
         }
     }
 
@@ -66,7 +67,7 @@ namespace VaWorks.Web
             manager.UserLockoutEnabledByDefault = true;
             manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
             manager.MaxFailedAccessAttemptsBeforeLockout = 5;
-
+           
             // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
             // You can write your own provider and plug it in here.
             manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser>

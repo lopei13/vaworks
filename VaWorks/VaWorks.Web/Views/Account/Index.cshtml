@@ -21,6 +21,12 @@
                 <h6>Upload a different photo...</h6>
 
                 <input type="file" name="file" class="form-control">
+                @if (!ViewBag.IsConfirmed) {
+                    <div>
+                        <p class="warning">Your email is not confirmed.  Please confirm your email in case you forget your password.</p>
+                        @Html.ActionLink("Send Confirmation Email", "SendConfirmationEmail", null, new { @class = "btn btn-warning" })
+                    </div>
+                }
             </div>
         </div>
         <div class="col-md-9 personal-info">

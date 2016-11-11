@@ -77,7 +77,6 @@ namespace VaWorks.Web.ViewModels
         [Display(Name = "Last name")]
         public string LastName { get; set; }
 
-        [Required]
         [Display(Name = "User Name")]
         public string UserName { get; set; }
 

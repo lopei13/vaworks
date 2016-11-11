@@ -426,7 +426,7 @@
     <Content Include="Views\Kits\UploadDrawings.cshtml" />
     <Content Include="Views\UserMailer\Invitation.cshtml" />
     <Content Include="Views\UserMailer\InvitationRequest.cshtml" />
-    <Content Include="Views\UserMailer\PasswordReset.cshtml" />
+    <Content Include="Views\UserMailer\SendMessage.cshtml" />
     <Content Include="Views\UserMailer\Quote.cshtml" />
     <Content Include="Views\UserMailer\QuoteSubmit.cshtml" />
     <Content Include="Views\UserMailer\QuoteUpdated.cshtml" />
@@ -453,6 +453,7 @@
     <Content Include="Views\Account\Unlock.cshtml" />
     <Content Include="Views\Account\Lockout.cshtml" />
     <Content Include="Views\Quotes\CreateQuoteLink.cshtml" />
+    <Content Include="Views\Account\ConfirmationEmailSent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

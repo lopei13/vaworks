@@ -13,7 +13,7 @@ namespace VaWorks.Web.Mailers
         MvcMailMessage Quote(Quote quote, string email);
         MvcMailMessage QuoteSubmit(Quote quote, string eamil);
         MvcMailMessage QuoteUpdated(Quote quote, string email);
-        MvcMailMessage PasswordReset(string email, string pw);
+        MvcMailMessage SendMessage(string email, string subject, string body);
         MvcMailMessage SubmitValveActuatorRequest(ValveActuatorRequestViewModel model, string email);
     }
 }

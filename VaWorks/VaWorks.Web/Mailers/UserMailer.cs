@@ -91,14 +91,14 @@ namespace VaWorks.Web.Mailers
             });
         }
 
-        public MvcMailMessage PasswordReset(string email, string pw)
+        public MvcMailMessage SendMessage(string email, string subject, string body)
         {
-            ViewData = new System.Web.Mvc.ViewDataDictionary(pw);
+            ViewBag.Body = body;
 
             return Populate(x => 
             {
-                x.Subject = "Password reset";
-                x.ViewName = "PasswordReset";
+                x.Subject = subject;
+                x.ViewName = "SendMessage";
                 x.To.Add(email);
             });
         }

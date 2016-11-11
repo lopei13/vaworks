@@ -75,6 +75,7 @@ namespace VaWorks.Web.Controllers
             if(user == null) {
                 return LogOff();
             }
+            ViewBag.IsConfirmed = UserManager.IsEmailConfirmed(userId);
             return View(user);
         }
 
@@ -339,12 +340,13 @@ namespace VaWorks.Web.Controllers
                 }
 
                 var user = new ApplicationUser {
-                    UserName = model.UserName,
+                    UserName = model.Email,
                     Email = model.Email,
                     Name = $"{model.FirstName} {model.LastName}",
                     PhoneNumber = model.PhoneNumber,
                     IsSales = invite.Type == InvitationType.SalesRepresentive,
-                    OrganizationId = invite.OrganizationId
+                    OrganizationId = invite.OrganizationId,
+                    EmailConfirmed = true
                 };
                 
                 var result = await UserManager.CreateAsync(user, model.Password);
@@ -363,9 +365,9 @@ namespace VaWorks.Web.Controllers
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    //await UserManager.SendEmailAsync(user.Id, "VaWorks - Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     invite.IsClaimed = true;
                     invite.ClaimedDate = DateTimeOffset.Now;
@@ -413,6 +415,16 @@ namespace VaWorks.Web.Controllers
             return View(model);
         }
 
+        public async Task<ActionResult> SendConfirmationEmail()
+        {
+            string userId = User.Identity.GetUserId();
+            string code = await UserManager.GenerateEmailConfirmationTokenAsync(userId);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userId, code = code }, protocol: Request.Url.Scheme);
+            await UserManager.SendEmailAsync(userId, "VaWorks - Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+            return View("ConfirmationEmailSend");
+        }
+
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
@@ -443,7 +455,7 @@ namespace VaWorks.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
+                var user = await UserManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
@@ -452,10 +464,10 @@ namespace VaWorks.Web.Controllers
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
+                await UserManager.SendEmailAsync(user.Id, "VaWorks - Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form
@@ -489,7 +501,7 @@ namespace VaWorks.Web.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
+            var user = await UserManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
