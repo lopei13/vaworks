@@ -454,6 +454,8 @@
     <Content Include="Views\Account\Lockout.cshtml" />
     <Content Include="Views\Quotes\CreateQuoteLink.cshtml" />
     <Content Include="Views\Account\ConfirmationEmailSent.cshtml" />
+    <Content Include="Views\Account\ForgotUserName.cshtml" />
+    <Content Include="Views\Account\ForgotUserNameConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

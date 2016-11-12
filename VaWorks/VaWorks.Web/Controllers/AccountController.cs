@@ -340,7 +340,7 @@ namespace VaWorks.Web.Controllers
                 }
 
                 var user = new ApplicationUser {
-                    UserName = model.Email,
+                    UserName = model.UserName,
                     Email = model.Email,
                     Name = $"{model.FirstName} {model.LastName}",
                     PhoneNumber = model.PhoneNumber,
@@ -422,7 +422,7 @@ namespace VaWorks.Web.Controllers
             var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userId, code = code }, protocol: Request.Url.Scheme);
             await UserManager.SendEmailAsync(userId, "VaWorks - Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-            return View("ConfirmationEmailSend");
+            return View("ConfirmationEmailSent");
         }
 
         //
@@ -483,6 +483,31 @@ namespace VaWorks.Web.Controllers
         }
 
         //
+        // GET: /Account/ForgotPassword
+        [AllowAnonymous]
+        public ActionResult ForgotUserName()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult> ForgotUserName(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid) {
+                var user = await UserManager.FindByEmailAsync(model.Email);
+                if (user != null || !(await UserManager.IsEmailConfirmedAsync(user.Id))) {
+                    // Don't reveal that the user does not exist or is not confirmed
+                    ViewBag.UserName = user.UserName;
+                    return View("ForgotUserNameConfirmation");
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
@@ -501,7 +526,7 @@ namespace VaWorks.Web.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByEmailAsync(model.Email);
+            var user = await UserManager.FindByNameAsync(model.UserName);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
