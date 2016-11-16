@@ -22,11 +22,11 @@ namespace VaWorks.Web.Data.Entities
         [Required]
         public int OrganizationId { get; set; }
 
-        [StringLength(50)]
+        [StringLength(250)]
         public string Name { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(250)]
         public string Company { get; set; }
 
         [Required]
