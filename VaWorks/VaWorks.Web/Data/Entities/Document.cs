@@ -7,6 +7,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VaWorks.Web.Data.Entities
 {
+    public enum DocumentType
+    {
+        [Display(Name = "Material Standard")]
+        MaterialStandard,
+        [Display(Name = "Price Sheet")]
+        PriceSheet
+    }
+
     [Table("Documents")]
     public class Document
     {
@@ -24,6 +32,8 @@ namespace VaWorks.Web.Data.Entities
 
         [MaxLength(250)]
         public string Description { get; set; }
+
+        public DocumentType DocumentType { get; set; }
 
         [Display(Name = "Document")]
         public byte[] FileData { get; set; }

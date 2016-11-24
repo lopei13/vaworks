@@ -233,8 +233,10 @@
                             <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">Valve or Actuator is not Listed</button>
                         </div>
                         <div class="col-md-6">
-                            <a href="~/Content/Virgo SA2 Series Mounting Hardware (161101).pdf" target="_blank" class="btn btn-default">Virgo SA2 Series Price Sheet</a>
-                            <a href="~/Content/Virgo L Series Mounting Hardware (161101).pdf" target="_blank" class="btn btn-default">Virgo L Series Price Sheet</a>
+                            <h3>Price Sheets</h3>
+                            @{ Html.RenderAction("LinkedDocuments", "Documents", new { organizationId = Model, docType = 1 }); }
+                            @*<a href="~/Content/Virgo SA2 Series Mounting Hardware (161101).pdf" target="_blank" class="btn btn-default">Virgo SA2 Series Price Sheet</a>
+                            <a href="~/Content/Virgo L Series Mounting Hardware (161101).pdf" target="_blank" class="btn btn-default">Virgo L Series Price Sheet</a>*@
                         </div>
 
                         <div class="modal fade" id="myModal">
@@ -330,7 +332,8 @@
                             </div>
                         </div>
                     </div>
-                    @{ Html.RenderAction("LinkedDocuments", "Documents", new { organizationId = Model }); }
+                    <h3>Design Standards</h3>
+                    @{ Html.RenderAction("LinkedDocuments", "Documents", new { organizationId = Model, docType = 0 }); }
                 </div>
 
                 <div id="options" class="tab-pane fade in" ng-class="{active: currentStep == 3}">
