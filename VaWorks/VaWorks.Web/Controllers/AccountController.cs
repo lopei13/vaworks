@@ -255,7 +255,13 @@ namespace VaWorks.Web.Controllers
 
                     // send the admin an email
                     var email = Database.Users.Where(u => u.Id == admin).FirstOrDefault().Email;
-                    mailer.InvitationRequest(invitationRequest, email).SendAsync();
+
+                    try {
+                        mailer.InvitationRequest(invitationRequest, email).Send();
+                    } catch(Exception ex) {
+                        return View("MailDown", ex);
+                    }
+                    return View("RequestAccessConfirmation");
                 }
 
                 return View("RequestAccessConfirmation");

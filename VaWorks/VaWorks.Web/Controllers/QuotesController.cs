@@ -253,7 +253,11 @@ namespace VaWorks.Web.Controllers
 
 
             IUserMailer mailer = new UserMailer();
-            mailer.Quote(quote, quote.Customer.Email).SendAsync();
+            try {
+                mailer.Quote(quote, quote.Customer.Email).Send();
+            } catch (Exception ex) {
+                return View("MailDown", ex);
+            }
 
             db.SystemMessages.Add(new SystemMessage() {
                 UserId = quote.CustomerId,

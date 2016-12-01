@@ -1,0 +1,15 @@
+﻿@model System.Exception
+
+@{
+    ViewBag.Title = "Email Down";
+}
+
+<h1 class="text-danger">Dang it!</h1>
+<h2 class="text-danger">We couldn't fully process your request.</h2>
+<p class="text-danger">It appears that there is a problem with our email service.  It won't be long and we should have it up and running.</p>
+@if (Model != null) {
+<p class="text-danger">@Model.Message</p>
+if (Model.InnerException != null) {
+<p class="text-danger">@Model.InnerException.Message</p>
+}}
+

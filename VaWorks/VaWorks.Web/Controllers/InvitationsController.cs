@@ -91,7 +91,11 @@ namespace VaWorks.Web.Controllers
             var invite = db.Invitations.Find(id);
             if(invite != null) {
                 IUserMailer UserMailer = new UserMailer();
-                UserMailer.Invitation(invite).SendAsync();
+                try {
+                    UserMailer.Invitation(invite).Send();
+                } catch (Exception ex) {
+                    return View("MailDown", ex);
+                }
                 AddSuccess("Invitation resent.");
             } else {
                 AddDanger("Invitation not found.");
@@ -174,7 +178,12 @@ namespace VaWorks.Web.Controllers
                 if (count > 0) {
                     IUserMailer UserMailer = new UserMailer();
                     foreach (var i in invites) {
-                        UserMailer.Invitation(i).SendAsync();
+                        try {
+                            UserMailer.Invitation(i).Send();
+                        } catch (Exception ex) {
+                            return View("MailDown", ex);
+                        }
+                        
                     }
                 }
                 return Confirmation();
