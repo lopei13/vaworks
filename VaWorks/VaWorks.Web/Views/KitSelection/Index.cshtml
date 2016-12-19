@@ -221,7 +221,7 @@
                                     <label>Size</label>
                                     <select id="actuatorsizes" ng-disabled="!hasActuatorSizes" ng-model="selectedActuatorSize"
                                             ng-change="getMaterials()"
-                                            ng-options="a as a.Size for a in actuatorsizes track by a.InterfaceCode" class="form-control">
+                                            ng-options="a as a.Size for a in actuatorsizes track by a.ActuatorId" class="form-control">
                                         <option value="">Select Size</option>
                                     </select>
                                 </div>
