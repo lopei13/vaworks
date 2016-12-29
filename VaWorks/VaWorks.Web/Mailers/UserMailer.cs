@@ -50,7 +50,7 @@ namespace VaWorks.Web.Mailers
 
             return Populate(x =>
             {
-                x.Subject = "Quote from VaWorks " + quote.QuoteNumber;
+                x.Subject = "Quote " + quote.QuoteNumber + ":" + quote.Title;
                 x.ViewName = "Quote";
                 x.To.Add(email);
             });
