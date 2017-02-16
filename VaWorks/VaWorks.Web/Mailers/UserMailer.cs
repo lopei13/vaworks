@@ -70,6 +70,7 @@ namespace VaWorks.Web.Mailers
                 x.Subject = "VaWorks Quote Submit " + quote.QuoteNumber;
                 x.ViewName = "QuoteSubmit";
                 x.To.Add(email);
+                x.CC.Add("tlambert@vanaireinc.com");
             });
         }
 
