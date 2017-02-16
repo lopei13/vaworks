@@ -14,12 +14,14 @@ namespace VaWorks.Web.Mailers
 		public virtual MvcMailMessage Welcome(ApplicationUser user)
 		{
             ViewData = new System.Web.Mvc.ViewDataDictionary(user);
+
+
 			return Populate(x =>
 			{
 				x.Subject = "Welcome To VaWorks";
 				x.ViewName = "Welcome";
 				x.To.Add(user.Email);
-			});
+            });
 		}
 
         public virtual MvcMailMessage UserRegistered(ApplicationUser user, string email)
@@ -41,6 +43,9 @@ namespace VaWorks.Web.Mailers
 				x.Subject = "VaWorks Invitation from VanAire";
 				x.ViewName = "Invitation";
 				x.To.Add(invite.Email);
+                try {
+                    x.To.Add(invite.SalesPersonEmail);
+                } catch { }
 			});
 		}
  
