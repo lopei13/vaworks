@@ -158,6 +158,44 @@ namespace VaWorks.Web.Controllers
             return RedirectToAction("Edit", new { id = quote.QuoteId });
         }
 
+        public ActionResult EditTitle(int? id, string returnUrl)
+        {
+            if (id == null) {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Quote quote = db.Quotes.Find(id);
+
+            if (quote == null) {
+                return HttpNotFound();
+            }
+
+            ViewBag.ReturnUrl = returnUrl;
+
+            return View(quote);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditTitle(int? quoteId, string title, string returnUrl)
+        {
+            if(quoteId == null || string.IsNullOrEmpty(title)) {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Quote quote = db.Quotes.Find(quoteId);
+
+            if(quote == null) {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            quote.Title = title;
+
+            db.SaveChanges();
+
+            return Redirect(returnUrl);
+        }
+
         // GET: Quotes/Edit/5
         public ActionResult Edit(int? id)
         {

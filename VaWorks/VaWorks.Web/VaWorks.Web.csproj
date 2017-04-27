@@ -457,6 +457,7 @@
     <Content Include="Views\Account\ForgotUserName.cshtml" />
     <Content Include="Views\Account\ForgotUserNameConfirmation.cshtml" />
     <Content Include="Views\Shared\MailDown.cshtml" />
+    <Content Include="Views\Quotes\EditTitle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
