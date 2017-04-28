@@ -228,7 +228,7 @@ namespace VaWorks.Web.Controllers
 
                 var invitationRequest = new InvitationRequest() {
                     RequestDate = DateTimeOffset.Now,
-                    Company = model.Company,
+                    Company = model.Company + " " + model.Comments,
                     Email = model.Email,
                     Name = model.Name,
                     Status = RequestStatus.New

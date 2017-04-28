@@ -32,6 +32,13 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(m => m.Comments, "Location", new { @class = "col-md-2 control-label" })
+            <div class="col-md-2">
+                @Html.TextBoxFor(m => m.Comments, new { @class = "form-control", placeholder = "Location", type = "text" })
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-2 col-md-offset-2" style="margin-top: 15px;">
                 <input type="submit" class="btn btn-primary form-control" value="Request Access" />
             </div>
