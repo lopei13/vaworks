@@ -92,7 +92,10 @@ namespace VaWorks.Web.Controllers
             if(invite != null) {
                 IUserMailer UserMailer = new UserMailer();
                 try {
-                    UserMailer.Invitation(invite).Send();
+                    System.Net.Mail.Attachment at = new System.Net.Mail.Attachment(Server.MapPath("~/Content/VaworksInstructions.pdf"));
+                    Mvc.Mailer.MvcMailMessage msg = UserMailer.Invitation(invite);
+                    msg.Attachments.Add(at);
+                    msg.Send();
                 } catch (Exception ex) {
                     return View("MailDown", ex);
                 }
@@ -179,7 +182,10 @@ namespace VaWorks.Web.Controllers
                     IUserMailer UserMailer = new UserMailer();
                     foreach (var i in invites) {
                         try {
-                            UserMailer.Invitation(i).Send();
+                            System.Net.Mail.Attachment at = new System.Net.Mail.Attachment(Server.MapPath("~/Content/VaworksInstructions.pdf"));
+                            Mvc.Mailer.MvcMailMessage msg = UserMailer.Invitation(i);
+                            msg.Attachments.Add(at);
+                            msg.Send();
                         } catch (Exception ex) {
                             return View("MailDown", ex);
                         }

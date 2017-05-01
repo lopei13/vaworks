@@ -278,6 +278,7 @@
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="Content\Virgo L Series Mounting Hardware %28161101%29.pdf" />
     <Content Include="Content\Virgo SA2 Series Mounting Hardware %28161101%29.pdf" />
+    <Content Include="Content\VaworksInstructions.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\client\controllers\selectController.js" />
     <Content Include="Scripts\client\controllers\searchController.js" />
