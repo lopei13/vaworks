@@ -209,7 +209,7 @@ namespace VaWorks.Web.Controllers
                     SelectPdf.PdfDocument doc = converter.ConvertUrl(url);
                     System.IO.MemoryStream ms = new System.IO.MemoryStream();
                     doc.Save(ms);
-                    msg.Attachments.Add(new System.Net.Mail.Attachment(ms, item.KitNumber + ".PDF"));
+                    msg.Attachments.Add(new System.Net.Mail.Attachment(ms, item.KitNumber + ".PDF", "application/pdf"));
                 } else {
                     string file = Server.MapPath($"~/Content/Drawings/{item.KitNumber}.pdf");
                     if (System.IO.File.Exists(file)) {
