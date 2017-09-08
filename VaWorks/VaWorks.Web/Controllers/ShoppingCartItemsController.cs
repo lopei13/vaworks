@@ -198,9 +198,22 @@ namespace VaWorks.Web.Controllers
             HashSet<string> numbers = new HashSet<string>();
 
             foreach(var item in quote.Items) {
-                string file = Server.MapPath($"~/Content/Drawings/{item.KitNumber}.pdf");
-                if (System.IO.File.Exists(file)) {
-                    msg.Attachments.Add(new System.Net.Mail.Attachment(file));
+                if (System.IO.File.Exists(image)) {
+                    string url = Url.Action("ViewDrawing", "KitSelection", new { kitNumber = item.KitNumber, description = item.Description });
+                    SelectPdf.HtmlToPdf converter = new SelectPdf.HtmlToPdf();
+                    converter.Options.PdfPageSize = SelectPdf.PdfPageSize.Letter;
+                    converter.Options.PdfPageOrientation = SelectPdf.PdfPageOrientation.Landscape;
+                    converter.Options.WebPageHeight = 6120;
+                    converter.Options.WebPageWidth = 7920;
+                    SelectPdf.PdfDocument doc = converter.ConvertUrl(url);
+                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                    doc.Save(ms);
+                    msg.Attachments.Add(new System.Net.Mail.Attachment(ms, item.KitNumber + ".PDF"));
+                } else {
+                    string file = Server.MapPath($"~/Content/Drawings/{item.KitNumber}.pdf");
+                    if (System.IO.File.Exists(file)) {
+                        msg.Attachments.Add(new System.Net.Mail.Attachment(file));
+                    }
                 }
 
                 // get the VES doc
