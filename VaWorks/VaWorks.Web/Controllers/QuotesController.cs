@@ -307,7 +307,7 @@ namespace VaWorks.Web.Controllers
             foreach (var item in quote.Items) {
                 string image = Server.MapPath($"~/Content/Images/{item.KitNumber}.png");
                 if (System.IO.File.Exists(image)) {
-                    string url = Url.Action("ViewDrawing", "KitSelection", new { kitNumber = item.KitNumber, description = item.Description });
+                    string url = Url.Action("ViewDrawing", "KitSelection", new { kitNumber = item.KitNumber, description = item.Description }, Request.Url.Scheme);
                     SelectPdf.HtmlToPdf converter = new SelectPdf.HtmlToPdf();
                     converter.Options.PdfPageSize = SelectPdf.PdfPageSize.Letter;
                     converter.Options.PdfPageOrientation = SelectPdf.PdfPageOrientation.Landscape;
