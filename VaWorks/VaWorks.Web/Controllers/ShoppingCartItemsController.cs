@@ -198,6 +198,7 @@ namespace VaWorks.Web.Controllers
             HashSet<string> numbers = new HashSet<string>();
 
             foreach(var item in quote.Items) {
+                string image = Server.MapPath($"~/Content/Images/{item.KitNumber}.png");
                 if (System.IO.File.Exists(image)) {
                     string url = Url.Action("ViewDrawing", "KitSelection", new { kitNumber = item.KitNumber, description = item.Description });
                     SelectPdf.HtmlToPdf converter = new SelectPdf.HtmlToPdf();
