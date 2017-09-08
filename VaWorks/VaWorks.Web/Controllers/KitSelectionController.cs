@@ -380,5 +380,31 @@ namespace VaWorks.Web.Controllers
                 return RedirectToAction("Edit", "Quotes", new { id = quoteId });
             }            
         }
+
+        //public ActionResult ViewDrawing(int valveId, int actuatorId, int kitId)
+        //{
+        //    var kit = (from k in db.Kits
+        //              join v in db.Valves on k.ValveInterfaceCode equals v.InterfaceCode
+        //              join a in db.Actuators on k.ActuatorInterfaceCode equals a.InterfaceCode
+        //              where v.ValveId == valveId && a.ActuatorId == actuatorId && k.KitId == kitId
+        //              select new ViewModels.KitDrawingViewModel() {
+        //                  KitNumber = k.KitNumber,
+        //                  Description = $"KIT FOR {a.Manufacturer} {a.Model} {a.Size} TO A {v.Size} {v.Manufacturer} {v.Model}"
+        //              }).FirstOrDefault();
+
+        //    if (kit != null) {
+        //        return View(kit);
+        //    } else {
+        //        return HttpNotFound();
+        //    }
+        //}
+
+        public ActionResult ViewDrawing(string kitNumber, string description)
+        {
+            return View(new ViewModels.KitDrawingViewModel() {
+                KitNumber = kitNumber,
+                Description = description
+            });
+        }
     }
 }

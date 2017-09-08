@@ -1,0 +1,44 @@
+﻿@model VaWorks.Web.ViewModels.KitDrawingViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <style>
+        html, body, {
+            height: 100%;
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .drawing {
+            position: absolute;
+            background: url('@Url.Content("~/Content/Images/" + Model.KitNumber + ".png")') no-repeat;
+            height:6120px;
+            width: 7920px;
+        }
+
+        .drawing-title {
+            position: absolute;
+            left: 2560px;
+            top: 5350px;
+            width: 1310px;
+            height: 525px;
+            font-family: sans-serif;
+            font-weight: 100;
+            font-size: 5em;
+            background: #fff;
+        }
+    </style>
+    <title>@Model.KitNumber</title>
+</head>
+<body>
+    <div class="drawing">
+        <h1 class="drawing-title">@Model.Description</h1>
+    </div>
+</body>
+</html>
