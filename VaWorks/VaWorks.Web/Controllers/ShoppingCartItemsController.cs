@@ -204,7 +204,7 @@ namespace VaWorks.Web.Controllers
                 if (System.IO.File.Exists(image)) {
                     string url = Url.Action("ViewDrawing", "ShoppingCartItems", new { kitNumber = item.KitNumber, description = item.Description }, Request.Url.Scheme);
 
-                    HtmlToPdfConverter htmlToPdf = new HtmlToPdfConverter(7920, 6120);
+                    HtmlToPdfConverter htmlToPdf = new HtmlToPdfConverter(1920, 1483);
 
                     byte[] data = htmlToPdf.ConvertUrl(url);
 
