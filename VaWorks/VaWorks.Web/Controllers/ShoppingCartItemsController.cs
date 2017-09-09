@@ -208,8 +208,7 @@ namespace VaWorks.Web.Controllers
 
                     byte[] data = htmlToPdf.ConvertUrl(url);
 
-                    using (System.IO.MemoryStream ms = new System.IO.MemoryStream()) {
-                        ms.Write(data, 0, data.Length);
+                    using (System.IO.MemoryStream ms = new System.IO.MemoryStream(data, false)) {
                         msg.Attachments.Add(new System.Net.Mail.Attachment(ms, item.KitNumber + ".PDF", "application/pdf"));
                     }
 
