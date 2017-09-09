@@ -204,14 +204,18 @@ namespace VaWorks.Web.Controllers
                 if (System.IO.File.Exists(image)) {
                     string url = Url.Action("ViewDrawing", "ShoppingCartItems", new { kitNumber = item.KitNumber, description = item.Description }, Request.Url.Scheme);
 
-                    HtmlToPdfConverter htmlToPdf = new HtmlToPdfConverter(1920, 1483);
+                    HtmlToPdfConverter htmlToPdf = new HtmlToPdfConverter();
                     htmlToPdf.TriggeringMode = TriggeringMode.Auto;
                     htmlToPdf.ConversionDelay = 0;
+                    htmlToPdf.PdfDocumentOptions.PdfPageOrientation = PdfPageOrientation.Landscape;
+                    htmlToPdf.PdfDocumentOptions.FitHeight = true;
 
                     byte[] data = htmlToPdf.ConvertUrl(url);
 
-                    using (System.IO.MemoryStream ms = new System.IO.MemoryStream(data, false)) {
-                        msg.Attachments.Add(new System.Net.Mail.Attachment(ms, item.KitNumber + ".PDF", "application/pdf"));
+                    string tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), System.IO.Path.GetTempFileName() + ".PDF");
+                    using (System.IO.FileStream fs = System.IO.File.OpenWrite(tempPath)) {
+                        fs.Write(data, 0, data.Length);
+                        msg.Attachments.Add(new System.Net.Mail.Attachment(fs, item.KitNumber + ".PDF", "application/pdf"));                
                     }
 
                 } else {
