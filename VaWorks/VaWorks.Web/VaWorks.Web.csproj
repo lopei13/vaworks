@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="evohtmltopdf, Version=7.4.0.0, Culture=neutral, PublicKeyToken=e1fcbb86597de299, processorArchitecture=MSIL">
+      <HintPath>..\packages\evopdf.7.4\lib\net40\evohtmltopdf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="GridMvc, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Grid.Mvc.3.0.0\lib\net40\GridMvc.dll</HintPath>
       <Private>True</Private>
@@ -55,10 +59,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mvc.Mailer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Select.HtmlToPdf, Version=17.1.0.0, Culture=neutral, PublicKeyToken=e0ae9f6e27a97018, processorArchitecture=MSIL">
-      <HintPath>..\packages\Select.HtmlToPdf.17.1.0\lib\net40\Select.HtmlToPdf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -244,6 +244,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Drawings\drawing.txt" />
+    <Content Include="Content\Images\VA4533-0200.jpg" />
     <Content Include="Content\Images\VA4533-0200.png" />
     <Content Include="Content\Images\VA77411-191948.png" />
     <Content Include="Content\Images\VA77894-195924.png" />
@@ -468,7 +469,7 @@
     <Content Include="Views\Account\ForgotUserNameConfirmation.cshtml" />
     <Content Include="Views\Shared\MailDown.cshtml" />
     <Content Include="Views\Quotes\EditTitle.cshtml" />
-    <Content Include="Views\KitSelection\ViewDrawing.cshtml" />
+    <Content Include="Views\ShoppingCartItems\ViewDrawing.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Drawings\" />

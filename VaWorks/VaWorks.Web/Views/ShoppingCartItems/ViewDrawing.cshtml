@@ -8,7 +8,7 @@
 <html>
 <head>
     <style>
-        html, body, {
+        html, body {
             height: 100%;
             width: 100%;
             margin: 0px;
@@ -17,7 +17,6 @@
 
         .drawing {
             position: absolute;
-            background: url('@Url.Content("~/Content/Images/" + Model.KitNumber + ".png")') no-repeat;
             height:6120px;
             width: 7920px;
         }
@@ -38,6 +37,7 @@
 </head>
 <body>
     <div class="drawing">
+        <img src="~/Content/Images/@(Model.KitNumber).jpg" />
         <h1 class="drawing-title">@Model.Description</h1>
     </div>
 </body>

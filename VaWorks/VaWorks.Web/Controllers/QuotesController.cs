@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using EvoPdf;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -307,16 +308,16 @@ namespace VaWorks.Web.Controllers
             foreach (var item in quote.Items) {
                 string image = Server.MapPath($"~/Content/Images/{item.KitNumber}.png");
                 if (System.IO.File.Exists(image)) {
-                    string url = Url.Action("ViewDrawing", "KitSelection", new { kitNumber = item.KitNumber, description = item.Description }, Request.Url.Scheme);
-                    SelectPdf.HtmlToPdf converter = new SelectPdf.HtmlToPdf();
-                    converter.Options.PdfPageSize = SelectPdf.PdfPageSize.Letter;
-                    converter.Options.PdfPageOrientation = SelectPdf.PdfPageOrientation.Landscape;
-                    converter.Options.WebPageHeight = 6120;
-                    converter.Options.WebPageWidth = 7920;
-                    SelectPdf.PdfDocument doc = converter.ConvertUrl(url);
-                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
-                    doc.Save(ms);
-                    msg.Attachments.Add(new System.Net.Mail.Attachment(ms, item.KitNumber + ".PDF", "application/pdf"));
+                    string url = Url.Action("ViewDrawing", "ShoppingCartItems", new { kitNumber = item.KitNumber, description = item.Description }, Request.Url.Scheme);
+
+                    HtmlToPdfConverter htmlToPdf = new HtmlToPdfConverter(7920, 6120);
+
+                    byte[] data = htmlToPdf.ConvertUrl(url);
+
+                    using (System.IO.MemoryStream ms = new System.IO.MemoryStream()) {
+                        ms.Write(data, 0, data.Length);
+                        msg.Attachments.Add(new System.Net.Mail.Attachment(ms, item.KitNumber + ".PDF", "application/pdf"));
+                    }
                 } else {
                     string file = Server.MapPath($"~/Content/Drawings/{item.KitNumber}.pdf");
                     if (System.IO.File.Exists(file)) {
