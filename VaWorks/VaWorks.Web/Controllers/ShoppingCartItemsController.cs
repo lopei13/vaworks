@@ -205,6 +205,8 @@ namespace VaWorks.Web.Controllers
                     string url = Url.Action("ViewDrawing", "ShoppingCartItems", new { kitNumber = item.KitNumber, description = item.Description }, Request.Url.Scheme);
 
                     HtmlToPdfConverter htmlToPdf = new HtmlToPdfConverter(1920, 1483);
+                    htmlToPdf.TriggeringMode = TriggeringMode.Auto;
+                    htmlToPdf.ConversionDelay = 0;
 
                     byte[] data = htmlToPdf.ConvertUrl(url);
 
