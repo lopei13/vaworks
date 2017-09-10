@@ -212,11 +212,12 @@ namespace VaWorks.Web.Controllers
 
                     byte[] data = htmlToPdf.ConvertUrl(url);
 
-                    string tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), item.KitNumber + ".PDF");
-                    System.IO.FileStream fs = System.IO.File.OpenWrite(tempPath);
-                    fs.Write(data, 0, data.Length);
-                    fs.Close();
-                    msg.Attachments.Add(new System.Net.Mail.Attachment(tempPath));                
+                    //string tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), item.KitNumber + ".PDF");
+                    //System.IO.FileStream fs = System.IO.File.OpenWrite(tempPath);
+                    //fs.Write(data, 0, data.Length);
+                    //fs.Close();
+                    System.IO.MemoryStream ms = new System.IO.MemoryStream(data, false);
+                    msg.Attachments.Add(new System.Net.Mail.Attachment(ms, $"{item.KitNumber}_{item.Actuator}_{item.Valve}_.PDF"));                
                     
                 } else {
                     string file = Server.MapPath($"~/Content/Drawings/{item.KitNumber}.pdf");
