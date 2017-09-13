@@ -211,6 +211,7 @@ namespace VaWorks.Web.Controllers
 
                     HtmlToPdfConverter htmlToPdf = new HtmlToPdfConverter();
                     htmlToPdf.TriggeringMode = TriggeringMode.Auto;
+                    htmlToPdf.LicenseKey = "jwERABMTABcYABcOEAATEQ4REg4ZGRkZABA=";
                     htmlToPdf.ConversionDelay = 0;
                     htmlToPdf.PdfDocumentOptions.PdfPageOrientation = PdfPageOrientation.Landscape;
                     htmlToPdf.PdfDocumentOptions.PdfPageSize = new PdfPageSize(792, 612);
