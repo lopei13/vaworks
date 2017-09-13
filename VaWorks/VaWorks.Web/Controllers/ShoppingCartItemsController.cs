@@ -200,9 +200,14 @@ namespace VaWorks.Web.Controllers
             HashSet<string> numbers = new HashSet<string>();
 
             foreach(var item in quote.Items) {
-                string image = Server.MapPath($"~/Content/Images/{item.KitNumber}.png");
+                string image = Server.MapPath($"~/Content/Images/{item.KitNumber}.jpg");
                 if (System.IO.File.Exists(image)) {
-                    string url = Url.Action("ViewDrawing", "ShoppingCartItems", new { kitNumber = item.KitNumber, description = item.Description }, Request.Url.Scheme);
+
+                    string code = item.KitNumber.Split('-').LastOrDefault();
+
+                    string mat = db.KitMaterials.Where(m => m.Code == code).FirstOrDefault().Name;
+
+                    string url = Url.Action("ViewDrawing", "ShoppingCartItems", new { kitNumber = item.KitNumber, description = mat + " " + item.Description }, Request.Url.Scheme);
 
                     HtmlToPdfConverter htmlToPdf = new HtmlToPdfConverter();
                     htmlToPdf.TriggeringMode = TriggeringMode.Auto;
