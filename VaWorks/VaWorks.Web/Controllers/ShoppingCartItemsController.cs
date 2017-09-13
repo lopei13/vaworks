@@ -213,6 +213,7 @@ namespace VaWorks.Web.Controllers
                     htmlToPdf.TriggeringMode = TriggeringMode.Auto;
                     htmlToPdf.ConversionDelay = 0;
                     htmlToPdf.PdfDocumentOptions.PdfPageOrientation = PdfPageOrientation.Landscape;
+                    htmlToPdf.PdfDocumentOptions.PdfPageSize = new PdfPageSize(792, 612);
                     htmlToPdf.PdfDocumentOptions.FitHeight = true;
 
                     byte[] data = htmlToPdf.ConvertUrl(url);
