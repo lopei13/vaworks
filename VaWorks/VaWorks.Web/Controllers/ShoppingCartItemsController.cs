@@ -217,7 +217,7 @@ namespace VaWorks.Web.Controllers
                     //fs.Write(data, 0, data.Length);
                     //fs.Close();
                     System.IO.MemoryStream ms = new System.IO.MemoryStream(data, false);
-                    msg.Attachments.Add(new System.Net.Mail.Attachment(ms, $"{item.KitNumber}_{item.Actuator}_{item.Valve}_.PDF"));                
+                    msg.Attachments.Add(new System.Net.Mail.Attachment(ms, $"{item.KitNumber}_{item.Actuator}_{item.Valve}_.PDF"));            
                     
                 } else {
                     string file = Server.MapPath($"~/Content/Drawings/{item.KitNumber}.pdf");
