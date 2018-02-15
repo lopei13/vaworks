@@ -200,7 +200,7 @@ namespace VaWorks.Web.Controllers
             HashSet<string> numbers = new HashSet<string>();
 
             foreach(var item in quote.Items) {
-                string image = Server.MapPath($"~/Content/Images/{item.KitNumber}.jpg");
+                string image = Server.MapPath($"~/Content/Thumbnails/{item.KitNumber}.jpg");
                 if (System.IO.File.Exists(image)) {
 
                     string code = item.KitNumber.Split('-').LastOrDefault();
