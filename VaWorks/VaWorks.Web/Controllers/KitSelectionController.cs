@@ -263,7 +263,7 @@ namespace VaWorks.Web.Controllers
                 id = user.OrganizationId;
             }
 
-            string sql = "select ko.KitOptionId, ko.Name, ko.SortOrder, ko.Code from KitOptions as ko " +
+            string sql = "select distinct ko.KitOptionId, ko.Name, ko.SortOrder, ko.Code from KitOptions as ko " +
                          "inner join Kits as k on k.KitOptionId = ko.KitOptionId " +
                          "inner join OrganizationKits as ok on k.KitId = ok.KitId " +
                          "where k.KitMaterialId = @kitMaterialId and k.ValveInterfaceCode = @valveInterfaceCode and k.ActuatorInterfaceCode = @actuatorInterfaceCode and ok.OrganizationId = @organizationId";
