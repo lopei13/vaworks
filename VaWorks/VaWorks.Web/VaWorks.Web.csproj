@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -224,6 +225,7 @@
     <Compile Include="Data\IDataWriter.cs" />
     <Compile Include="Data\ReleaseInitializer.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
+    <Compile Include="Extensions\WebImageExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -246,6 +248,7 @@
     <Content Include="Content\Drawings\drawing.txt" />
     <Content Include="Content\Images\VA4533-0200.jpg" />
     <Content Include="Content\Images\VA4533-0200.png" />
+    <Content Include="Content\Images\VA48253-0200.jpg" />
     <Content Include="Content\Images\VA77411-191948.png" />
     <Content Include="Content\Images\VA77894-195924.png" />
     <Content Include="Content\font-awesome.css" />

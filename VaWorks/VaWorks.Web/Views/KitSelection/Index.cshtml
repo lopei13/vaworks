@@ -391,7 +391,7 @@
                                     <div class="col-lg-6">
                                         <!-- show drawing-->
                                         <p>Drawing</p>
-                                        <img src="~/Content/Thumbnails/{{kit.KitNumber}}.jpg" width="350" />
+                                        <img src="@Url.Action("ResizeImage", new { urlImage = "~/Content/Thumbnails/{{kit.KitNumber}}.jpg", width = 350 })" width="350" />
                                     </div>
                                 </div>
                                 <div class="row">

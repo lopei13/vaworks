@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using VaWorks.Web.Data;
 using VaWorks.Web.Data.Entities;
+using VaWorks.Web.Extensions;
 
 namespace VaWorks.Web.Controllers
 {
@@ -405,6 +407,14 @@ namespace VaWorks.Web.Controllers
                 KitNumber = kitNumber,
                 Description = description
             });
+        }
+
+        public ActionResult ResizeImage(string imageUrl, int width)
+        {
+            string filePath = Server.MapPath("~//Content//Thumbnails//" + imageUrl);
+            WebImage wImage = new WebImage(filePath);
+            wImage = WebImageExtension.Resize(wImage, width);
+            return File(wImage.GetBytes(), "image/jpg");
         }
     }
 }
