@@ -203,7 +203,7 @@ namespace VaWorks.Web.Controllers
                 string image = Server.MapPath($"~/Content/Thumbnails/{item.KitNumber}.jpg");
                 if (System.IO.File.Exists(image)) {
 
-                    string code = item.KitNumber.Split('-').LastOrDefault();
+                    string code = item.KitNumber.Split('-').ElementAt(1);
 
                     string mat = db.KitMaterials.Where(m => m.Code == code).FirstOrDefault().Name;
 
