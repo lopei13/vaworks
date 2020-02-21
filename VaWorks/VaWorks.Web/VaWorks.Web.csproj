@@ -231,6 +231,10 @@
     </Compile>
     <Compile Include="Mailers\IUserMailer.cs" />
     <Compile Include="Mailers\UserMailer.cs" />
+    <Compile Include="Migrations\202002212210076_ILT_Init.cs" />
+    <Compile Include="Migrations\202002212210076_ILT_Init.Designer.cs">
+      <DependentUpon>202002212210076_ILT_Init.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="ViewModels\KitDrawingViewModel.cs" />
@@ -486,6 +490,11 @@
     </Content>
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202002212210076_ILT_Init.resx">
+      <DependentUpon>202002212210076_ILT_Init.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

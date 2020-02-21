@@ -34,6 +34,9 @@ rcf/
 *.suo
 *.user
 
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+
 # Access Control Service integration (via FedUtil or Add STS Reference from VS2010) will create FederationMetadata.xml below this folder
 ##=> looks like FederationMetadata.xml is referenced in csproj, so need it in source control
 # FederationMetadata\
